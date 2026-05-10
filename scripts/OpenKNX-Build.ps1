@@ -1,0 +1,1 @@
+& "lib/OGM-Common/scripts/build/OpenKNX-Build.ps1" @args

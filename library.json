@@ -1,0 +1,6 @@
+{
+    "name": "OAM-IO-Homecontrol",
+    "version": "0.1.0",
+    "description": "OpenKNX application module for io-homecontrol with ESP32",
+    "dependencies": {}
+}

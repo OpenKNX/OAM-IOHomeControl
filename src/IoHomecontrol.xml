@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-model href="../../Organization/knxprod-support/knx_project_20/knx-editor.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<KNX xmlns="http://knx.org/xml/project/20" xmlns:op="http://github.com/OpenKNX/OpenKNXproducer">
+
+  <op:config href="IoHomecontrol.conf.xml" />
+
+  <op:ETS
+    OpenKnxId="0xAF"
+    ApplicationNumber="0x34"
+    ApplicationVersion="0.8"
+    ReplacesVersions="0.8 0.7 0.6 0.5 0.4 0.3 0.2 0.1 0.0" 
+    ApplicationRevision="0"
+    ProductName="IO-HomeControl KNX Gateway"
+    BusCurrent="30"
+    OrderNumber="IO-HomeControl"
+    MediumTypes="MT-0 MT-5"
+    ApplicationName="OpenKnxIoHomecontrol" />
+
+    <op:define prefix="BASE" ModuleType="10"
+    share="../lib/OGM-Common/src/Common.share.xml" >
+    <op:verify File="../lib/OGM-Common/library.json" ModuleVersion="%BASE_VerifyVersion%" />
+  </op:define>
+
+  <op:define prefix="NET" ModuleType="11"
+    share="../lib/OFM-Network/src/Network.share.xml">
+    <op:verify File="../lib/OFM-Network/library.json" ModuleVersion="%NET_VerifyVersion%" /> 
+  </op:define>
+
+  <op:define prefix="UCT" ModuleType="19"
+      share="../lib/OFM-ConfigTransfer/src/ConfigTransfer.share.xml">
+      <op:verify File="../lib/OFM-ConfigTransfer/library.json" ModuleVersion="%UCT_VerifyVersion%" />
+  </op:define>
+
+  <op:define prefix="LOG" ModuleType="10"
+    share="../lib/OFM-LogicModule/src/Logikmodul.share.xml"
+    template="../lib/OFM-LogicModule/src/Logikmodul.templ.xml"
+    NumChannels="100"
+    KoOffset="100">
+    <op:verify File="../lib/OFM-LogicModule/library.json" ModuleVersion="%LOG_VerifyVersion%" /> 
+  </op:define>
+  <op:define prefix="FCB"
+    share="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml"
+    template="../lib/OFM-FunctionBlocks/src/FunctionBlocks.templ.xml"
+    NumChannels="15"
+    KoOffset="430"
+    ModuleType="26">
+    <op:verify File="../lib/OFM-FunctionBlocks/library.json" ModuleVersion="%FCB_VerifyVersion%" />
+  </op:define>
+
+  <op:define prefix="IOHC" ModuleType="24"
+    share="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml"
+    template="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml"
+    NumChannels="16"
+    KoOffset="600"
+    KoSingleOffset="400">
+    <op:verify File="../lib/OFM-IO-Homecontrol/library.json" ModuleVersion="%IOHC_VerifyVersion%" />
+  </op:define>
+<generate>
+            <Dynamic>
+            <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="BASE" />
+            <op:include href="../lib/OFM-Network/src/Network.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="NET" />
+            <op:include href="../lib/OFM-ConfigTransfer/src/ConfigTransfer.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="UCT" />
+            <op:include href="../lib/OFM-LogicModule/src/Logikmodul.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="LOG" />
+            <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="FCB" />
+            <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="IOHC" />
+          </Dynamic>
+</generate>
+</KNX>

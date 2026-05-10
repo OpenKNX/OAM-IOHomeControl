@@ -1,0 +1,34 @@
+#pragma once
+
+#include "HardwareConfig.h"
+
+#ifndef OPENKNX_LEDFUNC_IOHC_STATE
+#define OPENKNX_LEDFUNC_IOHC_STATE 410
+#endif
+
+#ifdef OPENKNX_INFOLED1_DEFAULT
+#undef OPENKNX_INFOLED1_DEFAULT
+#endif
+
+#ifdef OPENKNX_INFOLED2_DEFAULT
+#undef OPENKNX_INFOLED2_DEFAULT
+#endif
+
+#ifdef OPENKNX_INFOLED3_DEFAULT
+#undef OPENKNX_INFOLED3_DEFAULT
+#endif
+
+#define OPENKNX_INFOLED1_DEFAULT 2
+#define OPENKNX_INFOLED2_DEFAULT OPENKNX_LEDFUNC_IOHC_STATE
+#define OPENKNX_INFOLED3_DEFAULT 3
+
+#if defined(OKNXHW_OPENKNXIAO_KNEOPIX_ESP32S3_V1)
+#ifdef PROG_LED_PIN
+#undef PROG_LED_PIN
+#endif
+#define PROG_LED_PIN -1
+#endif
+
+inline void openknxIohcPrepareBoardLeds()
+{
+}
