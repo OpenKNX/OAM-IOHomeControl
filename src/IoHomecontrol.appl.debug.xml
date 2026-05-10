@@ -23,8 +23,8 @@
               <op:include href="../lib/OFM-LogicModule/src/Logikmodul.templ.xml" xpath="//ApplicationProgram/Static/ParameterTypes/ParameterType" type="template" prefix="LOG" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Static/ParameterTypes/ParameterType" prefix="FCB" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.templ.xml" xpath="//ApplicationProgram/Static/ParameterTypes/ParameterType" type="template" prefix="FCB" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ParameterTypes/ParameterType" prefix="IOHC" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ParameterTypes/ParameterType" type="template" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ParameterTypes/ParameterType" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ParameterTypes/ParameterType" type="template" prefix="IOHC" />
             </ParameterTypes>
             <Parameters>
               <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Static/Parameters/Parameter|//ApplicationProgram/Static/Parameters/Union" type="parameter" prefix="BASE" />
@@ -34,8 +34,8 @@
               <op:include href="../lib/OFM-LogicModule/src/Logikmodul.templ.xml" xpath="//ApplicationProgram/Static/Parameters/Parameter|//ApplicationProgram/Static/Parameters/Union" type="template" prefix="LOG" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Static/Parameters/Parameter|//ApplicationProgram/Static/Parameters/Union" type="parameter" prefix="FCB" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.templ.xml" xpath="//ApplicationProgram/Static/Parameters/Parameter|//ApplicationProgram/Static/Parameters/Union" type="template" prefix="FCB" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/Parameters/Parameter|//ApplicationProgram/Static/Parameters/Union" type="parameter" prefix="IOHC" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/Parameters/Parameter|//ApplicationProgram/Static/Parameters/Union" type="template" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/Parameters/Parameter|//ApplicationProgram/Static/Parameters/Union" type="parameter" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/Parameters/Parameter|//ApplicationProgram/Static/Parameters/Union" type="template" prefix="IOHC" />
             </Parameters>
             <ParameterRefs>
               <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Static/ParameterRefs/ParameterRef" prefix="BASE" />
@@ -45,8 +45,8 @@
               <op:include href="../lib/OFM-LogicModule/src/Logikmodul.templ.xml" xpath="//ApplicationProgram/Static/ParameterRefs/ParameterRef" type="template" prefix="LOG" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Static/ParameterRefs/ParameterRef" prefix="FCB" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.templ.xml" xpath="//ApplicationProgram/Static/ParameterRefs/ParameterRef" type="template" prefix="FCB" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ParameterRefs/ParameterRef" prefix="IOHC" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ParameterRefs/ParameterRef" type="template" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ParameterRefs/ParameterRef" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ParameterRefs/ParameterRef" type="template" prefix="IOHC" />
             </ParameterRefs>
             <ParameterCalculations>
               <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Static/ParameterCalculations/ParameterCalculation" prefix="BASE" />
@@ -56,8 +56,8 @@
               <op:include href="../lib/OFM-LogicModule/src/Logikmodul.templ.xml" xpath="//ApplicationProgram/Static/ParameterCalculations/ParameterCalculation" type="template" prefix="LOG" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Static/ParameterCalculations/ParameterCalculation" prefix="FCB" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.templ.xml" xpath="//ApplicationProgram/Static/ParameterCalculations/ParameterCalculation" type="template" prefix="FCB" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ParameterCalculations/ParameterCalculation" prefix="IOHC" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ParameterCalculations/ParameterCalculation" type="template" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ParameterCalculations/ParameterCalculation" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ParameterCalculations/ParameterCalculation" type="template" prefix="IOHC" />
             </ParameterCalculations>
             <ParameterValidations>
               <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Static/ParameterValidations/ParameterValidation" prefix="BASE" />
@@ -67,8 +67,8 @@
               <op:include href="../lib/OFM-LogicModule/src/Logikmodul.templ.xml" xpath="//ApplicationProgram/Static/ParameterValidations/ParameterValidation" type="template" prefix="LOG" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Static/ParameterValidations/ParameterValidation" prefix="FCB" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.templ.xml" xpath="//ApplicationProgram/Static/ParameterValidations/ParameterValidation" type="template" prefix="FCB" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ParameterValidations/ParameterValidation" prefix="IOHC" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ParameterValidations/ParameterValidation" type="template" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ParameterValidations/ParameterValidation" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ParameterValidations/ParameterValidation" type="template" prefix="IOHC" />
             </ParameterValidations>
             <ComObjectTable>
               <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Static/ComObjectTable/ComObject" prefix="BASE" />
@@ -78,8 +78,8 @@
               <op:include href="../lib/OFM-LogicModule/src/Logikmodul.templ.xml" xpath="//ApplicationProgram/Static/ComObjectTable/ComObject" type="template" prefix="LOG" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Static/ComObjectTable/ComObject" prefix="FCB" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.templ.xml" xpath="//ApplicationProgram/Static/ComObjectTable/ComObject" type="template" prefix="FCB" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ComObjectTable/ComObject" prefix="IOHC" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ComObjectTable/ComObject" type="template" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ComObjectTable/ComObject" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ComObjectTable/ComObject" type="template" prefix="IOHC" />
             </ComObjectTable>
             <ComObjectRefs>
               <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Static/ComObjectRefs/ComObjectRef" prefix="BASE" />
@@ -89,8 +89,8 @@
               <op:include href="../lib/OFM-LogicModule/src/Logikmodul.templ.xml" xpath="//ApplicationProgram/Static/ComObjectRefs/ComObjectRef" type="template" prefix="LOG" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Static/ComObjectRefs/ComObjectRef" prefix="FCB" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.templ.xml" xpath="//ApplicationProgram/Static/ComObjectRefs/ComObjectRef" type="template" prefix="FCB" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ComObjectRefs/ComObjectRef" prefix="IOHC" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ComObjectRefs/ComObjectRef" type="template" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/ComObjectRefs/ComObjectRef" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/Static/ComObjectRefs/ComObjectRef" type="template" prefix="IOHC" />
             </ComObjectRefs>
             <AddressTable MaxEntries="2047" />
             <AssociationTable MaxEntries="2047" />
@@ -119,7 +119,7 @@
               <op:include href="../lib/OFM-ConfigTransfer/src/ConfigTransfer.share.xml" xpath="//ApplicationProgram/Static/Messages/*" prefix="UCT" />
               <op:include href="../lib/OFM-LogicModule/src/Logikmodul.share.xml" xpath="//ApplicationProgram/Static/Messages/*" prefix="LOG" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Static/Messages/*" prefix="FCB" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/Messages/*" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/Messages/*" prefix="IOHC" />
             </Messages>
             <Script>
               <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Static/Script/text()" prefix="BASE" />
@@ -127,7 +127,7 @@
               <op:include href="../lib/OFM-ConfigTransfer/src/ConfigTransfer.share.xml" xpath="//ApplicationProgram/Static/Script/text()" prefix="UCT" />
               <op:include href="../lib/OFM-LogicModule/src/Logikmodul.share.xml" xpath="//ApplicationProgram/Static/Script/text()" prefix="LOG" />
               <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Static/Script/text()" prefix="FCB" />
-              <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/Script/text()" prefix="IOHC" />
+              <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Static/Script/text()" prefix="IOHC" />
             </Script>
             <Options TextParameterEncoding="iso-8859-15" SupportsExtendedMemoryServices="true" SupportsExtendedPropertyServices="true" />
           </Static>
@@ -139,8 +139,8 @@
             <op:include href="../lib/OFM-LogicModule/src/Logikmodul.templ.xml" xpath="//ApplicationProgram/ModuleDefs/*" type="template" prefix="LOG" />
             <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/ModuleDefs/*" prefix="FCB" />
             <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.templ.xml" xpath="//ApplicationProgram/ModuleDefs/*" type="template" prefix="FCB" />
-            <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/ModuleDefs/*" prefix="IOHC" />
-            <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/ModuleDefs/*" type="template" prefix="IOHC" />
+            <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/ModuleDefs/*" prefix="IOHC" />
+            <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.templ.xml" xpath="//ApplicationProgram/ModuleDefs/*" type="template" prefix="IOHC" />
           </ModuleDefs>
           <Dynamic>
             <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="BASE" />
@@ -148,7 +148,7 @@
             <op:include href="../lib/OFM-ConfigTransfer/src/ConfigTransfer.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="UCT" />
             <op:include href="../lib/OFM-LogicModule/src/Logikmodul.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="LOG" />
             <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="FCB" />
-            <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="IOHC" />
+            <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="IOHC" />
           </Dynamic>
         </ApplicationProgram>
       </ApplicationPrograms>
@@ -158,7 +158,7 @@
         <op:include href="../lib/OFM-ConfigTransfer/src/ConfigTransfer.share.xml" xpath="//Manufacturer/Baggages/*" prefix="UCT" />
         <op:include href="../lib/OFM-LogicModule/src/Logikmodul.share.xml" xpath="//Manufacturer/Baggages/*" prefix="LOG" />
         <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//Manufacturer/Baggages/*" prefix="FCB" />
-        <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//Manufacturer/Baggages/*" prefix="IOHC" />
+        <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//Manufacturer/Baggages/*" prefix="IOHC" />
       </Baggages>
       <Hardware>
         <Hardware Id="%HardwareId%" Name="OpenKNX-IO-HomeControl KNX Gateway" SerialNumber="0xAF34" VersionNumber="1" BusCurrent="30" HasIndividualAddress="true" HasApplicationProgram="true">

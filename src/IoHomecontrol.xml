@@ -48,12 +48,12 @@
   </op:define>
 
   <op:define prefix="IOHC" ModuleType="24"
-    share="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml"
-    template="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.templ.xml"
+    share="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml"
+    template="../lib/OFM-IOHomeControl/src/IoHomecontrol.templ.xml"
     NumChannels="16"
     KoOffset="600"
     KoSingleOffset="400">
-    <op:verify File="../lib/OFM-IO-Homecontrol/library.json" ModuleVersion="%IOHC_VerifyVersion%" />
+    <op:verify File="../lib/OFM-IOHomeControl/library.json" ModuleVersion="%IOHC_VerifyVersion%" />
   </op:define>
 <generate>
             <Dynamic>
@@ -62,7 +62,7 @@
             <op:include href="../lib/OFM-ConfigTransfer/src/ConfigTransfer.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="UCT" />
             <op:include href="../lib/OFM-LogicModule/src/Logikmodul.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="LOG" />
             <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="FCB" />
-            <op:include href="../lib/OFM-IO-Homecontrol/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="IOHC" />
+            <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="IOHC" />
           </Dynamic>
 </generate>
 </KNX>
