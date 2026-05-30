@@ -167,6 +167,33 @@
             "problemMatcher": []
         },
         {
+            "label": "Develop: OpenKNX_XIAO_S3_SX1276_IP",
+            "type": "shell",
+            "command": "scripts/OpenKNX-Build.ps1",
+            "args": [
+                "develop_OpenKNX_XIAO_S3_SX1276_IP"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Develop: OpenKNX_XIAO_S3_SX1276_IP (USB)",
+            "type": "shell",
+            "command": "scripts/OpenKNX-Build.ps1",
+            "args": [
+                "develop_OpenKNX_XIAO_S3_SX1276_IP",
+                "upload"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
             "label": "Develop: OpenKNX_REG1_ESP_V00_11_SX1276_TP",
             "type": "shell",
             "command": "scripts/OpenKNX-Build.ps1",
