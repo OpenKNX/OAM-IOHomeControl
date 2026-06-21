@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 13
+#define MAIN_ApplicationVersion 16
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14269
@@ -3825,7 +3825,6 @@
 #define IOHC_ParamBlockSize 52
 #define IOHC_ParamCalcIndex(index) (index + IOHC_ParamBlockOffset + _channelIndex * IOHC_ParamBlockSize)
 
-#define IOHC_IOHCPairingMode                      0      // 8 Bits, Bit 7-0
 #define IOHC_IOHCActive                           0      // 1 Bit, Bit 7
 #define     IOHC_IOHCActiveMask 0x80
 #define     IOHC_IOHCActiveShift 7
@@ -3906,8 +3905,6 @@
 #define IOHC_IOHCScene10CozyMode                 33      // 8 Bits, Bit 7-0
 #define IOHC_IOHCScene10OnOff                    23      // 8 Bits, Bit 7-0
 
-// Pairing-Modus
-#define ParamIOHC_IOHCPairingMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCPairingMode)))
 // Kanal aktiv
 #define ParamIOHC_IOHCActive                          ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCActive)) & IOHC_IOHCActiveMask))
 // Gerätetyp

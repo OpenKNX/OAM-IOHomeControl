@@ -1,13 +1,13 @@
 #pragma once
 
-#define MAIN_Version "54cad92"
+#define MAIN_Version "da02ca1"
 #define KNX_Version "2.3.1+49c1072"
 #define MODULE_FunctionBlocks_Version "0.10.0+e8ec058"
 #define MODULE_FunctionBlocks_Version_Major 0
 #define MODULE_FunctionBlocks_Version_Minor 10
 #define MODULE_FunctionBlocks_Version_Revision 0
 #define MODULE_FunctionBlocks_ETS 10
-#define MODULE_Common_Version "1.8.1+122a53f"
+#define MODULE_Common_Version "1.8.1+67ae535"
 #define MODULE_Common_Version_Major 1
 #define MODULE_Common_Version_Minor 8
 #define MODULE_Common_Version_Revision 1
@@ -22,12 +22,12 @@
 #define MODULE_IO_Version_Minor 1
 #define MODULE_IO_Version_Revision 0
 #define MODULE_IO_ETS 1
-#define MODULE_HardwareConfig_Version "1.0.0+6a68a61"
+#define MODULE_HardwareConfig_Version "1.0.0+8bf530a"
 #define MODULE_HardwareConfig_Version_Major 1
 #define MODULE_HardwareConfig_Version_Minor 0
 #define MODULE_HardwareConfig_Version_Revision 0
 #define MODULE_HardwareConfig_ETS 16
-#define MODULE_Network_Version "0.6.0+f888004"
+#define MODULE_Network_Version "0.6.0+b530c40"
 #define MODULE_Network_Version_Major 0
 #define MODULE_Network_Version_Minor 6
 #define MODULE_Network_Version_Revision 0
@@ -37,5 +37,5 @@
 #define MODULE_UsbExchange_Version_Minor 0
 #define MODULE_UsbExchange_Version_Revision 2
 #define MODULE_UsbExchange_ETS 0
-#define BUILD_DATETIME "2026-06-08 19:42:24"
-#define BUILD_TIMESTAMP 1780940544
+#define BUILD_DATETIME "2026-06-21 19:56:39"
+#define BUILD_TIMESTAMP 1782064599
