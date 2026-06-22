@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 16
+#define MAIN_ApplicationVersion 17
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14269
@@ -26,7 +26,7 @@
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 24
 #define NET_ModuleVersion 6
-#define UCT_ModuleVersion 5
+#define UCT_ModuleVersion 6
 #define LOG_ModuleVersion 67
 #define FCB_ModuleVersion 10
 #define IOHC_ModuleVersion 1
@@ -3788,35 +3788,35 @@
 // 
 #define KoFCB_CHKO9                               (knx.getGroupObject(FCB_KoCalcNumber(FCB_KoCHKO9)))
 
-#define IOHC_IOHCVisibleChannels                 13435      // uint8_t
-#define IOHC_IOHCRemoteObserve                   13436      // 1 Bit, Bit 7
-#define     IOHC_IOHCRemoteObserveMask 0x80
-#define     IOHC_IOHCRemoteObserveShift 7
+#define IOHC_VisibleChannels                     13435      // uint8_t
+#define IOHC_RemoteObserve                       13436      // 1 Bit, Bit 7
+#define     IOHC_RemoteObserveMask 0x80
+#define     IOHC_RemoteObserveShift 7
 
 // Anzahl io-homecontrol Kanäle
-#define ParamIOHC_IOHCVisibleChannels                 (knx.paramByte(IOHC_IOHCVisibleChannels))
+#define ParamIOHC_VisibleChannels                     (knx.paramByte(IOHC_VisibleChannels))
 // Fernbedienungs-Beobachtung aktivieren
-#define ParamIOHC_IOHCRemoteObserve                   ((bool)(knx.paramByte(IOHC_IOHCRemoteObserve) & IOHC_IOHCRemoteObserveMask))
+#define ParamIOHC_RemoteObserve                       ((bool)(knx.paramByte(IOHC_RemoteObserve) & IOHC_RemoteObserveMask))
 
-#define IOHC_KoIOHC_Modulstatus 420
-#define IOHC_KoIOHC_Discovery 421
-#define IOHC_KoIOHC_DiscoveryAktiv 422
-#define IOHC_KoIOHC_NetzwerkScan 423
-#define IOHC_KoIOHC_NetzwerkScanAktiv 424
-#define IOHC_KoIOHC_BeobachteteFernbedienung 425
+#define IOHC_KoModuleStatus 420
+#define IOHC_KoDiscovery 421
+#define IOHC_KoDiscoveryActive 422
+#define IOHC_KoNetworkScan 423
+#define IOHC_KoNetworkScanActive 424
+#define IOHC_KoObservedRemote 425
 
 // io-homecontrol Modulstatus
-#define KoIOHC_IOHC_Modulstatus                    (knx.getGroupObject(IOHC_KoIOHC_Modulstatus))
+#define KoIOHC_ModuleStatus                        (knx.getGroupObject(IOHC_KoModuleStatus))
 // Discovery starten
-#define KoIOHC_IOHC_Discovery                      (knx.getGroupObject(IOHC_KoIOHC_Discovery))
+#define KoIOHC_Discovery                           (knx.getGroupObject(IOHC_KoDiscovery))
 // Discovery aktiv
-#define KoIOHC_IOHC_DiscoveryAktiv                 (knx.getGroupObject(IOHC_KoIOHC_DiscoveryAktiv))
+#define KoIOHC_DiscoveryActive                     (knx.getGroupObject(IOHC_KoDiscoveryActive))
 // Netzwerk-Scan
-#define KoIOHC_IOHC_NetzwerkScan                   (knx.getGroupObject(IOHC_KoIOHC_NetzwerkScan))
+#define KoIOHC_NetworkScan                         (knx.getGroupObject(IOHC_KoNetworkScan))
 // Netzwerk-Scan aktiv
-#define KoIOHC_IOHC_NetzwerkScanAktiv              (knx.getGroupObject(IOHC_KoIOHC_NetzwerkScanAktiv))
+#define KoIOHC_NetworkScanActive                   (knx.getGroupObject(IOHC_KoNetworkScanActive))
 // Beobachtete Fernbedienung
-#define KoIOHC_IOHC_BeobachteteFernbedienung       (knx.getGroupObject(IOHC_KoIOHC_BeobachteteFernbedienung))
+#define KoIOHC_ObservedRemote                      (knx.getGroupObject(IOHC_KoObservedRemote))
 
 #define IOHC_ChannelCount 16
 
@@ -3825,232 +3825,232 @@
 #define IOHC_ParamBlockSize 52
 #define IOHC_ParamCalcIndex(index) (index + IOHC_ParamBlockOffset + _channelIndex * IOHC_ParamBlockSize)
 
-#define IOHC_IOHCActive                           0      // 1 Bit, Bit 7
-#define     IOHC_IOHCActiveMask 0x80
-#define     IOHC_IOHCActiveShift 7
-#define IOHC_IOHCDeviceType                       1      // 8 Bits, Bit 7-0
-#define IOHC_IOHCPollInterval                     2      // 16 Bits, Bit 15-0
-#define IOHC_IOHCOpeningTime                      4      // float (4 Byte)
-#define IOHC_IOHCClosingTime                      8      // float (4 Byte)
-#define IOHC_IOHCInvertDir                        0      // 1 Bit, Bit 6
-#define     IOHC_IOHCInvertDirMask 0x40
-#define     IOHC_IOHCInvertDirShift 6
-#define IOHC_IOHCPowerOnBeh                      12      // 8 Bits, Bit 7-0
-#define IOHC_IOHCProtocolMode                    44      // 8 Bits, Bit 7-0
-#define IOHC_IOHCOneWayTargetNodeId              45      // uint32_t
-#define IOHC_IOHCOneWayBroadcastType             49      // 8 Bits, Bit 7-0
-#define IOHC_IOHCOneWayManufacturer              50      // 8 Bits, Bit 7-0
-#define IOHC_IOHCOneWayProfileChannel            51      // uint8_t
-#define IOHC_IOHCSceneCount                      13      // 4 Bits, Bit 7-4
-#define     IOHC_IOHCSceneCountMask 0xF0
-#define     IOHC_IOHCSceneCountShift 4
-#define IOHC_IOHCScene1Position                  14      // uint8_t
-#define IOHC_IOHCScene1Action                    24      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene1Slat                      34      // uint8_t
-#define IOHC_IOHCScene1Temperature               14      // uint8_t
-#define IOHC_IOHCScene1CozyMode                  24      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene1OnOff                     14      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene2Position                  15      // uint8_t
-#define IOHC_IOHCScene2Action                    25      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene2Slat                      35      // uint8_t
-#define IOHC_IOHCScene2Temperature               15      // uint8_t
-#define IOHC_IOHCScene2CozyMode                  25      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene2OnOff                     15      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene3Position                  16      // uint8_t
-#define IOHC_IOHCScene3Action                    26      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene3Slat                      36      // uint8_t
-#define IOHC_IOHCScene3Temperature               16      // uint8_t
-#define IOHC_IOHCScene3CozyMode                  26      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene3OnOff                     16      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene4Position                  17      // uint8_t
-#define IOHC_IOHCScene4Action                    27      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene4Slat                      37      // uint8_t
-#define IOHC_IOHCScene4Temperature               17      // uint8_t
-#define IOHC_IOHCScene4CozyMode                  27      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene4OnOff                     17      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene5Position                  18      // uint8_t
-#define IOHC_IOHCScene5Action                    28      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene5Slat                      38      // uint8_t
-#define IOHC_IOHCScene5Temperature               18      // uint8_t
-#define IOHC_IOHCScene5CozyMode                  28      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene5OnOff                     18      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene6Position                  19      // uint8_t
-#define IOHC_IOHCScene6Action                    29      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene6Slat                      39      // uint8_t
-#define IOHC_IOHCScene6Temperature               19      // uint8_t
-#define IOHC_IOHCScene6CozyMode                  29      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene6OnOff                     19      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene7Position                  20      // uint8_t
-#define IOHC_IOHCScene7Action                    30      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene7Slat                      40      // uint8_t
-#define IOHC_IOHCScene7Temperature               20      // uint8_t
-#define IOHC_IOHCScene7CozyMode                  30      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene7OnOff                     20      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene8Position                  21      // uint8_t
-#define IOHC_IOHCScene8Action                    31      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene8Slat                      41      // uint8_t
-#define IOHC_IOHCScene8Temperature               21      // uint8_t
-#define IOHC_IOHCScene8CozyMode                  31      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene8OnOff                     21      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene9Position                  22      // uint8_t
-#define IOHC_IOHCScene9Action                    32      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene9Slat                      42      // uint8_t
-#define IOHC_IOHCScene9Temperature               22      // uint8_t
-#define IOHC_IOHCScene9CozyMode                  32      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene9OnOff                     22      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene10Position                 23      // uint8_t
-#define IOHC_IOHCScene10Action                   33      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene10Slat                     43      // uint8_t
-#define IOHC_IOHCScene10Temperature              23      // uint8_t
-#define IOHC_IOHCScene10CozyMode                 33      // 8 Bits, Bit 7-0
-#define IOHC_IOHCScene10OnOff                    23      // 8 Bits, Bit 7-0
+#define IOHC_cActive                              0      // 1 Bit, Bit 7
+#define     IOHC_cActiveMask 0x80
+#define     IOHC_cActiveShift 7
+#define IOHC_cDeviceType                          1      // 8 Bits, Bit 7-0
+#define IOHC_cPollInterval                        2      // 16 Bits, Bit 15-0
+#define IOHC_cOpeningTime                         4      // float (4 Byte)
+#define IOHC_cClosingTime                         8      // float (4 Byte)
+#define IOHC_cInvertDir                           0      // 1 Bit, Bit 6
+#define     IOHC_cInvertDirMask 0x40
+#define     IOHC_cInvertDirShift 6
+#define IOHC_cPowerOnBeh                         12      // 8 Bits, Bit 7-0
+#define IOHC_cProtocolMode                       44      // 8 Bits, Bit 7-0
+#define IOHC_cOneWayTargetNodeId                 45      // uint32_t
+#define IOHC_cOneWayBroadcastType                49      // 8 Bits, Bit 7-0
+#define IOHC_cOneWayManufacturer                 50      // 8 Bits, Bit 7-0
+#define IOHC_cOneWayProfileChannel               51      // uint8_t
+#define IOHC_cSceneCount                         13      // 4 Bits, Bit 7-4
+#define     IOHC_cSceneCountMask 0xF0
+#define     IOHC_cSceneCountShift 4
+#define IOHC_cScene1Position                     14      // uint8_t
+#define IOHC_cScene1Action                       24      // 8 Bits, Bit 7-0
+#define IOHC_cScene1Slat                         34      // uint8_t
+#define IOHC_cScene1Temperature                  14      // uint8_t
+#define IOHC_cScene1CozyMode                     24      // 8 Bits, Bit 7-0
+#define IOHC_cScene1OnOff                        14      // 8 Bits, Bit 7-0
+#define IOHC_cScene2Position                     15      // uint8_t
+#define IOHC_cScene2Action                       25      // 8 Bits, Bit 7-0
+#define IOHC_cScene2Slat                         35      // uint8_t
+#define IOHC_cScene2Temperature                  15      // uint8_t
+#define IOHC_cScene2CozyMode                     25      // 8 Bits, Bit 7-0
+#define IOHC_cScene2OnOff                        15      // 8 Bits, Bit 7-0
+#define IOHC_cScene3Position                     16      // uint8_t
+#define IOHC_cScene3Action                       26      // 8 Bits, Bit 7-0
+#define IOHC_cScene3Slat                         36      // uint8_t
+#define IOHC_cScene3Temperature                  16      // uint8_t
+#define IOHC_cScene3CozyMode                     26      // 8 Bits, Bit 7-0
+#define IOHC_cScene3OnOff                        16      // 8 Bits, Bit 7-0
+#define IOHC_cScene4Position                     17      // uint8_t
+#define IOHC_cScene4Action                       27      // 8 Bits, Bit 7-0
+#define IOHC_cScene4Slat                         37      // uint8_t
+#define IOHC_cScene4Temperature                  17      // uint8_t
+#define IOHC_cScene4CozyMode                     27      // 8 Bits, Bit 7-0
+#define IOHC_cScene4OnOff                        17      // 8 Bits, Bit 7-0
+#define IOHC_cScene5Position                     18      // uint8_t
+#define IOHC_cScene5Action                       28      // 8 Bits, Bit 7-0
+#define IOHC_cScene5Slat                         38      // uint8_t
+#define IOHC_cScene5Temperature                  18      // uint8_t
+#define IOHC_cScene5CozyMode                     28      // 8 Bits, Bit 7-0
+#define IOHC_cScene5OnOff                        18      // 8 Bits, Bit 7-0
+#define IOHC_cScene6Position                     19      // uint8_t
+#define IOHC_cScene6Action                       29      // 8 Bits, Bit 7-0
+#define IOHC_cScene6Slat                         39      // uint8_t
+#define IOHC_cScene6Temperature                  19      // uint8_t
+#define IOHC_cScene6CozyMode                     29      // 8 Bits, Bit 7-0
+#define IOHC_cScene6OnOff                        19      // 8 Bits, Bit 7-0
+#define IOHC_cScene7Position                     20      // uint8_t
+#define IOHC_cScene7Action                       30      // 8 Bits, Bit 7-0
+#define IOHC_cScene7Slat                         40      // uint8_t
+#define IOHC_cScene7Temperature                  20      // uint8_t
+#define IOHC_cScene7CozyMode                     30      // 8 Bits, Bit 7-0
+#define IOHC_cScene7OnOff                        20      // 8 Bits, Bit 7-0
+#define IOHC_cScene8Position                     21      // uint8_t
+#define IOHC_cScene8Action                       31      // 8 Bits, Bit 7-0
+#define IOHC_cScene8Slat                         41      // uint8_t
+#define IOHC_cScene8Temperature                  21      // uint8_t
+#define IOHC_cScene8CozyMode                     31      // 8 Bits, Bit 7-0
+#define IOHC_cScene8OnOff                        21      // 8 Bits, Bit 7-0
+#define IOHC_cScene9Position                     22      // uint8_t
+#define IOHC_cScene9Action                       32      // 8 Bits, Bit 7-0
+#define IOHC_cScene9Slat                         42      // uint8_t
+#define IOHC_cScene9Temperature                  22      // uint8_t
+#define IOHC_cScene9CozyMode                     32      // 8 Bits, Bit 7-0
+#define IOHC_cScene9OnOff                        22      // 8 Bits, Bit 7-0
+#define IOHC_cScene10Position                    23      // uint8_t
+#define IOHC_cScene10Action                      33      // 8 Bits, Bit 7-0
+#define IOHC_cScene10Slat                        43      // uint8_t
+#define IOHC_cScene10Temperature                 23      // uint8_t
+#define IOHC_cScene10CozyMode                    33      // 8 Bits, Bit 7-0
+#define IOHC_cScene10OnOff                       23      // 8 Bits, Bit 7-0
 
 // Kanal aktiv
-#define ParamIOHC_IOHCActive                          ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCActive)) & IOHC_IOHCActiveMask))
+#define ParamIOHC_cActive                             ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cActive)) & IOHC_cActiveMask))
 // Gerätetyp
-#define ParamIOHC_IOHCDeviceType                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCDeviceType)))
+#define ParamIOHC_cDeviceType                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cDeviceType)))
 // Status-Abfrageintervall (Fallback)
-#define ParamIOHC_IOHCPollInterval                    (knx.paramWord(IOHC_ParamCalcIndex(IOHC_IOHCPollInterval)))
+#define ParamIOHC_cPollInterval                       (knx.paramWord(IOHC_ParamCalcIndex(IOHC_cPollInterval)))
 // Öffnungszeit (Sekunden)
-#define ParamIOHC_IOHCOpeningTime                     (knx.paramFloat(IOHC_ParamCalcIndex(IOHC_IOHCOpeningTime), Float_Enc_IEEE754Single))
+#define ParamIOHC_cOpeningTime                        (knx.paramFloat(IOHC_ParamCalcIndex(IOHC_cOpeningTime), Float_Enc_IEEE754Single))
 // Schließzeit (Sekunden)
-#define ParamIOHC_IOHCClosingTime                     (knx.paramFloat(IOHC_ParamCalcIndex(IOHC_IOHCClosingTime), Float_Enc_IEEE754Single))
+#define ParamIOHC_cClosingTime                        (knx.paramFloat(IOHC_ParamCalcIndex(IOHC_cClosingTime), Float_Enc_IEEE754Single))
 // Richtung invertieren
-#define ParamIOHC_IOHCInvertDir                       ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCInvertDir)) & IOHC_IOHCInvertDirMask))
+#define ParamIOHC_cInvertDir                          ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cInvertDir)) & IOHC_cInvertDirMask))
 // Verhalten nach Neustart
-#define ParamIOHC_IOHCPowerOnBeh                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCPowerOnBeh)))
+#define ParamIOHC_cPowerOnBeh                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cPowerOnBeh)))
 // Protokoll-Modus
-#define ParamIOHC_IOHCProtocolMode                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCProtocolMode)))
+#define ParamIOHC_cProtocolMode                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cProtocolMode)))
 // 1W Aktor-Node-ID (dezimal, 0 = nicht gesetzt)
-#define ParamIOHC_IOHCOneWayTargetNodeId              (knx.paramInt(IOHC_ParamCalcIndex(IOHC_IOHCOneWayTargetNodeId)))
+#define ParamIOHC_cOneWayTargetNodeId                 (knx.paramInt(IOHC_ParamCalcIndex(IOHC_cOneWayTargetNodeId)))
 // 1W Broadcast-Typ
-#define ParamIOHC_IOHCOneWayBroadcastType             (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCOneWayBroadcastType)))
+#define ParamIOHC_cOneWayBroadcastType                (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayBroadcastType)))
 // 1W Controller-Hersteller (eigenes Profil)
-#define ParamIOHC_IOHCOneWayManufacturer              (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCOneWayManufacturer)))
+#define ParamIOHC_cOneWayManufacturer                 (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayManufacturer)))
 // 1W Profil teilen mit Kanal (0 = eigenes)
-#define ParamIOHC_IOHCOneWayProfileChannel            (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCOneWayProfileChannel)))
+#define ParamIOHC_cOneWayProfileChannel               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayProfileChannel)))
 // Anzahl Szenen
-#define ParamIOHC_IOHCSceneCount                      ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCSceneCount)) & IOHC_IOHCSceneCountMask) >> IOHC_IOHCSceneCountShift)
+#define ParamIOHC_cSceneCount                         ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSceneCount)) & IOHC_cSceneCountMask) >> IOHC_cSceneCountShift)
 // Szene 1 Position
-#define ParamIOHC_IOHCScene1Position                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene1Position)))
+#define ParamIOHC_cScene1Position                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene1Position)))
 // Szene 1 Aktion
-#define ParamIOHC_IOHCScene1Action                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene1Action)))
+#define ParamIOHC_cScene1Action                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene1Action)))
 // Szene 1 Lamellenposition
-#define ParamIOHC_IOHCScene1Slat                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene1Slat)))
+#define ParamIOHC_cScene1Slat                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene1Slat)))
 // Szene 1 Temperatur
-#define ParamIOHC_IOHCScene1Temperature               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene1Temperature)))
+#define ParamIOHC_cScene1Temperature                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene1Temperature)))
 // Szene 1 Modus
-#define ParamIOHC_IOHCScene1CozyMode                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene1CozyMode)))
+#define ParamIOHC_cScene1CozyMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene1CozyMode)))
 // Szene 1 Zustand
-#define ParamIOHC_IOHCScene1OnOff                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene1OnOff)))
+#define ParamIOHC_cScene1OnOff                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene1OnOff)))
 // Szene 2 Position
-#define ParamIOHC_IOHCScene2Position                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene2Position)))
+#define ParamIOHC_cScene2Position                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene2Position)))
 // Szene 2 Aktion
-#define ParamIOHC_IOHCScene2Action                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene2Action)))
+#define ParamIOHC_cScene2Action                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene2Action)))
 // Szene 2 Lamellenposition
-#define ParamIOHC_IOHCScene2Slat                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene2Slat)))
+#define ParamIOHC_cScene2Slat                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene2Slat)))
 // Szene 2 Temperatur
-#define ParamIOHC_IOHCScene2Temperature               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene2Temperature)))
+#define ParamIOHC_cScene2Temperature                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene2Temperature)))
 // Szene 2 Modus
-#define ParamIOHC_IOHCScene2CozyMode                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene2CozyMode)))
+#define ParamIOHC_cScene2CozyMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene2CozyMode)))
 // Szene 2 Zustand
-#define ParamIOHC_IOHCScene2OnOff                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene2OnOff)))
+#define ParamIOHC_cScene2OnOff                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene2OnOff)))
 // Szene 3 Position
-#define ParamIOHC_IOHCScene3Position                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene3Position)))
+#define ParamIOHC_cScene3Position                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene3Position)))
 // Szene 3 Aktion
-#define ParamIOHC_IOHCScene3Action                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene3Action)))
+#define ParamIOHC_cScene3Action                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene3Action)))
 // Szene 3 Lamellenposition
-#define ParamIOHC_IOHCScene3Slat                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene3Slat)))
+#define ParamIOHC_cScene3Slat                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene3Slat)))
 // Szene 3 Temperatur
-#define ParamIOHC_IOHCScene3Temperature               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene3Temperature)))
+#define ParamIOHC_cScene3Temperature                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene3Temperature)))
 // Szene 3 Modus
-#define ParamIOHC_IOHCScene3CozyMode                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene3CozyMode)))
+#define ParamIOHC_cScene3CozyMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene3CozyMode)))
 // Szene 3 Zustand
-#define ParamIOHC_IOHCScene3OnOff                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene3OnOff)))
+#define ParamIOHC_cScene3OnOff                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene3OnOff)))
 // Szene 4 Position
-#define ParamIOHC_IOHCScene4Position                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene4Position)))
+#define ParamIOHC_cScene4Position                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene4Position)))
 // Szene 4 Aktion
-#define ParamIOHC_IOHCScene4Action                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene4Action)))
+#define ParamIOHC_cScene4Action                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene4Action)))
 // Szene 4 Lamellenposition
-#define ParamIOHC_IOHCScene4Slat                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene4Slat)))
+#define ParamIOHC_cScene4Slat                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene4Slat)))
 // Szene 4 Temperatur
-#define ParamIOHC_IOHCScene4Temperature               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene4Temperature)))
+#define ParamIOHC_cScene4Temperature                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene4Temperature)))
 // Szene 4 Modus
-#define ParamIOHC_IOHCScene4CozyMode                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene4CozyMode)))
+#define ParamIOHC_cScene4CozyMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene4CozyMode)))
 // Szene 4 Zustand
-#define ParamIOHC_IOHCScene4OnOff                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene4OnOff)))
+#define ParamIOHC_cScene4OnOff                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene4OnOff)))
 // Szene 5 Position
-#define ParamIOHC_IOHCScene5Position                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene5Position)))
+#define ParamIOHC_cScene5Position                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene5Position)))
 // Szene 5 Aktion
-#define ParamIOHC_IOHCScene5Action                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene5Action)))
+#define ParamIOHC_cScene5Action                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene5Action)))
 // Szene 5 Lamellenposition
-#define ParamIOHC_IOHCScene5Slat                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene5Slat)))
+#define ParamIOHC_cScene5Slat                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene5Slat)))
 // Szene 5 Temperatur
-#define ParamIOHC_IOHCScene5Temperature               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene5Temperature)))
+#define ParamIOHC_cScene5Temperature                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene5Temperature)))
 // Szene 5 Modus
-#define ParamIOHC_IOHCScene5CozyMode                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene5CozyMode)))
+#define ParamIOHC_cScene5CozyMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene5CozyMode)))
 // Szene 5 Zustand
-#define ParamIOHC_IOHCScene5OnOff                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene5OnOff)))
+#define ParamIOHC_cScene5OnOff                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene5OnOff)))
 // Szene 6 Position
-#define ParamIOHC_IOHCScene6Position                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene6Position)))
+#define ParamIOHC_cScene6Position                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene6Position)))
 // Szene 6 Aktion
-#define ParamIOHC_IOHCScene6Action                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene6Action)))
+#define ParamIOHC_cScene6Action                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene6Action)))
 // Szene 6 Lamellenposition
-#define ParamIOHC_IOHCScene6Slat                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene6Slat)))
+#define ParamIOHC_cScene6Slat                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene6Slat)))
 // Szene 6 Temperatur
-#define ParamIOHC_IOHCScene6Temperature               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene6Temperature)))
+#define ParamIOHC_cScene6Temperature                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene6Temperature)))
 // Szene 6 Modus
-#define ParamIOHC_IOHCScene6CozyMode                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene6CozyMode)))
+#define ParamIOHC_cScene6CozyMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene6CozyMode)))
 // Szene 6 Zustand
-#define ParamIOHC_IOHCScene6OnOff                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene6OnOff)))
+#define ParamIOHC_cScene6OnOff                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene6OnOff)))
 // Szene 7 Position
-#define ParamIOHC_IOHCScene7Position                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene7Position)))
+#define ParamIOHC_cScene7Position                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene7Position)))
 // Szene 7 Aktion
-#define ParamIOHC_IOHCScene7Action                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene7Action)))
+#define ParamIOHC_cScene7Action                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene7Action)))
 // Szene 7 Lamellenposition
-#define ParamIOHC_IOHCScene7Slat                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene7Slat)))
+#define ParamIOHC_cScene7Slat                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene7Slat)))
 // Szene 7 Temperatur
-#define ParamIOHC_IOHCScene7Temperature               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene7Temperature)))
+#define ParamIOHC_cScene7Temperature                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene7Temperature)))
 // Szene 7 Modus
-#define ParamIOHC_IOHCScene7CozyMode                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene7CozyMode)))
+#define ParamIOHC_cScene7CozyMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene7CozyMode)))
 // Szene 7 Zustand
-#define ParamIOHC_IOHCScene7OnOff                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene7OnOff)))
+#define ParamIOHC_cScene7OnOff                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene7OnOff)))
 // Szene 8 Position
-#define ParamIOHC_IOHCScene8Position                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene8Position)))
+#define ParamIOHC_cScene8Position                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene8Position)))
 // Szene 8 Aktion
-#define ParamIOHC_IOHCScene8Action                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene8Action)))
+#define ParamIOHC_cScene8Action                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene8Action)))
 // Szene 8 Lamellenposition
-#define ParamIOHC_IOHCScene8Slat                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene8Slat)))
+#define ParamIOHC_cScene8Slat                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene8Slat)))
 // Szene 8 Temperatur
-#define ParamIOHC_IOHCScene8Temperature               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene8Temperature)))
+#define ParamIOHC_cScene8Temperature                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene8Temperature)))
 // Szene 8 Modus
-#define ParamIOHC_IOHCScene8CozyMode                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene8CozyMode)))
+#define ParamIOHC_cScene8CozyMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene8CozyMode)))
 // Szene 8 Zustand
-#define ParamIOHC_IOHCScene8OnOff                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene8OnOff)))
+#define ParamIOHC_cScene8OnOff                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene8OnOff)))
 // Szene 9 Position
-#define ParamIOHC_IOHCScene9Position                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene9Position)))
+#define ParamIOHC_cScene9Position                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene9Position)))
 // Szene 9 Aktion
-#define ParamIOHC_IOHCScene9Action                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene9Action)))
+#define ParamIOHC_cScene9Action                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene9Action)))
 // Szene 9 Lamellenposition
-#define ParamIOHC_IOHCScene9Slat                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene9Slat)))
+#define ParamIOHC_cScene9Slat                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene9Slat)))
 // Szene 9 Temperatur
-#define ParamIOHC_IOHCScene9Temperature               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene9Temperature)))
+#define ParamIOHC_cScene9Temperature                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene9Temperature)))
 // Szene 9 Modus
-#define ParamIOHC_IOHCScene9CozyMode                  (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene9CozyMode)))
+#define ParamIOHC_cScene9CozyMode                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene9CozyMode)))
 // Szene 9 Zustand
-#define ParamIOHC_IOHCScene9OnOff                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene9OnOff)))
+#define ParamIOHC_cScene9OnOff                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene9OnOff)))
 // Szene 10 Position
-#define ParamIOHC_IOHCScene10Position                 (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene10Position)))
+#define ParamIOHC_cScene10Position                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene10Position)))
 // Szene 10 Aktion
-#define ParamIOHC_IOHCScene10Action                   (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene10Action)))
+#define ParamIOHC_cScene10Action                      (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene10Action)))
 // Szene 10 Lamellenposition
-#define ParamIOHC_IOHCScene10Slat                     (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene10Slat)))
+#define ParamIOHC_cScene10Slat                        (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene10Slat)))
 // Szene 10 Temperatur
-#define ParamIOHC_IOHCScene10Temperature              (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene10Temperature)))
+#define ParamIOHC_cScene10Temperature                 (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene10Temperature)))
 // Szene 10 Modus
-#define ParamIOHC_IOHCScene10CozyMode                 (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene10CozyMode)))
+#define ParamIOHC_cScene10CozyMode                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene10CozyMode)))
 // Szene 10 Zustand
-#define ParamIOHC_IOHCScene10OnOff                    (knx.paramByte(IOHC_ParamCalcIndex(IOHC_IOHCScene10OnOff)))
+#define ParamIOHC_cScene10OnOff                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cScene10OnOff)))
 
 // deprecated
 #define IOHC_KoOffset 600
@@ -4139,19 +4139,6 @@
 #define KoIOHC_CHCozyPresence                      (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHCozyPresence)))
 // Kanal %C% Fensterkontakt
 #define KoIOHC_CHCozyWindow                        (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHCozyWindow)))
-
-
-
-// Header generation for Module 'BASE_KommentarModule'
-
-#define BASE_KommentarModuleCount 0
-#define BASE_KommentarModuleModuleParamSize 0
-#define BASE_KommentarModuleSubmodulesParamSize 0
-#define BASE_KommentarModuleParamSize 0
-#define BASE_KommentarModuleParamOffset 14269
-#define BASE_KommentarModuleCalcIndex(index, m1) (index + BASE_KommentarModuleParamOffset + _channelIndex * BASE_KommentarModuleCount * BASE_KommentarModuleParamSize + m1 * BASE_KommentarModuleParamSize)
-
-
 
 
 // enumeration types
