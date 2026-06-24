@@ -1,29 +1,36 @@
-# OAM-IO-Homecontrol
+# OAM-IOHomeControl
 
-OpenKNX application module for an io-homecontrol-to-KNX gateway.
+OpenKNX application for an io-homecontrol-to-KNX gateway.
 
-This repository assembles the `OFM-IO-Homecontrol` firmware module with the required OpenKNX base and optional application modules into complete build targets and ETS products. The detailed io-homecontrol functionality itself is documented in the firmware module.
+This repository assembles the [OFM-IOHomeControl](https://github.com/OpenKNX/OFM-IOHomeControl) function module with the required OpenKNX base and application function modules into complete build targets and ETS products. The io-homecontrol functionality itself is documented in the [OFM-IOHomeControl](https://github.com/OpenKNX/OFM-IOHomeControl) function module.
 
-## Scope of this repository
+## Functions / OpenKNX modules
 
-This OAM provides:
+| Function | Module | Description |
+| --- | --- | --- |
+| io-homecontrol gateway | [OFM-IOHomeControl](https://github.com/OpenKNX/OFM-IOHomeControl) | 16 channels for io-homecontrol devices: radio, protocol, pairing and ETS integration |
+| 100 logic channels | [OFM-LogicModule](https://github.com/OpenKNX/OFM-LogicModule) | Pre- and post-processing of events and conversion between DPTs |
+| 15 function blocks | [OFM-FunctionBlocks](https://github.com/OpenKNX/OFM-FunctionBlocks) | Grouping of channels into reusable function blocks |
+| Network | [OFM-Network](https://github.com/OpenKNX/OFM-Network) | Network support for KNX IP targets |
+| Configuration transfer | [OFM-ConfigTransfer](https://github.com/OpenKNX/OFM-ConfigTransfer) | Copy, export and import of configuration examples |
+| OpenKNX base | [OGM-Common](https://github.com/OpenKNX/OGM-Common) | OpenKNX base framework |
 
-- PlatformIO environments for the supported hardware targets
-- OpenKNX module composition and registration
-- ETS product generation for the complete application
-- Integration of `OFM-IO-Homecontrol` with OpenKNX Logic, FunctionBlocks, Network and ConfigTransfer modules
-- Release/build scripts and target-specific configuration
+Function module registration order in [src/main.cpp](src/main.cpp):
+
+1. Network, conditional on KNX IP targets
+2. IoHomecontrol
+3. Logic
+4. FunctionBlocks
 
 ## Module documentation
 
-For all io-homecontrol specific details, use the `OFM-IO-Homecontrol` documentation:
+For all io-homecontrol specific details, use the [OFM-IOHomeControl](https://github.com/OpenKNX/OFM-IOHomeControl) documentation:
 
-- Application description: `doc/Applikationsbeschreibung-IoHomecontrol.md` in the `OFM-IO-Homecontrol` module
-- Pairing and commissioning notes: module pairing/debug documentation
-- Communication objects and DPTs: module application description
-- Radio/protocol diagnostics: module README and service documentation
+- Application description, communication objects and DPTs
+- Pairing and commissioning notes
+- Radio/protocol diagnostics
 
-## Hardware Targets
+## Hardware targets
 
 | Board | Radio | KNX | Environment |
 | --- | --- | --- | --- |
@@ -36,77 +43,23 @@ For all io-homecontrol specific details, use the `OFM-IO-Homecontrol` documentat
 
 All targets use ESP32 with 8 MB flash.
 
-## Included Modules
-
-| Module | Description |
-| --- | --- |
-| OFM-IO-Homecontrol | io-homecontrol radio, protocol, channel logic and ETS integration |
-| OFM-LogicModule | OpenKNX logic module |
-| OFM-FunctionBlocks | OpenKNX function blocks |
-| OFM-Network | Network support for KNX IP targets |
-| OFM-ConfigTransfer | ConfigTransfer pages included in the ETS product |
-| OGM-Common | OpenKNX base framework |
-
-Firmware module registration order in `main.cpp`:
-
-1. Network, conditional on KNX IP targets
-2. IoHomecontrol
-3. Logic
-4. FunctionBlocks
-
 ## Building
 
-### Prerequisites
+This repository follows the standard OpenKNX build process. See the [OpenKNX wiki](https://github.com/OpenKNX/OpenKNX/wiki) for the general toolchain setup (PlatformIO, OpenKNXproducer, dependency restore).
 
-- PlatformIO
-- OpenKNXproducer
-
-### Generate ETS Product
+Generate the ETS product and build a firmware target:
 
 ```bash
 OpenKNXproducer create --Debug -h include/knxprod.h src/IoHomecontrol
-```
-
-This generates:
-
-- `include/knxprod.h` for firmware compilation
-- `src/IoHomecontrol.knxprod` for ETS import
-
-### Build Firmware
-
-```bash
-# Develop build for XIAO S3 + SX1262 + KNX TP
 pio run -e develop_OpenKNX_XIAO_S3_SX1262_TP
-
-# Release build for REG1 + SX1276 + KNX TP
-pio run -e release_OpenKNX_REG1_ESP_V00_11_SX1276_TP
 ```
 
-### Release Build
+A complete release build is produced with:
 
 ```powershell
 scripts/Build-Release.ps1 -Release
 ```
 
-## Project Structure
+## Changelog
 
-```text
-OAM-IO-Homecontrol/
-  include/
-    hardware.h          Hardware pin definitions and LED defaults
-    versions.h          Firmware version strings
-    knxprod.h           Generated parameter/KO macros
-  src/
-    main.cpp            Module registration and startup
-    IoHomecontrol.xml   Application XML
-    IoHomecontrol.conf.xml
-    IoHomecontrol.base.xml
-  lib/                  Symlinked OFM/OGM dependencies
-  scripts/              Build automation
-  platformio.ini
-  platformio.custom.ini Build environments and radio pin maps
-```
-
-## Version
-
-`0.1.0`
+See [CHANGELOG.md](CHANGELOG.md).
