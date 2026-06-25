@@ -6,21 +6,14 @@ This repository assembles the [OFM-IOHomeControl](https://github.com/OpenKNX/OFM
 
 ## Functions / OpenKNX modules
 
-| Function | Module | Description |
-| --- | --- | --- |
-| io-homecontrol gateway | [OFM-IOHomeControl](https://github.com/OpenKNX/OFM-IOHomeControl) | 16 channels for io-homecontrol devices: radio, protocol, pairing and ETS integration |
-| 100 logic channels | [OFM-LogicModule](https://github.com/OpenKNX/OFM-LogicModule) | Pre- and post-processing of events and conversion between DPTs |
-| 15 function blocks | [OFM-FunctionBlocks](https://github.com/OpenKNX/OFM-FunctionBlocks) | Grouping of channels into reusable function blocks |
-| Network | [OFM-Network](https://github.com/OpenKNX/OFM-Network) | Network support for KNX IP targets |
-| Configuration transfer | [OFM-ConfigTransfer](https://github.com/OpenKNX/OFM-ConfigTransfer) | Copy, export and import of configuration examples |
-| OpenKNX base | [OGM-Common](https://github.com/OpenKNX/OGM-Common) | OpenKNX base framework |
-
-Function module registration order in [src/main.cpp](src/main.cpp):
-
-1. Network, conditional on KNX IP targets
-2. IoHomecontrol
-3. Logic
-4. FunctionBlocks
+| Function | Module | ETS application manual | Description |
+| --- | --- | --- | --- |
+| io-homecontrol gateway | [OFM-IOHomeControl](https://github.com/OpenKNX/OFM-IOHomeControl) | [Applikationsbeschreibung IoHomecontrol](https://github.com/OpenKNX/OFM-IOHomeControl/blob/v1/doc/Applikationsbeschreibung-IoHomecontrol.md) | 16 channels for io-homecontrol devices: radio, protocol, pairing and ETS integration |
+| 99 logic channels | [OFM-LogicModule](https://github.com/OpenKNX/OFM-LogicModule) | [Applikationsbeschreibung Logik](https://github.com/OpenKNX/OFM-LogicModule/blob/v1/doc/Applikationsbeschreibung-Logik.md) | Pre- and post-processing of events and conversion between DPTs |
+| 15 function blocks | [OFM-FunctionBlocks](https://github.com/OpenKNX/OFM-FunctionBlocks) | [Applikationsbeschreibung FunctionBlocks](https://github.com/OpenKNX/OFM-FunctionBlocks/blob/v1/doc/Applikationsbeschreibung-FunctionBlocks.md) | Grouping of channels into reusable function blocks |
+| Network | [OFM-Network](https://github.com/OpenKNX/OFM-Network) | [Applikationsbeschreibung Netzwerk](https://github.com/OpenKNX/OFM-Network/blob/v1/doc/Applikationsbeschreibung-Netzwerk.md) | Network support for KNX IP targets |
+| Configuration transfer | [OFM-ConfigTransfer](https://github.com/OpenKNX/OFM-ConfigTransfer) | [Applikationsbeschreibung ConfigTransfer](https://github.com/OpenKNX/OFM-ConfigTransfer/blob/v1/doc/Applikationsbeschreibung-ConfigTransfer.md) | Copy, export and import of configuration examples |
+| OpenKNX base | [OGM-Common](https://github.com/OpenKNX/OGM-Common) | – | OpenKNX base framework |
 
 ## Module documentation
 
