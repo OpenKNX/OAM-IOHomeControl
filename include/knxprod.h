@@ -18,10 +18,10 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 17
+#define MAIN_ApplicationVersion 18
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14269
+#define MAIN_ParameterSize 14285
 #define MAIN_MaxKoNumber 999
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 24
@@ -3822,7 +3822,7 @@
 
 // Parameter per channel
 #define IOHC_ParamBlockOffset 13437
-#define IOHC_ParamBlockSize 52
+#define IOHC_ParamBlockSize 53
 #define IOHC_ParamCalcIndex(index) (index + IOHC_ParamBlockOffset + _channelIndex * IOHC_ParamBlockSize)
 
 #define IOHC_cActive                              0      // 1 Bit, Bit 7
@@ -3841,6 +3841,7 @@
 #define IOHC_cOneWayBroadcastType                49      // 8 Bits, Bit 7-0
 #define IOHC_cOneWayManufacturer                 50      // 8 Bits, Bit 7-0
 #define IOHC_cOneWayProfileChannel               51      // uint8_t
+#define IOHC_cOneWayAcei                         52      // 8 Bits, Bit 7-0
 #define IOHC_cSceneCount                         13      // 4 Bits, Bit 7-4
 #define     IOHC_cSceneCountMask 0xF0
 #define     IOHC_cSceneCountShift 4
@@ -3929,6 +3930,8 @@
 #define ParamIOHC_cOneWayManufacturer                 (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayManufacturer)))
 // 1W Profil teilen mit Kanal (0 = eigenes)
 #define ParamIOHC_cOneWayProfileChannel               (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayProfileChannel)))
+// 1W Befehls-Priorität (ACEI)
+#define ParamIOHC_cOneWayAcei                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayAcei)))
 // Anzahl Szenen
 #define ParamIOHC_cSceneCount                         ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSceneCount)) & IOHC_cSceneCountMask) >> IOHC_cSceneCountShift)
 // Szene 1 Position
