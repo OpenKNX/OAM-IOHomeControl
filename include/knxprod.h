@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 18
+#define MAIN_ApplicationVersion 24
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14285
@@ -27,7 +27,7 @@
 #define BASE_ModuleVersion 24
 #define NET_ModuleVersion 6
 #define UCT_ModuleVersion 6
-#define LOG_ModuleVersion 67
+#define LOG_ModuleVersion 68
 #define FCB_ModuleVersion 10
 #define IOHC_ModuleVersion 1
 // Parameter with single occurrence
@@ -1749,7 +1749,7 @@
 #define ParamLOG_fLogic                              (PT_Logic)(knx.paramByte(LOG_ParamCalcIndex(LOG_fLogic)))
 // Logik auswerten
 #define ParamLOG_fCalculate                          (PT_Calculate)(knx.paramByte(LOG_ParamCalcIndex(LOG_fCalculate)) & LOG_fCalculateMask)
-// Kanal deaktivieren (zu Testzwecken)
+// Suspendiert
 #define ParamLOG_fDisable                            ((bool)(knx.paramByte(LOG_ParamCalcIndex(LOG_fDisable)) & LOG_fDisableMask))
 // Tor geht sofort wieder zu
 #define ParamLOG_fTGate                              ((bool)(knx.paramByte(LOG_ParamCalcIndex(LOG_fTGate)) & LOG_fTGateMask))
@@ -3828,6 +3828,9 @@
 #define IOHC_cActive                              0      // 1 Bit, Bit 7
 #define     IOHC_cActiveMask 0x80
 #define     IOHC_cActiveShift 7
+#define IOHC_cSuspend                             0      // 1 Bit, Bit 5
+#define     IOHC_cSuspendMask 0x20
+#define     IOHC_cSuspendShift 5
 #define IOHC_cDeviceType                          1      // 8 Bits, Bit 7-0
 #define IOHC_cPollInterval                        2      // 16 Bits, Bit 15-0
 #define IOHC_cOpeningTime                         4      // float (4 Byte)
@@ -3906,8 +3909,10 @@
 #define IOHC_cScene10CozyMode                    33      // 8 Bits, Bit 7-0
 #define IOHC_cScene10OnOff                       23      // 8 Bits, Bit 7-0
 
-// Kanal aktiv
+// Kanalaktivität
 #define ParamIOHC_cActive                             ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cActive)) & IOHC_cActiveMask))
+// Suspendiert
+#define ParamIOHC_cSuspend                            ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSuspend)) & IOHC_cSuspendMask))
 // Gerätetyp
 #define ParamIOHC_cDeviceType                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cDeviceType)))
 // Status-Abfrageintervall (Fallback)
