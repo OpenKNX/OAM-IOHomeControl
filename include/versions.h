@@ -1,6 +1,6 @@
 #pragma once
 
-#define MAIN_Version "6c247bb"
+#define MAIN_Version "46a5e86"
 #define KNX_Version "2.3.1+53ddb18"
 #define MODULE_FunctionBlocks_Version "0.10.0+99e76b7"
 #define MODULE_FunctionBlocks_Version_Major 0
@@ -46,5 +46,5 @@
 #define MODULE_FileTransferModule_Version_Minor 1
 #define MODULE_FileTransferModule_Version_Revision 5
 #define MODULE_FileTransferModule_ETS 1
-#define BUILD_DATETIME "2026-07-21 22:43:26"
-#define BUILD_TIMESTAMP 1784666606
+#define BUILD_DATETIME "2026-08-05 22:47:24"
+#define BUILD_TIMESTAMP 1785962844

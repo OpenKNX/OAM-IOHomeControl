@@ -18,14 +18,14 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 25
+#define MAIN_ApplicationVersion 27
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14285
 #define MAIN_MaxKoNumber 999
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 24
-#define NET_ModuleVersion 6
+#define NET_ModuleVersion 7
 #define UCT_ModuleVersion 6
 #define LOG_ModuleVersion 68
 #define FCB_ModuleVersion 10
@@ -1739,11 +1739,11 @@
 #define LOG_fOOffKOSendNumber                   81      // uint16_t
 #define LOG_fOOffKOSendNumberRel                81      // int16_t
 
-// Zeit bis der Kanal nach einem Neustart aktiv wird
+// Startverzögerung
 #define ParamLOG_fChannelDelayBase                   ((knx.paramByte(LOG_ParamCalcIndex(LOG_fChannelDelayBase)) & LOG_fChannelDelayBaseMask) >> LOG_fChannelDelayBaseShift)
-// Zeit bis der Kanal nach einem Neustart aktiv wird
+// Startverzögerung
 #define ParamLOG_fChannelDelayTime                   (knx.paramWord(LOG_ParamCalcIndex(LOG_fChannelDelayTime)) & LOG_fChannelDelayTimeMask)
-// Zeit bis der Kanal nach einem Neustart aktiv wird (in Millisekunden)
+// Startverzögerung (in Millisekunden)
 #define ParamLOG_fChannelDelayTimeMS                 (paramDelay(knx.paramWord(LOG_ParamCalcIndex(LOG_fChannelDelayTime))))
 // Logik-Operation
 #define ParamLOG_fLogic                              (PT_Logic)(knx.paramByte(LOG_ParamCalcIndex(LOG_fLogic)))
@@ -3831,6 +3831,9 @@
 #define IOHC_cSuspend                             0      // 1 Bit, Bit 5
 #define     IOHC_cSuspendMask 0x20
 #define     IOHC_cSuspendShift 5
+#define IOHC_cDimmable                            0      // 1 Bit, Bit 4
+#define     IOHC_cDimmableMask 0x10
+#define     IOHC_cDimmableShift 4
 #define IOHC_cDeviceType                          1      // 8 Bits, Bit 7-0
 #define IOHC_cPollInterval                        2      // 16 Bits, Bit 15-0
 #define IOHC_cOpeningTime                         4      // float (4 Byte)
@@ -3913,6 +3916,8 @@
 #define ParamIOHC_cActive                             ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cActive)) & IOHC_cActiveMask))
 // Suspendiert
 #define ParamIOHC_cSuspend                            ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSuspend)) & IOHC_cSuspendMask))
+// Dimmbar
+#define ParamIOHC_cDimmable                           ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cDimmable)) & IOHC_cDimmableMask))
 // Gerätetyp
 #define ParamIOHC_cDeviceType                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cDeviceType)))
 // Status-Abfrageintervall (Fallback)
