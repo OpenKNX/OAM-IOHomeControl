@@ -11,6 +11,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Hardened 2W pairing response correlation and kept unicast response waits on their request channel.
+- Defaulted 1W enrollment to `remove-add` (`0x39 -> 0x30`); `announce-add` remains an explicit diagnostic fallback.
+- Documented the class-addressed 1W model and safe handling of extracted keys.
+- Added documented pairing outcomes/diagnostics, RS100 silent-operation support, and repeatable native OFM suite entry points.
+
 ## v0.1.0: 2026-06-24 (Initial assembly)
 
 - Initial assembly of the OAM-IOHomeControl application

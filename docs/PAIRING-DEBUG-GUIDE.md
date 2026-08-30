@@ -15,7 +15,7 @@ Recommended preparation:
 3. Make sure the target channel is configured in ETS:
    - set the correct device type
    - choose `2W` or `1W`
-   - for `1W`, enter the known actuator node ID
+   - for `1W`, select the broadcast/device class and controller profile
 4. Keep the device close to the gateway during pairing.
 
 ## 2W Pairing
@@ -31,6 +31,11 @@ Use this flow for normal bidirectional devices.
    - alternative: serial console command `iohc pair NN`
 6. Wait for the pairing flow to finish.
    On a develop build, the serial console should immediately show `ETS: pairing started for channel N` when the ETS action is received.
+   `iohc pairdiag status` also reports a structured outcome:
+   - `no-response`: no correlated device answer arrived; check learn mode, range, power and RF channel.
+   - `invalid-response`: a frame arrived but did not match the expected peer, destination or phase; check the selected device and controller identity.
+   - `key-exchange-failure`: discovery worked but the `0x31/0x3C/0x32/0x33` exchange exhausted its retry budget; keep the actuator awake and retry in learn mode.
+   - `configuration-failure`: the negotiated key was stored, but optional automatic status feedback was not configured. Verify the device with a normal command.
 7. Check whether the channel is paired:
    - ETS object `K9 Pairing-Status`
    - or serial console `iohc status NN`
@@ -43,17 +48,22 @@ Use this flow for unidirectional devices.
 Important constraints:
 
 - `1W` pairing is blind learn, so the actuator does not confirm success over the air.
-- You must know the actuator node ID in advance.
+- A normal `1W` enrollment is class-addressed; the actuator node ID is not put on air and is optional diagnostics metadata only.
+- Select the matching broadcast/device class. A class mismatch looks exactly like a blind-pairing failure.
+- The default enrollment sequence is authenticated self-remove `0x39`, then add/send-key `0x30` (`remove-add`). `announce-add` is retained only as an explicit diagnostic fallback.
+- A controller profile consists of its remote node ID, key, manufacturer and monotonic sequence counter. Keep the profile persistent: rolling a sequence counter backwards can make a valid remote appear to stop working.
+- A new controller profile enrolls a new virtual remote. Cloning instead captures an existing remote's `0x30` SendKey frame and intentionally takes over that remote identity; do this only for a remote you own.
+- Some remotes append an optional MAC trailer to `0x30`. Enable the ETS `1W Anmeldung mit MAC-Anhang (0x30)` option only when the target family requires it. Never paste a captured `0x30`, controller key, or extracted key into public logs.
 
 Steps:
 
 1. In ETS, set `Protokollmodus` to `1W`.
-2. Enter the actuator node ID in `1W Aktor-Node-ID`.
+2. Configure the controller identity/key and matching broadcast/device class. Do not use an observed actuator ID as proof of success.
 3. Set `Anlernmodus` to `Anlernen`.
 4. Put the actuator into learn mode.
 5. Trigger pairing:
    - preferred: ETS online pairing action
-   - alternative: serial console `iohc pair NN AABBCC`
+   - channel-first diagnostic syntax: `iohcNN pair1w remove-add` (default), `iohcNN pair1w add-only`, `iohcNN pair1w announce-add`, `iohcNN pair1w announce-only`, or `iohcNN pair1w remove`
 6. Verify with a real device action, because a pure RF acknowledgment is not expected in the same way as `2W`.
    On a develop build, the serial console should immediately show `ETS: 1W pairing started for channel N` when the ETS action is received.
 
@@ -90,10 +100,11 @@ After reboot, run these commands in order:
 5. Start pairing:
    - ETS online pairing action
    - or `iohc pair NN`
-   - or `iohc pair NN AABBCC` for `1W`
+   - or an explicit `iohcNN pair1w ...` mode for `1W`
 6. Wait until the controller returns to idle or clearly fails.
 7. `iohc status NN`
-8. `iohc radio`
+8. `iohc pairdiag status`
+9. `iohc radio`
 
 If the channel is still not paired, also run:
 
@@ -112,7 +123,7 @@ If there is nearby io-homecontrol traffic and you want extra RF context:
 
 ## Copy-Paste Command Blocks
 
-Use the block that matches your hardware. Replace `NN` with your channel number. For `1W`, replace `AABBCC` with the actuator node ID.
+Use the block that matches your hardware. Replace `NN` with your channel number. A `1W` controller is class-addressed; an optional observed actuator ID is diagnostics metadata, not an on-air target.
 
 ### SX1262
 
@@ -137,7 +148,7 @@ iohc radio raw
 iohc radio txtest
 iohc radio sweep 3
 iohc pairdiag on
-iohc pair NN AABBCC
+iohcNN pair1w remove-add
 iohc status NN
 iohc radio
 ```
@@ -165,7 +176,7 @@ iohc radio raw
 iohc radio txtest
 iohc radio sweep 3
 iohc pairdiag on
-iohc pair NN AABBCC
+iohcNN pair1w remove-add
 iohc status NN
 iohc radio
 ```
@@ -181,6 +192,10 @@ iohc scan dump
 iohc scan stats
 ```
 
+## RS100 Silent Operation
+
+For a Somfy RS100 on a `2W` channel, enable the ETS channel option `Somfy RS100: leiser Betrieb`. Position and favorite commands then use the captured `Execute` profile byte `0x05`; the normal profile is `0x06`. The option deliberately does not alter stop, ventilation, or tilt frames, because there is no matching verified RS100 capture for those forms.
+
 ## What To Send Us
 
 Please include all of the following:
@@ -189,7 +204,7 @@ Please include all of the following:
 2. Radio backend: `SX1262` or `SX1276`
 3. Device type you tried to pair
 4. Whether it was `2W` or `1W`
-5. For `1W`, the actuator node ID you used
+5. For `1W`, the selected broadcast/device class and controller identity (never publish extracted keys)
 6. The exact console commands you ran
 7. The full serial log from boot until after the failed attempt
 8. Whether the physical device reacted at all
@@ -206,7 +221,7 @@ These observations are especially useful:
 3. `iohc discover` sees devices, but `iohc pair` fails
    - RF receive path is probably working; the issue is likely in pairing/auth flow or device compatibility
 4. `1W` pairing fails with no reaction
-   - first check the actuator node ID; a wrong node ID makes blind pairing indistinguishable from RF failure
+   - first check learn mode, controller identity, and broadcast/device class; a wrong class makes blind pairing indistinguishable from RF failure
 
 ## Short Example Session
 

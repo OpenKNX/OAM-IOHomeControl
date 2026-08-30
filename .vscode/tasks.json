@@ -81,7 +81,7 @@
         {
             "label": "OpenKNXproducer (DEV)",
             "type": "shell",
-            "command": "~/bin/OpenKNXproducer",
+            "command": "OpenKNXproducer",
             "args": [
                 "create",
                 "--Debug",
