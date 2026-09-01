@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Added a configurable 1W enrollment finalizer with a conservative automatic VELUX/KLI profile.
+- Serialized VELUX REMOVE, multicast ADD, STOP, and DOWN enrollment phases with deterministic timing, continuous logical sequences, failure diagnostics, and an in-memory phase trace.
+- Added native regression coverage and source-derived masked KLI reference data; physical KUX/KLI and SX1276/SX1262 validation remains a documented bench step.
 - Hardened 2W pairing response correlation and kept unicast response waits on their request channel.
 - Defaulted 1W enrollment to `remove-add` (`0x39 -> 0x30`); `announce-add` remains an explicit diagnostic fallback.
 - Documented the class-addressed 1W model and safe handling of extracted keys.

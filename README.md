@@ -21,6 +21,7 @@ For all io-homecontrol specific details, use the [OFM-IOHomeControl](https://git
 
 - Application description, communication objects and DPTs
 - Pairing and commissioning notes
+- VELUX KUX/KLI enrollment finalizer and troubleshooting guidance
 - Radio/protocol diagnostics
 
 ## Hardware targets

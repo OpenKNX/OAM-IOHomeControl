@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 28
+#define MAIN_ApplicationVersion 29
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14301
@@ -3854,6 +3854,9 @@
 #define IOHC_cSilentOperation                    53      // 1 Bit, Bit 6
 #define     IOHC_cSilentOperationMask 0x40
 #define     IOHC_cSilentOperationShift 6
+#define IOHC_cOneWayEnrollmentFinalizer          53      // 2 Bits, Bit 5-4
+#define     IOHC_cOneWayEnrollmentFinalizerMask 0x30
+#define     IOHC_cOneWayEnrollmentFinalizerShift 4
 #define IOHC_cSceneCount                         13      // 4 Bits, Bit 7-4
 #define     IOHC_cSceneCountMask 0xF0
 #define     IOHC_cSceneCountShift 4
@@ -3952,6 +3955,8 @@
 #define ParamIOHC_cOneWayEnrollmentMac                ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentMac)) & IOHC_cOneWayEnrollmentMacMask))
 // Somfy RS100: leiser Betrieb
 #define ParamIOHC_cSilentOperation                    ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSilentOperation)) & IOHC_cSilentOperationMask))
+// 1W Anmeldeabschluss
+#define ParamIOHC_cOneWayEnrollmentFinalizer          ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentFinalizer)) & IOHC_cOneWayEnrollmentFinalizerMask) >> IOHC_cOneWayEnrollmentFinalizerShift)
 // Anzahl Szenen
 #define ParamIOHC_cSceneCount                         ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSceneCount)) & IOHC_cSceneCountMask) >> IOHC_cSceneCountShift)
 // Szene 1 Position
