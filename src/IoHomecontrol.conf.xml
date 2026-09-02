@@ -19,6 +19,4 @@
   <op:config name="%BASE_Info2LedFunc%" value="410" />
   <op:config name="%BASE_Info3LedFunc%" value="3" />
 
-  <op:config name="%IOHC_NumChannelsDefault%" value="4" />
-
 </KNX>

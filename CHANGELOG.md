@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Aligned io-homecontrol channel selection with the current OpenKNX layout and added the shared per-channel suspension radio control.
 - Added a configurable 1W enrollment finalizer with a conservative automatic VELUX/KLI profile.
 - Serialized VELUX REMOVE, multicast ADD, STOP, and DOWN enrollment phases with deterministic timing, continuous logical sequences, failure diagnostics, and an in-memory phase trace.
 - Added native regression coverage and source-derived masked KLI reference data; physical KUX/KLI and SX1276/SX1262 validation remains a documented bench step.
