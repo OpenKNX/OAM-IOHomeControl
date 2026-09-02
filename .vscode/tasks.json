@@ -81,7 +81,7 @@
         {
             "label": "OpenKNXproducer (DEV)",
             "type": "shell",
-            "command": "OpenKNXproducer",
+            "command": "~/bin/OpenKNXproducer.exe",
             "args": [
                 "create",
                 "--Debug",
@@ -98,7 +98,7 @@
         {
             "label": "OpenKNXproducer (Beta)",
             "type": "shell",
-            "command": "OpenKNXproducer",
+            "command": "~/bin/OpenKNXproducer.exe",
             "args": [
                 "create",
                 "--Debug",
@@ -186,6 +186,21 @@
             "args": [
                 "develop_OpenKNX_XIAO_S3_SX1276_IP",
                 "upload"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Factory: OpenKNX_XIAO_S3_SX1276_IP",
+            "type": "shell",
+            "command": "${env:USERPROFILE}/.platformio/penv/Scripts/platformio.exe",
+            "args": [
+                "run",
+                "--environment",
+                "develop_OpenKNX_XIAO_S3_SX1276_IP"
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
