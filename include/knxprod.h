@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 31
+#define MAIN_ApplicationVersion 32
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14301
@@ -3941,7 +3941,7 @@
 #define ParamIOHC_cPowerOnBeh                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cPowerOnBeh)))
 // Protokoll-Modus
 #define ParamIOHC_cProtocolMode                       (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cProtocolMode)))
-// 1W Aktor-Node-ID (dezimal, 0 = nicht gesetzt)
+// 1W Aktor-Node-ID (dezimal, 0 = nur Rundruf)
 #define ParamIOHC_cOneWayTargetNodeId                 (knx.paramInt(IOHC_ParamCalcIndex(IOHC_cOneWayTargetNodeId)))
 // 1W Broadcast-Typ
 #define ParamIOHC_cOneWayBroadcastType                (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayBroadcastType)))
