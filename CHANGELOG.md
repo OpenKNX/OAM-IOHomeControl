@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Fixed directed 2W communication with always-alive devices by resolving START preambles from the effective per-device power class; unknown devices now default to always-alive.
+- Added discovery-based 2W power-class learning with flash persistence, an ETS `Automatic / Always Alive / Low Power` override, SPE roll-call and directed pairing preamble handling, status diagnostics, and runtime-only bench overrides.
 - Aligned io-homecontrol channel selection with the current OpenKNX layout and added the shared per-channel suspension radio control.
 - Added a configurable 1W enrollment finalizer with a conservative automatic VELUX/KLI profile.
 - Serialized VELUX REMOVE, multicast ADD, STOP, and DOWN enrollment phases with deterministic timing, continuous logical sequences, failure diagnostics, and an in-memory phase trace.

@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 32
+#define MAIN_ApplicationVersion 33
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14301
@@ -3857,6 +3857,9 @@
 #define IOHC_cOneWayEnrollmentFinalizer          53      // 2 Bits, Bit 5-4
 #define     IOHC_cOneWayEnrollmentFinalizerMask 0x30
 #define     IOHC_cOneWayEnrollmentFinalizerShift 4
+#define IOHC_cTwoWayPowerClass                   53      // 2 Bits, Bit 3-2
+#define     IOHC_cTwoWayPowerClassMask 0x0C
+#define     IOHC_cTwoWayPowerClassShift 2
 #define IOHC_cSceneCount                         13      // 4 Bits, Bit 7-4
 #define     IOHC_cSceneCountMask 0xF0
 #define     IOHC_cSceneCountShift 4
@@ -3957,6 +3960,8 @@
 #define ParamIOHC_cSilentOperation                    ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSilentOperation)) & IOHC_cSilentOperationMask))
 // 1W Anmeldeabschluss
 #define ParamIOHC_cOneWayEnrollmentFinalizer          ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentFinalizer)) & IOHC_cOneWayEnrollmentFinalizerMask) >> IOHC_cOneWayEnrollmentFinalizerShift)
+// 2W Energieklasse
+#define ParamIOHC_cTwoWayPowerClass                   ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cTwoWayPowerClass)) & IOHC_cTwoWayPowerClassMask) >> IOHC_cTwoWayPowerClassShift)
 // Anzahl Szenen
 #define ParamIOHC_cSceneCount                         ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSceneCount)) & IOHC_cSceneCountMask) >> IOHC_cSceneCountShift)
 // Szene 1 Position
