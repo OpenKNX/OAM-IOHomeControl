@@ -21,7 +21,7 @@
 #define MAIN_ApplicationVersion 33
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14301
+#define MAIN_ParameterSize 14413
 #define MAIN_MaxKoNumber 999
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
@@ -3822,7 +3822,7 @@
 
 // Parameter per channel
 #define IOHC_ParamBlockOffset 13437
-#define IOHC_ParamBlockSize 54
+#define IOHC_ParamBlockSize 61
 #define IOHC_ParamCalcIndex(index) (index + IOHC_ParamBlockOffset + _channelIndex * IOHC_ParamBlockSize)
 
 #define IOHC_cActive                              0      // 1 Bit, Bit 7
@@ -3860,6 +3860,27 @@
 #define IOHC_cTwoWayPowerClass                   53      // 2 Bits, Bit 3-2
 #define     IOHC_cTwoWayPowerClassMask 0x0C
 #define     IOHC_cTwoWayPowerClassShift 2
+#define IOHC_cTwoWayDiscoveryCommand             54      // 2 Bits, Bit 7-6
+#define     IOHC_cTwoWayDiscoveryCommandMask 0xC0
+#define     IOHC_cTwoWayDiscoveryCommandShift 6
+#define IOHC_cTwoWayDiscoveryDestination         55      // 2 Bits, Bit 7-6
+#define     IOHC_cTwoWayDiscoveryDestinationMask 0xC0
+#define     IOHC_cTwoWayDiscoveryDestinationShift 6
+#define IOHC_cTwoWayDiscoveryAck                 56      // 2 Bits, Bit 7-6
+#define     IOHC_cTwoWayDiscoveryAckMask 0xC0
+#define     IOHC_cTwoWayDiscoveryAckShift 6
+#define IOHC_cTwoWayDiscoveryLowPower            57      // 2 Bits, Bit 7-6
+#define     IOHC_cTwoWayDiscoveryLowPowerMask 0xC0
+#define     IOHC_cTwoWayDiscoveryLowPowerShift 6
+#define IOHC_cTwoWayDiscoveryPreamble            58      // 2 Bits, Bit 7-6
+#define     IOHC_cTwoWayDiscoveryPreambleMask 0xC0
+#define     IOHC_cTwoWayDiscoveryPreambleShift 6
+#define IOHC_cOneWayExecuteDestination           59      // 2 Bits, Bit 7-6
+#define     IOHC_cOneWayExecuteDestinationMask 0xC0
+#define     IOHC_cOneWayExecuteDestinationShift 6
+#define IOHC_cOneWayEnrollmentClasses            60      // 3 Bits, Bit 7-5
+#define     IOHC_cOneWayEnrollmentClassesMask 0xE0
+#define     IOHC_cOneWayEnrollmentClassesShift 5
 #define IOHC_cSceneCount                         13      // 4 Bits, Bit 7-4
 #define     IOHC_cSceneCountMask 0xF0
 #define     IOHC_cSceneCountShift 4
@@ -3962,6 +3983,20 @@
 #define ParamIOHC_cOneWayEnrollmentFinalizer          ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentFinalizer)) & IOHC_cOneWayEnrollmentFinalizerMask) >> IOHC_cOneWayEnrollmentFinalizerShift)
 // 2W Energieklasse
 #define ParamIOHC_cTwoWayPowerClass                   ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cTwoWayPowerClass)) & IOHC_cTwoWayPowerClassMask) >> IOHC_cTwoWayPowerClassShift)
+// 2W Discovery-Befehl
+#define ParamIOHC_cTwoWayDiscoveryCommand             ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cTwoWayDiscoveryCommand)) & IOHC_cTwoWayDiscoveryCommandMask) >> IOHC_cTwoWayDiscoveryCommandShift)
+// 2W Discovery-Ziel
+#define ParamIOHC_cTwoWayDiscoveryDestination         ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cTwoWayDiscoveryDestination)) & IOHC_cTwoWayDiscoveryDestinationMask) >> IOHC_cTwoWayDiscoveryDestinationShift)
+// 2W Discovery ACK
+#define ParamIOHC_cTwoWayDiscoveryAck                 ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cTwoWayDiscoveryAck)) & IOHC_cTwoWayDiscoveryAckMask) >> IOHC_cTwoWayDiscoveryAckShift)
+// 2W Discovery LOW_POWER
+#define ParamIOHC_cTwoWayDiscoveryLowPower            ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cTwoWayDiscoveryLowPower)) & IOHC_cTwoWayDiscoveryLowPowerMask) >> IOHC_cTwoWayDiscoveryLowPowerShift)
+// 2W Discovery-Präambel
+#define ParamIOHC_cTwoWayDiscoveryPreamble            ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cTwoWayDiscoveryPreamble)) & IOHC_cTwoWayDiscoveryPreambleMask) >> IOHC_cTwoWayDiscoveryPreambleShift)
+// 1W Befehls-Ziel
+#define ParamIOHC_cOneWayExecuteDestination           ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayExecuteDestination)) & IOHC_cOneWayExecuteDestinationMask) >> IOHC_cOneWayExecuteDestinationShift)
+// VELUX 1W Anmeldeklassen
+#define ParamIOHC_cOneWayEnrollmentClasses            ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentClasses)) & IOHC_cOneWayEnrollmentClassesMask) >> IOHC_cOneWayEnrollmentClassesShift)
 // Anzahl Szenen
 #define ParamIOHC_cSceneCount                         ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSceneCount)) & IOHC_cSceneCountMask) >> IOHC_cSceneCountShift)
 // Szene 1 Position
