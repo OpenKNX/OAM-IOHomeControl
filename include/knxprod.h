@@ -21,7 +21,7 @@
 #define MAIN_ApplicationVersion 33
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14413
+#define MAIN_ParameterSize 14429
 #define MAIN_MaxKoNumber 999
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
@@ -3822,7 +3822,7 @@
 
 // Parameter per channel
 #define IOHC_ParamBlockOffset 13437
-#define IOHC_ParamBlockSize 61
+#define IOHC_ParamBlockSize 62
 #define IOHC_ParamCalcIndex(index) (index + IOHC_ParamBlockOffset + _channelIndex * IOHC_ParamBlockSize)
 
 #define IOHC_cActive                              0      // 1 Bit, Bit 7
@@ -3881,6 +3881,9 @@
 #define IOHC_cOneWayEnrollmentClasses            60      // 3 Bits, Bit 7-5
 #define     IOHC_cOneWayEnrollmentClassesMask 0xE0
 #define     IOHC_cOneWayEnrollmentClassesShift 5
+#define IOHC_cOneWayPowerClass                   61      // 2 Bits, Bit 7-6
+#define     IOHC_cOneWayPowerClassMask 0xC0
+#define     IOHC_cOneWayPowerClassShift 6
 #define IOHC_cSceneCount                         13      // 4 Bits, Bit 7-4
 #define     IOHC_cSceneCountMask 0xF0
 #define     IOHC_cSceneCountShift 4
@@ -3997,6 +4000,8 @@
 #define ParamIOHC_cOneWayExecuteDestination           ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayExecuteDestination)) & IOHC_cOneWayExecuteDestinationMask) >> IOHC_cOneWayExecuteDestinationShift)
 // VELUX 1W Anmeldeklassen
 #define ParamIOHC_cOneWayEnrollmentClasses            ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentClasses)) & IOHC_cOneWayEnrollmentClassesMask) >> IOHC_cOneWayEnrollmentClassesShift)
+// 1W Energieklasse des Controllerprofils
+#define ParamIOHC_cOneWayPowerClass                   ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayPowerClass)) & IOHC_cOneWayPowerClassMask) >> IOHC_cOneWayPowerClassShift)
 // Anzahl Szenen
 #define ParamIOHC_cSceneCount                         ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSceneCount)) & IOHC_cSceneCountMask) >> IOHC_cSceneCountShift)
 // Szene 1 Position
