@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 34
+#define MAIN_ApplicationVersion 35
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14429
@@ -3878,9 +3878,9 @@
 #define IOHC_cOneWayExecuteDestination           59      // 2 Bits, Bit 7-6
 #define     IOHC_cOneWayExecuteDestinationMask 0xC0
 #define     IOHC_cOneWayExecuteDestinationShift 6
-#define IOHC_cOneWayEnrollmentClasses            60      // 3 Bits, Bit 7-5
-#define     IOHC_cOneWayEnrollmentClassesMask 0xE0
-#define     IOHC_cOneWayEnrollmentClassesShift 5
+#define IOHC_cOneWayEnrollmentClasses            60      // 4 Bits, Bit 7-4
+#define     IOHC_cOneWayEnrollmentClassesMask 0xF0
+#define     IOHC_cOneWayEnrollmentClassesShift 4
 #define IOHC_cOneWayPowerClass                   61      // 2 Bits, Bit 7-6
 #define     IOHC_cOneWayPowerClassMask 0xC0
 #define     IOHC_cOneWayPowerClassShift 6
