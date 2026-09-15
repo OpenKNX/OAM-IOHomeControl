@@ -7,7 +7,7 @@
   <op:ETS
     OpenKnxId="0xAF"
     ApplicationNumber="0x34"
-    ApplicationVersion="2.03"
+    ApplicationVersion="2.04"
     ReplacesVersionsDownTo="0.1"
     ApplicationRevision="0"
     FirmwareRevision="0"
