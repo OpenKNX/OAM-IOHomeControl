@@ -12,7 +12,7 @@ jobs:
 
         # [BUILD]: all build targets
         target:
-          - -Release
+          # NO Release XML present; - -Release
           - ""
 
         # [REF]: same commit and (newest on) branch
@@ -26,4 +26,4 @@ jobs:
       # oam_ref: use current branch as default -> ${{ github.ref_name }}
       restore_branch: ${{ matrix.restore_branch }}
       target: ${{ matrix.target }}
-      KNXPROD_PREFIX: StateEngine
+      KNXPROD_PREFIX: IOHomeControl
