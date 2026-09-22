@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Fixed the ETS 2W key-extraction action freezing the commissioning dialog by replacing its synchronous polling loop with non-blocking, repeat-to-refresh steps.
 - Fixed directed 2W communication with always-alive devices by resolving START preambles from the effective per-device power class; unknown devices now default to always-alive.
 - Added discovery-based 2W power-class learning with flash persistence, an ETS `Automatic / Always Alive / Low Power` override, SPE roll-call and directed pairing preamble handling, status diagnostics, and runtime-only bench overrides.
 - Aligned io-homecontrol channel selection with the current OpenKNX layout and added the shared per-channel suspension radio control.
