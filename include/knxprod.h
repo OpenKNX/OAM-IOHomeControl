@@ -18,10 +18,10 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 42
+#define MAIN_ApplicationVersion 53
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14477
+#define MAIN_ParameterSize 14525
 #define MAIN_MaxKoNumber 999
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
@@ -3822,7 +3822,7 @@
 
 // Parameter per channel
 #define IOHC_ParamBlockOffset 13437
-#define IOHC_ParamBlockSize 65
+#define IOHC_ParamBlockSize 68
 #define IOHC_ParamCalcIndex(index) (index + IOHC_ParamBlockOffset + _channelIndex * IOHC_ParamBlockSize)
 
 #define IOHC_cActive                              0      // 1 Bit, Bit 7
@@ -3834,6 +3834,9 @@
 #define IOHC_cDimmable                            0      // 1 Bit, Bit 4
 #define     IOHC_cDimmableMask 0x10
 #define     IOHC_cDimmableShift 4
+#define IOHC_cOneWayEnrollmentDestination         0      // 2 Bits, Bit 3-2
+#define     IOHC_cOneWayEnrollmentDestinationMask 0x0C
+#define     IOHC_cOneWayEnrollmentDestinationShift 2
 #define IOHC_cDeviceType                          1      // 8 Bits, Bit 7-0
 #define IOHC_cPollInterval                        2      // 16 Bits, Bit 15-0
 #define IOHC_cOpeningTime                         4      // float (4 Byte)
@@ -3863,9 +3866,9 @@
 #define IOHC_cTwoWayDiscoveryCommand             54      // 2 Bits, Bit 7-6
 #define     IOHC_cTwoWayDiscoveryCommandMask 0xC0
 #define     IOHC_cTwoWayDiscoveryCommandShift 6
-#define IOHC_cTwoWayDiscoveryDestination         55      // 2 Bits, Bit 7-6
-#define     IOHC_cTwoWayDiscoveryDestinationMask 0xC0
-#define     IOHC_cTwoWayDiscoveryDestinationShift 6
+#define IOHC_cTwoWayDiscoveryDestination         55      // 3 Bits, Bit 7-5
+#define     IOHC_cTwoWayDiscoveryDestinationMask 0xE0
+#define     IOHC_cTwoWayDiscoveryDestinationShift 5
 #define IOHC_cTwoWayDiscoveryAck                 56      // 2 Bits, Bit 7-6
 #define     IOHC_cTwoWayDiscoveryAckMask 0xC0
 #define     IOHC_cTwoWayDiscoveryAckShift 6
@@ -3889,6 +3892,10 @@
 #define     IOHC_cTwoWayDiscoverConfirmModeMask 0x03
 #define     IOHC_cTwoWayDiscoverConfirmModeShift 0
 #define IOHC_cTwoWayKeyInitDelay                 63      // uint16_t
+#define IOHC_cTwoWayDiscoveryListenChannels      65      // 1 Bit, Bit 7
+#define     IOHC_cTwoWayDiscoveryListenChannelsMask 0x80
+#define     IOHC_cTwoWayDiscoveryListenChannelsShift 7
+#define IOHC_cProfileOverride                    66      // uint16_t
 #define IOHC_cSceneCount                         13      // 4 Bits, Bit 7-4
 #define     IOHC_cSceneCountMask 0xF0
 #define     IOHC_cSceneCountShift 4
@@ -3959,6 +3966,8 @@
 #define ParamIOHC_cSuspend                            ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSuspend)) & IOHC_cSuspendMask))
 // Dimmbar
 #define ParamIOHC_cDimmable                           ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cDimmable)) & IOHC_cDimmableMask))
+// 1W Anmelde-Ziel
+#define ParamIOHC_cOneWayEnrollmentDestination        ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentDestination)) & IOHC_cOneWayEnrollmentDestinationMask) >> IOHC_cOneWayEnrollmentDestinationShift)
 // Gerätetyp
 #define ParamIOHC_cDeviceType                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cDeviceType)))
 // Status-Abfrageintervall (Fallback)
@@ -4013,6 +4022,10 @@
 #define ParamIOHC_cTwoWayDiscoverConfirmMode          (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cTwoWayDiscoverConfirmMode)) & IOHC_cTwoWayDiscoverConfirmModeMask)
 // 2W Pause vor Schlüsselaustausch (ms)
 #define ParamIOHC_cTwoWayKeyInitDelay                 (knx.paramWord(IOHC_ParamCalcIndex(IOHC_cTwoWayKeyInitDelay)))
+// 2W Discovery-Antwortkanäle
+#define ParamIOHC_cTwoWayDiscoveryListenChannels      ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cTwoWayDiscoveryListenChannels)) & IOHC_cTwoWayDiscoveryListenChannelsMask))
+// Manuelles Profil (packed Wert dezimal, 0 = Auto)
+#define ParamIOHC_cProfileOverride                    (knx.paramWord(IOHC_ParamCalcIndex(IOHC_cProfileOverride)))
 // Anzahl Szenen
 #define ParamIOHC_cSceneCount                         ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSceneCount)) & IOHC_cSceneCountMask) >> IOHC_cSceneCountShift)
 // Szene 1 Position
@@ -4173,13 +4186,13 @@
 #define IOHC_KoCHCozyPresence 23
 #define IOHC_KoCHCozyWindow 24
 
-// Kanal %C% Position
+// Kanal %C% Position / Stellwert
 #define KoIOHC_CHPosition                          (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHPosition)))
 // Kanal %C% Position Rückmeldung
 #define KoIOHC_CHPositionFeedback                  (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHPositionFeedback)))
 // Kanal %C% Auf/Ab
 #define KoIOHC_CHUpDown                            (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHUpDown)))
-// Kanal %C% Ein/Aus
+// Kanal %C% Ein/Aus / Verriegeln
 #define KoIOHC_CHOnOff                             (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHOnOff)))
 // Kanal %C% Stopp
 #define KoIOHC_CHStop                              (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHStop)))
