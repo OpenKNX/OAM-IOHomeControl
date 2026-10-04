@@ -20,6 +20,7 @@ Das erste Datenbyte ist das Kommando. Kanalnummern sind nullbasiert.
 | `0x11` | CancelPairing | `cmd` | `status` | Bricht einen laufenden Pairing-Vorgang ab. |
 | `0x12` | QueryPairingStatus | `cmd, channel` | `paired, nodeIdHi, nodeIdMid, nodeIdLo, controllerState, lastPairStartStatus` | Liefert Pairing-Status, gepaarte Node-ID und Diagnoseinformationen fuer einen Kanal. |
 | `0x13` | UnpairChannel | `cmd, channel` | `status` | Entfernt Pairing und Schluessel des Kanals und speichert den neuen Zustand im Flash. |
+| `0x1D` | QueryRecognition | `cmd, channel` | `status, schema=1, channel, nodeId[3], profileLo, profileHi, subprofile, manufacturer, powerClass, flags` | Liest die gespeicherte Kanal-Erkennung ohne Funkabfrage. Flags: Bit2 gültige Identität, Bit3 vollständige Metadaten, Bit4 betriebsbereit, Bit5 1W. Hersteller/Profil sind keine exakte Produktmodell-Erkennung. |
 | `0x20` | TestSendPosition | `cmd, channel, percent` | `status` | Testkommando zum Senden einer Positionsvorgabe an ein bereits gepaartes Geraet. |
 
 ### Statuscodes

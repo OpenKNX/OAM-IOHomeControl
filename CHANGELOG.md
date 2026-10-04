@@ -11,6 +11,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Composed ETS application 3.6 with OFM-IOHomeControl 0.2.0; retained existing parameter offsets and object numbers.
+- Added recognition after normal 2W pairing with an explicit ETS type-adoption action, while preserving names and manual/expert overrides during recognition and import.
+- Fixed extended version-3 headers and declared frame length overflow; added sorted sparse MP/FP representation with strict bounds.
+- Clarified SX1276 FSK preamble byte units and remaining hardware qualification gates; retained existing radio settings.
+
 - Fixed the ETS 2W key-extraction action freezing the commissioning dialog by replacing its synchronous polling loop with non-blocking, repeat-to-refresh steps.
 - Fixed directed 2W communication with always-alive devices by resolving START preambles from the effective per-device power class; unknown devices now default to always-alive.
 - Added discovery-based 2W power-class learning with flash persistence, an ETS `Automatic / Always Alive / Low Power` override, SPE roll-call and directed pairing preamble handling, status diagnostics, and runtime-only bench overrides.

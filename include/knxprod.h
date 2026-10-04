@@ -18,7 +18,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 53
+#define MAIN_ApplicationVersion 54
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14525
@@ -29,7 +29,7 @@
 #define UCT_ModuleVersion 6
 #define LOG_ModuleVersion 68
 #define FCB_ModuleVersion 10
-#define IOHC_ModuleVersion 1
+#define IOHC_ModuleVersion 2
 // Parameter with single occurrence
 
 
