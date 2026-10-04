@@ -11,6 +11,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Fixed wrapped-key log redaction for extended version-3 frame headers, including malformed-extension handling.
+
+- Fixed 1W sequence-window reservations being silently suppressed by the shared flash write throttle; pause RF state machines while KNX configuration prevents persistence.
+- Added product-scoped OVPd projection and window-lock read semantics, strict window-security enums and diagnostic provenance without enabling new writes or KOs.
+
 - Composed ETS application 3.6 with OFM-IOHomeControl 0.2.0; retained existing parameter offsets and object numbers.
 - Added recognition after normal 2W pairing with an explicit ETS type-adoption action, while preserving names and manual/expert overrides during recognition and import.
 - Fixed extended version-3 headers and declared frame length overflow; added sorted sparse MP/FP representation with strict bounds.

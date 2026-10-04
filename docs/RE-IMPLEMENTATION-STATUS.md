@@ -32,3 +32,26 @@ The installed x86 producer and PlatformIO Python lacking LZMA could not run on t
 5. Run real ETS commissioning and project migration with expert overrides and configured group addresses, then generate the signed product on an ETS-equipped system. Verify reset/recovery and authenticated status with real peers before release.
 
 In ETS, read **Status / Erkennung lesen** after successful 2W pairing, then use **Erkannten Gerätetyp übernehmen** and program the application. Reading status alone does not change settings. A nonzero manual profile blocks inferred category changes; 1W and unknown profiles require manual selection. Names, manual power policy, suspension and discovery settings survive recognition and import.
+
+## Continuation: reservation persistence and exact read semantics
+
+| OFM commit | Change |
+| --- | --- |
+| `df301af` | Force sequence-window flash saves; share the real allocation policy between production channels and native tests |
+| `efa04f2` | Add OVPd projection FP9 and window-lock FP1 read semantics with explicit provenance and strict enum decoding |
+| `c3d69b9` | Pause module RF/controller state machines while KNX configuration is unavailable |
+| `69ef65a` | Use the actual version-dependent command offset for key redaction; keep malformed extended frames opaque |
+
+The local OGM-Common (`da2c6ff`) flash audit found a default **180,000 ms** write throttle in `Flash/Default.h`; `Default::save(false)` silently returns inside that interval. The old sequence-window renewal used this throttled call, despite requiring persistence before transmission. It now uses `save(true)` at renewal, retaining the sixteen-value reservation policy. No-transmission restarts do not reserve another window. Wraparound is covered by allocator tests; acceptance of wraparound by every peer is not claimed. Production and native channels now execute the same allocation helper instead of maintaining duplicate implementations.
+
+Even `save(true)` returns while `knx.configured()` is false. The module loop now waits for configured state before running controller, radio diagnostic and workflow state machines. This does not retract a hardware transmission already in progress when ETS starts programming.
+
+The source audit also confirms that ESP32 uses **one storage slot** in the current shared backend; the alternate-slot implementation is conditional on RP2040. ESP32 sector erase/rewrite and the `void` save/commit API do not establish an atomic rollback or successful-write acknowledgement for OFM. This continuation closes throttle/configuration defects, not the remaining power-cut recovery gate. A journaled backend or independent durable identity-bound reservation journal still needs design and hardware fault injection.
+
+The OVPd supplement leaves the Appendix-2 table and generic actuator capability flags unchanged. Exact profile2/subprofile2 has projection FP9 metadata; its units and write path remain unspecified. Exact profile9/subprofile1 has window-security FP1:0 daylocked,1 homesecure,2 secured. Other values are unknown, including special-value sentinels. Diagnostic reads classify the enum as discrete and log its name without publishing position KOs. New semantic descriptors remain non-writable. Sliding-window, pergola and heat-pump expansions remain gated by exact product identity and qualified state/transport paths.
+
+Frame-level log redaction now reads the command at byte10 for valid version3 headers and at byte8 for ordinary versions0–2. Extended `0x30`/`0x32` payloads cannot bypass the key filter due to an address byte being misread as the command. Invalid or truncated version3 headers display only the control bytes plus a redaction marker, since their payload offsets are ambiguous. Payload-level redaction remains unchanged.
+
+Continuation checks: **521 native tests,33 XML/UI/source checks and7 executed ETS JavaScript regressions pass**. These include a throttled native flash adapter and the shared production allocator, not a real flash power-cut test. Firmware build results are recorded after the final checks below.
+
+Final continuation firmware checks pass for `develop_OpenKNX_XIAO_S3_SX1276_IP`, `release_OpenKNX_XIAO_S3_SX1276_TP` and `develop_OpenKNX_XIAO_S3_SX1276_TP`, including the configuration guard and redaction fix. There are no ETS XML, parameter-memory, KO-layout or flash-format changes in this continuation, so application/module versions remain3.6/0.2.0. `dependencies.txt` advances the local OFM pin to`69ef65a`. Existing compiler warnings outside the changes remain; no flash power-cut, radio peer or real ETS migration test is claimed.
