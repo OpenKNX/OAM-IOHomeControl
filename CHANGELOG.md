@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Apply recovered recipient reply normalization to version-3 key extraction, including ACK direction, PRIORITY/BEACON and command-specific END rules.
+- Add explicit product temperature conversions and an offline diagnostic console; reject unknown words, absent bounds and unsafe inverses.
+- Add reference RGB and FP14 tunable-white conversion helpers with safe black handling; retain product/write qualification gates.
+
 - Fixed wrapped-key log redaction for extended version-3 frame headers, including malformed-extension handling.
 
 - Fixed 1W sequence-window reservations being silently suppressed by the shared flash write throttle; pause RF state machines while KNX configuration prevents persistence.

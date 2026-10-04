@@ -55,3 +55,25 @@ Frame-level log redaction now reads the command at byte10 for valid version3 hea
 Continuation checks: **521 native tests,33 XML/UI/source checks and7 executed ETS JavaScript regressions pass**. These include a throttled native flash adapter and the shared production allocator, not a real flash power-cut test. Firmware build results are recorded after the final checks below.
 
 Final continuation firmware checks pass for `develop_OpenKNX_XIAO_S3_SX1276_IP`, `release_OpenKNX_XIAO_S3_SX1276_TP` and `develop_OpenKNX_XIAO_S3_SX1276_TP`, including the configuration guard and redaction fix. There are no ETS XML, parameter-memory, KO-layout or flash-format changes in this continuation, so application/module versions remain3.6/0.2.0. `dependencies.txt` advances the local OFM pin to`69ef65a`. Existing compiler warnings outside the changes remain; no flash power-cut, radio peer or real ETS migration test is claimed.
+
+## Continuation: version-3 recipient exchanges and product codecs
+
+Separate OFM commits, authored and committed locally as Franz Reisenhofer:
+
+| Commit | Implementation |
+| --- | --- |
+| `daf44e1` | Normalize recipient replies in all key-extraction phases, including authenticated node verification |
+| `121531f` | Checked temperature codecs and offline `iohc codec temp` diagnostics |
+| `b55b272` | Checked RGB chromaticity and tunable-white representation conversions |
+
+The recipient rules come from STM32 `0x0800FE5C–0x0800FFA8`: use the active local identity, reply to the request source, retain PRIORITY, clear LOW_POWER/ROUTED, produce BEACON from incoming ROUTED/BEACON, mirror version3 and swap ACK-request/response on non-START replies. START replies clear ACK bits. Generated3D has END; otherwise incoming PRIORITY suppresses END, generated3C suppresses END, and other replies have END. Ordinary request versions1/2 normalize to reply version0. The new helper consumes parsed 2W frames and preserves command/data. The real controller regression covers discovery, confirmation, key recovery, node verification and the independent command/data HMAC transcript. Controller/master-originated authentication policy remains separate and still needs original-peer version3 qualification.
+
+Temperature selectors identify explicit OVPd definitions, not inferred commercial products: heatpump `0x160000`, heating-interface `0xE0000`, generic-heater `0x340100`, atlantic-heater `0x34010C`, atlantic-dhw-v2 `0x33000C`, atlantic-dhw-ck `0x1000033000C`. Index0 means MP. Heatpump MP is −40..80°C (tenths), FP8 rounds to whole degrees. Heating-interface MP, generic FP12/13 and DHW-v2 MP require supplied minimum/maximum centikelvin bounds. Generic FP13 uses FP12 comfort minus the FP13 raw difference; it is not an independent absolute setpoint. Atlantic FP12 uses28015..30115CK; FP13 uses27515..28215CK, a numeric2..9°C quantity whose physical eco/setback interpretation is still gated. The centikelvin DHW variant is raw/100−273.15. Raw words above51200, missing/invalid context, unknown slots and nonfinite/out-of-range inverse inputs fail without changing the output. Coupled generic FP13, heatpump FP8 and centikelvin DHW inverse writes are not enabled.
+
+Console syntax: `iohc codec temp PRODUCT INDEX RAW16 [MIN_CK MAX_CK [COMFORT_RAW]]`. Product names are those above; raw words use hex, bounds use decimal centikelvin. It converts offline, without RF transmission, flash saves or KO publication. It retains the existing configured-KNX console guard.
+
+RGB definitions `0x60100`, `0x60102`, `0x10000060102` use the retained RGBToVector/vectorToRGB matrices, inverse MP brightness, FP10=u and FP11=v, without gamma correction. Black explicitly yields off MP and no chromaticity, avoiding the source's0/0. Tunable-white definitions `0x60202`, `0x10000060202` use FP14 over2000..6500K. The source producer's second argument is raw MP passthrough, not a percentage. Positive truncation is an explicit lighting encoder policy; it matches a Lua source model using floor for positive bit coercion, but the original bit runtime/hardware coercion is not qualified. RGB/white helpers are representation APIs, without automatic product selection, new KOs or high-FP RF write authorization.
+
+Validation: **527 native tests,34 XML/UI/source checks and7 executed ETS JavaScript tests pass**. Independently executing retained Lua contexts/formulas matched10 temperature results and8 lighting cases (lighting uses the stated bit-coercion model). Existing native SX1262 checks also pass and do not qualify SX1276 behavior. No ETS XML, parameter/KO layout or flash-format changes; versions remain application3.6/module0.2.0.
+
+Final firmware validation passes for `develop_OpenKNX_XIAO_S3_SX1276_TP`, `release_OpenKNX_XIAO_S3_SX1276_TP` and `develop_OpenKNX_XIAO_S3_SX1276_IP`. The local dependency pin advances to `b55b272`. Builds do not establish SX1276 RF conformance, physical version3 interoperability, atomic flash recovery or real ETS migration. No firmware flashing or remote push was performed.
