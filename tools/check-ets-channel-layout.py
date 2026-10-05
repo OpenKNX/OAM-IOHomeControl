@@ -80,6 +80,46 @@ for channel, movement in enumerate(movement_pages, 1):
     assert int(obj.get("Number")) == 1200 + channel - 1
     assert obj.get("DatapointType") == "DPST-5-10"
     assert parents[ko_ref].get("test") == "1"
+# Every exact profile exposes only its named and supported MP/FP functions.
+registry=(ROOT / "lib/OFM-IOHomeControl/src/protocol/IoHomeProfileRegistry.cpp").read_text().split("constexpr IoHomeParameterAlias")[0]
+profile_maps={}
+for code, args in re.findall(r'profile\((0x[0-9A-F]+), "[^\"]+", (.*?)\)',registry,re.S):
+    semantics=(re.findall(r'S::(\w+)',args)+['Unsupported']*4)[:4]
+    values={i:name for i,name in enumerate(semantics) if name!='Unsupported'}
+    packed=int(code,16)
+    if packed==0x0082:values[9]='ProjectionAngle'
+    if packed==0x0241:values[1]='WindowSecurityMode'
+    profile_maps[packed]=values
+for page in pages:
+    channel=int(re.search(r"Channel(\d+)Page",page.get("Name"))[1])
+    functions=page.find("k:ParameterBlock[@Name='IOHC_Functions']",NS)
+    selectors=[choose for choose in functions.findall('.//k:choose',NS)
+               if parameters[refs[choose.get('ParamRefId')]].get('Name')==f'PRF_c{channel}ProfileCode'
+               and choose.find("k:when[@test='0']",NS) is not None]
+    assert len(selectors)==1
+    selector=selectors[0]
+    assert parents[selector].get('test')=='1'
+    assert parameters[refs[parents[parents[selector]].get('ParamRefId')]].get('Name')==f'PRF_c{channel}Enabled'
+    assert {int(w.get('test')) for w in selector.findall('k:when',NS)} == {0,*profile_maps}
+    for packed, values in profile_maps.items():
+        branch=selector.find(f"k:when[@test='{packed}']",NS)
+        numbers=[]
+        for ref in branch.findall('k:ComObjectRefRef',NS):
+            obj=objects[object_refs[ref.get('RefId')]]
+            numbers.append(int(obj.get('Number'))-(1300+18*(channel-1)))
+        expected=[]
+        for index,semantic in values.items():
+            slot=(0,1,2,3,9).index(index)
+            binary=index==0 and (packed&63==58 or semantic in ('LockState','SwitchState'))
+            if semantic not in ('ProjectionAngle','WindowSecurityMode'):expected.append(16 if binary else slot*3)
+            expected.extend([17 if binary else slot*3+1,slot*3+2])
+        assert numbers==expected,(channel,packed,numbers,expected)
+        if packed==0x0241:
+            security=branch.findall('k:ComObjectRefRef',NS)[-2]
+            ref_id=security.get('RefId')
+            object_ref=tree.find(f".//k:Static//k:ComObjectRef[@Id='{ref_id}']",NS)
+            assert object_ref.get('DatapointType')=='DPST-5-10'
+    assert not functions.findall('.//k:ParameterBlock',NS)
 help_topics = {n.get("HelpContext") for n in dynamic.iter() if n.get("HelpContext", "").startswith("IOHC-")}
 for channel in tree.findall(".//k:Channel[@Name='IOHC_Global']", NS):
     for ref in channel.findall(".//k:ParameterRefRef", NS):

@@ -18,14 +18,15 @@
 #define ETS_ModuleId_PIC 7
 #define ETS_ModuleId_PVX 8
 #define ETS_ModuleId_MVS 9
+#define ETS_ModuleId_PRF 10
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 60
+#define MAIN_ApplicationVersion 61
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14573
-#define MAIN_MaxKoNumber 1215
+#define MAIN_ParameterSize 14621
+#define MAIN_MaxKoNumber 1587
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
 #define NET_ModuleVersion 8
@@ -120,6 +121,9 @@
 #define BASE_ModuleEnabled_MVS                   111      // 1 Bit, Bit 7
 #define     BASE_ModuleEnabled_MVSMask 0x80
 #define     BASE_ModuleEnabled_MVSShift 7
+#define BASE_ModuleEnabled_PRF                   111      // 1 Bit, Bit 6
+#define     BASE_ModuleEnabled_PRFMask 0x40
+#define     BASE_ModuleEnabled_PRFShift 6
 
 // Zeitbasis
 #define ParamBASE_StartupDelayBase                    ((knx.paramByte(BASE_StartupDelayBase) & BASE_StartupDelayBaseMask) >> BASE_StartupDelayBaseShift)
@@ -192,6 +196,8 @@
 #define ParamBASE_ModuleEnabled_PVX                   ((bool)(knx.paramByte(BASE_ModuleEnabled_PVX) & BASE_ModuleEnabled_PVXMask))
 // MVS
 #define ParamBASE_ModuleEnabled_MVS                   ((bool)(knx.paramByte(BASE_ModuleEnabled_MVS) & BASE_ModuleEnabled_MVSMask))
+// PRF
+#define ParamBASE_ModuleEnabled_PRF                   ((bool)(knx.paramByte(BASE_ModuleEnabled_PRF) & BASE_ModuleEnabled_PRFMask))
 
 #define BASE_KoHeartbeat 1
 #define BASE_KoTime 2
@@ -4375,6 +4381,90 @@
 
 // Kanal %C% Fahrmodus
 #define KoMVS_cMovementMode                       (knx.getGroupObject(MVS_KoCalcNumber(MVS_KocMovementMode)))
+
+#define PRF_ChannelCount 16
+
+// Parameter per channel
+#define PRF_ParamBlockOffset 14573
+#define PRF_ParamBlockSize 3
+#define PRF_ParamCalcIndex(index) (index + PRF_ParamBlockOffset + _channelIndex * PRF_ParamBlockSize)
+
+#define PRF_cProfileCode                         0      // uint16_t
+#define PRF_cEnabled                             2      // 1 Bit, Bit 7
+#define     PRF_cEnabledMask 0x80
+#define     PRF_cEnabledShift 7
+
+// Profilzuordnung für Objekte
+#define ParamPRF_cProfileCode                        (knx.paramWord(PRF_ParamCalcIndex(PRF_cProfileCode)))
+// Separate Profilfunktionen verwenden
+#define ParamPRF_cEnabled                            ((bool)(knx.paramByte(PRF_ParamCalcIndex(PRF_cEnabled)) & PRF_cEnabledMask))
+
+// deprecated
+#define PRF_KoOffset 1300
+
+// Communication objects per channel (multiple occurrence)
+#define PRF_KoBlockOffset 1300
+#define PRF_KoBlockSize 18
+
+#define PRF_KoCalcNumber(index) (index + PRF_KoBlockOffset + _channelIndex * PRF_KoBlockSize)
+#define PRF_KoCalcIndex(number) ((number >= PRF_KoCalcNumber(0) && number < PRF_KoCalcNumber(PRF_KoBlockSize)) ? (number - PRF_KoBlockOffset) % PRF_KoBlockSize : -1)
+#define PRF_KoCalcChannel(number) ((number >= PRF_KoBlockOffset && number < PRF_KoBlockOffset + PRF_ChannelCount * PRF_KoBlockSize) ? (number - PRF_KoBlockOffset) / PRF_KoBlockSize : -1)
+
+#define PRF_KocParameter0Set 0
+#define PRF_KocParameter0Feedback 1
+#define PRF_KocParameter0Valid 2
+#define PRF_KocParameter1Set 3
+#define PRF_KocParameter1Feedback 4
+#define PRF_KocParameter1Valid 5
+#define PRF_KocParameter2Set 6
+#define PRF_KocParameter2Feedback 7
+#define PRF_KocParameter2Valid 8
+#define PRF_KocParameter3Set 9
+#define PRF_KocParameter3Feedback 10
+#define PRF_KocParameter3Valid 11
+#define PRF_KocParameter9Set 12
+#define PRF_KocParameter9Feedback 13
+#define PRF_KocParameter9Valid 14
+#define PRF_KocRead 15
+#define PRF_KocBinarySet 16
+#define PRF_KocBinaryFeedback 17
+
+// Kanal %C% MP setzen
+#define KoPRF_cParameter0Set                      (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter0Set)))
+// Kanal %C% MP Rückmeldung
+#define KoPRF_cParameter0Feedback                 (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter0Feedback)))
+// Kanal %C% MP gültig
+#define KoPRF_cParameter0Valid                    (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter0Valid)))
+// Kanal %C% FP1 setzen
+#define KoPRF_cParameter1Set                      (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter1Set)))
+// Kanal %C% FP1 Rückmeldung
+#define KoPRF_cParameter1Feedback                 (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter1Feedback)))
+// Kanal %C% FP1 gültig
+#define KoPRF_cParameter1Valid                    (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter1Valid)))
+// Kanal %C% FP2 setzen
+#define KoPRF_cParameter2Set                      (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter2Set)))
+// Kanal %C% FP2 Rückmeldung
+#define KoPRF_cParameter2Feedback                 (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter2Feedback)))
+// Kanal %C% FP2 gültig
+#define KoPRF_cParameter2Valid                    (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter2Valid)))
+// Kanal %C% FP3 setzen
+#define KoPRF_cParameter3Set                      (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter3Set)))
+// Kanal %C% FP3 Rückmeldung
+#define KoPRF_cParameter3Feedback                 (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter3Feedback)))
+// Kanal %C% FP3 gültig
+#define KoPRF_cParameter3Valid                    (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter3Valid)))
+// Kanal %C% FP9 setzen
+#define KoPRF_cParameter9Set                      (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter9Set)))
+// Kanal %C% FP9 Rückmeldung
+#define KoPRF_cParameter9Feedback                 (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter9Feedback)))
+// Kanal %C% FP9 gültig
+#define KoPRF_cParameter9Valid                    (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocParameter9Valid)))
+// Kanal %C% Profilwerte lesen
+#define KoPRF_cRead                               (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocRead)))
+// Kanal %C% MP Schaltwert setzen
+#define KoPRF_cBinarySet                          (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocBinarySet)))
+// Kanal %C% MP Schaltwert Rückmeldung
+#define KoPRF_cBinaryFeedback                     (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocBinaryFeedback)))
 
 
 // enumeration types
