@@ -77,3 +77,25 @@ RGB definitions `0x60100`, `0x60102`, `0x10000060102` use the retained RGBToVect
 Validation: **527 native tests,34 XML/UI/source checks and7 executed ETS JavaScript tests pass**. Independently executing retained Lua contexts/formulas matched10 temperature results and8 lighting cases (lighting uses the stated bit-coercion model). Existing native SX1262 checks also pass and do not qualify SX1276 behavior. No ETS XML, parameter/KO layout or flash-format changes; versions remain application3.6/module0.2.0.
 
 Final firmware validation passes for `develop_OpenKNX_XIAO_S3_SX1276_TP`, `release_OpenKNX_XIAO_S3_SX1276_TP` and `develop_OpenKNX_XIAO_S3_SX1276_IP`. The local dependency pin advances to `b55b272`. Builds do not establish SX1276 RF conformance, physical version3 interoperability, atomic flash recovery or real ETS migration. No firmware flashing or remote push was performed.
+
+## 2026-10-05 continuation: master framing, identity binding and high-FP qualification
+
+Separate local OFM commits as Franz Reisenhofer:
+
+| Commit | Scope |
+| --- | --- |
+| `dca1be6` | Controller3D preserves version3 from its authenticated working request; independent MAC/header tests |
+| `db9c6b6` | Exact consistent identity evidence binds retained-source semantic families for diagnostics |
+| `d26507d` | Product-bound RGB and FP14 activation representations with transactional output validation |
+| `bbfe2a4` | Runtime `iohc 2wdiag version auto|3` and a real queued-controller authentication regression |
+| `d83580c` | Physical SX1276/peer/version3/high-FP bench procedure and explicit unrun status |
+
+The original STM32 MasterSession calls the generic continuation copier at0x0800EB9C when building3D (0x0800F09A/0x0800F150). Copier0x0800EC00–0x0800EC1C inserts/removes the extension to match its source working frame. Production authentication now preserves that form. This bounded change does not adopt all copied flags: ordinary request versions0/1/2 retain the established outgoing version0, and controller START/END, LOW_POWER and ACK policy retain their existing continuation values. The HMAC remains original CMD+DATA. The bench override is applied once to each newly built queued2W request; retries/authentication retain it even if the control changes later. It does not choose version for separate pairing/discovery state machines, negotiate a persistent per-peer preference, modify ETS or affect1W. `auto`/`reset` clears the override for subsequent requests. Extended payload overflow still fails serialization before transmission.
+
+Family binding requires valid full actuator metadata, no manufacturer signature conflict and no available GI2 profile/subprofile disagreement. RGB binds exact6/1 for manufacturers0/2; white exact6/2 for manufacturer2, scoped to retained definitions. Atlantic manufacturer12, exact22/1 plus GI2[7..9]=620000 or520001 binds PassAPC heat-pump/hybrid families. The source excludes Atlantic from the generic public MP/FP15/16 generator path: **PassAPC binding must not select the normalized generic HeatPump codec**. Names and manual/expert settings are not changed. Database generation/variant bits, exact commercial models and temperature bounds acquisition remain unresolved.
+
+Product-bound lighting builders produce only MP/FPI representations, without originator/ACEI, RF header, authentication, CRC or enqueue. They reject wrong family, conflicting evidence, invalid color/Kelvin, unknown white MP sentinels and insufficient capacity without changing buffer/length. RGB255,0,0 yields000000607CA9654C; safe blackC8000000; white4250K with raw ignored MP yieldsD40000046400. Lighting truncation/black policies still need original runtime/peer comparison. The existing RF FP1–3 diagnostic gate remains effective; no arbitrary FP10/11/14 writer or new KOs are enabled.
+
+Software checks: **531 native,34 XML/UI/source and7 actual ETS JavaScript tests pass**, plus the existing native SX1262 suites. These include ordinary/extended controller MAC equivalence, an ordinary received challenge answered in the explicitly selected extended working form, identity negatives and atomic representation output failures. Physical testing remains unexecuted: only Bluetooth/debug-console serial ports were found, with no identified SX1276 board/peer. `OFM/docs/SX1276-PEER-QUALIFICATION.md` records the concrete bench sequence and acceptance evidence needed. No radio measurements, original-peer version3 acceptance, commercial model binding, signed ETS product or flash power-cut result is claimed. No parameter/KO/flash-layout change; application/module remain3.6/0.2.0.
+
+Final firmware checks pass for SX1276 TP-development, TP-release and IP-development with the runtime bench control included. The dependency pin advances to`d83580c`. Physical checks remain pending hardware/peer access; generated build metadata is excluded from this commit.

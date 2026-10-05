@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Preserve controller authentication's extended working-request form; add runtime-only queued-2W version3 bench selection without automatic negotiation.
+- Bind retained-source lighting and Atlantic PassAPC families using exact consistent identity evidence; keep commercial variants and expert settings separate.
+- Add product-bound sorted RGB/FP14 activation representations and physical qualification procedure; high-FP RF transmission remains gated.
+
 - Apply recovered recipient reply normalization to version-3 key extraction, including ACK direction, PRIORITY/BEACON and command-specific END rules.
 - Add explicit product temperature conversions and an offline diagnostic console; reject unknown words, absent bounds and unsafe inverses.
 - Add reference RGB and FP14 tunable-white conversion helpers with safe black handling; retain product/write qualification gates.
