@@ -1,5 +1,13 @@
 # Reverse-engineering implementation checkpoint — 2026-10-04
 
+> **Current checkpoint — 2026-10-05:** [Authoritative twelve-point matrix](../../../IOHomeControl/docs/implementation/CURRENT-IMPLEMENTATION-STATUS.md). Older entries below are historical checkpoints.
+
+OFM `692ccda`, module 0.3.0; OAM application 3.7. All twelve points have software changes and separately recorded primary commits; the matrix identifies partial acceptance and remaining implementation. The four new recognition permissions are ETS-only and default to preserving manual settings. Channel memory/KO layout stays 68 bytes / 25 objects.
+
+Validation: 542 native tests; 34 UI/source checks; 11 actual ETS JavaScript tests; 2 tuning-summary tests; recognition generation check; producer 4.3.12 integrity and project-20 XSD validation; SX1276 TP development, TP release and IP development builds all passed. Producer had no ETS installation, so no signed `.knxprod` was created. No hardware was flashed and no physical peer qualification was performed.
+
+Remaining: checked global 2W identity transaction, actual ETS round trips, complete common commissioning UI/transaction coverage, exact commercial binding, operational product-specific KNX objects and physically qualified high-FP reads/writes. See the matrix for exact boundaries; compiled conversion/policy code does not enable RF writes.
+
 Target branch: `v1dev-KLFDocumentation`. Local commits by Franz Reisenhofer; no remote publication.
 
 | OFM commit | Change |

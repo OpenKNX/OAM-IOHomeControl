@@ -11,6 +11,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+- Add checked ESP32 NVS 1W reservations, identity-preserving recovery and explicit failure diagnostics.
+- Share generated recognition presentation with ETS; preserve manual settings through individual adoption permissions.
+- Add commissioning job generations, resumable assignment receipts and distinct product-family/quantity/permission metadata.
+- Capture SX1276 RX failure evidence and add controlled runtime bandwidth trials with evidence-based summaries.
+- Bump ETS application to 3.7 and IOHC module to 0.3.0; retain channel memory and KO layout. Physical peer/high-FP write qualification remains open.
+
 - Preserve controller authentication's extended working-request form; add runtime-only queued-2W version3 bench selection without automatic negotiation.
 - Bind retained-source lighting and Atlantic PassAPC families using exact consistent identity evidence; keep commercial variants and expert settings separate.
 - Add product-bound sorted RGB/FP14 activation representations and physical qualification procedure; high-FP RF transmission remains gated.
