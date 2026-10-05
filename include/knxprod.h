@@ -15,6 +15,7 @@
 #define ETS_ModuleId_LOG 4
 #define ETS_ModuleId_FCB 5
 #define ETS_ModuleId_IOHC 6
+#define ETS_ModuleId_PIC 7
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
@@ -22,7 +23,7 @@
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14525
-#define MAIN_MaxKoNumber 999
+#define MAIN_MaxKoNumber 1095
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
 #define NET_ModuleVersion 8
@@ -108,6 +109,9 @@
 #define BASE_ModuleEnabled_IOHC                  110      // 1 Bit, Bit 2
 #define     BASE_ModuleEnabled_IOHCMask 0x04
 #define     BASE_ModuleEnabled_IOHCShift 2
+#define BASE_ModuleEnabled_PIC                   110      // 1 Bit, Bit 1
+#define     BASE_ModuleEnabled_PICMask 0x02
+#define     BASE_ModuleEnabled_PICShift 1
 
 // Zeitbasis
 #define ParamBASE_StartupDelayBase                    ((knx.paramByte(BASE_StartupDelayBase) & BASE_StartupDelayBaseMask) >> BASE_StartupDelayBaseShift)
@@ -174,6 +178,8 @@
 #define ParamBASE_ModuleEnabled_FCB                   ((bool)(knx.paramByte(BASE_ModuleEnabled_FCB) & BASE_ModuleEnabled_FCBMask))
 // IOHC
 #define ParamBASE_ModuleEnabled_IOHC                  ((bool)(knx.paramByte(BASE_ModuleEnabled_IOHC) & BASE_ModuleEnabled_IOHCMask))
+// PIC
+#define ParamBASE_ModuleEnabled_PIC                   ((bool)(knx.paramByte(BASE_ModuleEnabled_PIC) & BASE_ModuleEnabled_PICMask))
 
 #define BASE_KoHeartbeat 1
 #define BASE_KoTime 2
@@ -4236,6 +4242,46 @@
 #define KoIOHC_CHCozyPresence                      (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHCozyPresence)))
 // Kanal %C% Fensterkontakt
 #define KoIOHC_CHCozyWindow                        (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHCozyWindow)))
+
+#define PIC_ChannelCount 16
+
+// Parameter per channel
+#define PIC_ParamBlockOffset 0
+#define PIC_ParamBlockSize -1
+#define PIC_ParamCalcIndex(index) (index + PIC_ParamBlockOffset + _channelIndex * PIC_ParamBlockSize)
+
+
+
+// deprecated
+#define PIC_KoOffset 1000
+
+// Communication objects per channel (multiple occurrence)
+#define PIC_KoBlockOffset 1000
+#define PIC_KoBlockSize 6
+
+#define PIC_KoCalcNumber(index) (index + PIC_KoBlockOffset + _channelIndex * PIC_KoBlockSize)
+#define PIC_KoCalcIndex(number) ((number >= PIC_KoCalcNumber(0) && number < PIC_KoCalcNumber(PIC_KoBlockSize)) ? (number - PIC_KoBlockOffset) % PIC_KoBlockSize : -1)
+#define PIC_KoCalcChannel(number) ((number >= PIC_KoBlockOffset && number < PIC_KoBlockOffset + PIC_ChannelCount * PIC_KoBlockSize) ? (number - PIC_KoBlockOffset) / PIC_KoBlockSize : -1)
+
+#define PIC_KocRgb 0
+#define PIC_KocRgbFeedback 1
+#define PIC_KocWhite 2
+#define PIC_KocWhiteFeedback 3
+#define PIC_KocValid 4
+#define PIC_KocRead 5
+
+// Kanal %C% RGB setzen
+#define KoPIC_cRgb                                (knx.getGroupObject(PIC_KoCalcNumber(PIC_KocRgb)))
+// Kanal %C% RGB Rückmeldung
+#define KoPIC_cRgbFeedback                        (knx.getGroupObject(PIC_KoCalcNumber(PIC_KocRgbFeedback)))
+// Kanal %C% Farbtemperatur setzen
+#define KoPIC_cWhite                              (knx.getGroupObject(PIC_KoCalcNumber(PIC_KocWhite)))
+// Kanal %C% Farbtemperatur Rückmeldung
+#define KoPIC_cWhiteFeedback                      (knx.getGroupObject(PIC_KoCalcNumber(PIC_KocWhiteFeedback)))
+// Kanal %C% Produktwerte gültig
+#define KoPIC_cValid                              (knx.getGroupObject(PIC_KoCalcNumber(PIC_KocValid)))
+// Kanal %C% Produktwerte abfragen
+#define KoPIC_cRead                               (knx.getGroupObject(PIC_KoCalcNumber(PIC_KocRead)))
 
 
 // enumeration types
