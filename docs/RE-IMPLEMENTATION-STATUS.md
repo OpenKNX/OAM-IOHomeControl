@@ -175,3 +175,39 @@ Still open: physical FIFO/CRC/timing and original-peer/version-3 acceptance; pow
 `8ab63c0` closes additional ownership gaps: an object read cannot start while gateway/1W receive is active, radio diagnostics/metadata refresh cannot overlap its console start, and runtime bandwidth/radio diagnostics cannot interrupt a read between queued frames.
 
 Final production validation: SX1276 TP development, TP release and IP development builds passed against OFM `8ab63c0`, module 0.5.1/application 3.9. ETS XML and generated parameter/KO header are unchanged from the validated application 3.9 product. Serial inventory shows only debug-console and Bluetooth callouts; no identifiable SX1276 serial fixture was available. No physical peer acceptance, power-cut test, signed product or device programming is claimed.
+
+
+## Evidence-backed P0/P1 continuation — 2026-10-05
+
+OFM code baseline `edf41a8`, OAM product baseline `2eb7128`, module **0.6.0** /
+ETS **3.10** (encoded 58, module 6). Product objects use an append-only bank
+**1000..1095**, six per channel. Legacy channel objects remain **600..999**,
+25 per channel, with **68-byte** parameter blocks. Visibility defaults off;
+qualification gates still deny high-FP writes and product publication.
+
+Added standard individual MP/FP GETs through FP16 and sparse replies, default
+min/max/current-alias GETs, explicit ETS RF-read requests, semantic-context
+invalidation, normal-pairing assignment receipts with durable revisions and
+unpair tombstones, shared commissioning entry guards/tokens for key capture
+and 1W clone, frozen-candidate evidence and read-only persistence diagnostics.
+The RGB/Kelvin object handlers, command preparation and publication pipeline
+are wired but remain qualification-gated. Separate replies are not an atomic
+RGB tuple; request authentication does not authenticate an unsigned reply.
+
+Validation: **577 native**, **34 UI/source**, **20 executed ETS JavaScript**,
+**3 release-evidence** and **2 radio-summary** tests; recognition generator;
+producer integrity/project-20 XSD; all three SX1276 TP-development, TP-release
+and IP-development builds passed. All 131 old IOHC object/parameter definitions
+were compared against the previous header and preserved. No real ETS import,
+signed product, download, RF peer or power-cut test was performed.
+
+The migration/recovery contract is in OFM `docs/MIGRATION-AND-RECOVERY.md`.
+Older firmware does not understand receipt tombstones; downgrade after use is
+not a supported migration. The evidence checker verifies artifact integrity
+and record completeness, never physical truth or firmware write authorization.
+
+The [authoritative matrix](../../../IOHomeControl/docs/implementation/CURRENT-IMPLEMENTATION-STATUS.md)
+separates completed software from missing qualification and unknown semantics.
+Unresolved capacity layouts, exact commercial/generation identities, physical
+temperature bounds, additional product object sets and authenticated high-FP
+peer behavior remain explicit limits. Existing user files are preserved.
