@@ -2,9 +2,9 @@
 
 > **Current checkpoint — 2026-10-05:** [Authoritative twelve-point matrix](../../../IOHomeControl/docs/implementation/CURRENT-IMPLEMENTATION-STATUS.md). Older entries below are historical checkpoints.
 
-OFM `cdeaa4a`, module 0.5.0; OAM application 3.9. All twelve points have software changes and separately recorded primary commits; the matrix identifies partial acceptance and remaining implementation. The four new recognition permissions are ETS-only and default to preserving manual settings. Channel memory/KO layout stays 68 bytes / 25 objects.
+OFM `8ab63c0`, module 0.5.1; OAM application 3.9. All twelve points have software changes and separately recorded primary commits; the matrix identifies partial acceptance and remaining implementation. The four new recognition permissions are ETS-only and default to preserving manual settings. Channel memory/KO layout stays 68 bytes / 25 objects.
 
-Validation: 558 native tests; 34 UI/source checks; 16 actual ETS JavaScript tests; 2 tuning-summary tests; recognition generation check; producer 4.3.12 integrity and project-20 XSD validation; SX1276 TP development, TP release and IP development builds all passed. Producer had no ETS installation, so no signed `.knxprod` was created. No hardware was flashed and no physical peer qualification was performed.
+Validation: 563 native tests; 34 UI/source checks; 16 actual ETS JavaScript tests; 2 tuning-summary tests; recognition generation check; producer 4.3.12 integrity and project-20 XSD validation; SX1276 TP development, TP release and IP development builds all passed. Producer had no ETS installation, so no signed `.knxprod` was created. No hardware was flashed and no physical peer qualification was performed.
 
 Remaining: global 2W journal power-cut qualification, actual ETS round trips, complete common commissioning UI/transaction coverage, exact commercial binding, operational product-specific KNX objects and physically qualified high-FP reads/writes. See the matrix for exact boundaries; compiled conversion/policy code does not enable RF writes.
 
@@ -145,3 +145,33 @@ Validation: **558 native tests**, **34 UI/source checks**, **16 actual ETS JavaS
 Still open: physical SX1276/peer and power-cut qualification; exact commercial/generation discriminators; authenticated high-FP read/coherent-tuple production and qualified writes; product-specific KNX object sets/publication; actual subscription writes and monitoring policy; RF integration of segmented object transfers and unresolved object schemas; full common commissioning transactions and persistent per-field evidence history. High-FP RF write permissions remain disabled.
 
 Final production validation: all three SX1276 TP development / TP release / IP development builds passed against OFM `cdeaa4a`. Header generation changed only application/module version constants (57/5), preserving repository line endings.
+
+
+## RF metadata-read continuation — 2026-10-05 (OFM 0.5.1)
+
+### Newly traced countdown policy
+
+Re-read binary: `io-homecontrol-stm32-20220823081517.bin`, SHA-256 `e0c20192affea4bc02514fd19d460b85a95f429b5834e53f1970a0018f946529`, mapped at `08000000`.
+
+The previously caller-supplied continuation word now has a concrete **callback-mode-1** read policy. Opening acceptance stores negotiated span at `08016506..08016510`; when the accepted callback returns mode 1, `0801695C..08016976` initializes the continuation word to `ceil(span/18)` (zero remainder stays the quotient via `08016988`). The multiplier at `080169DC` is `38E38E39`; exhaustive arithmetic checking for all 65536 unsigned 16-bit inputs reproduces division by 18 after the high product is shifted right by two. On a nonzero continuation reply, `08016794..080167D2` reads the application's ACK callback mode; mode 1 branches to `080168FE..08016904` and emits the **previous request word minus one**. Mode 2 repeats the request word; other modes choose zero. OFM selects the mode-1 continuation policy, rather than claiming every original product uses it.
+
+The recipient copies request word to reply at `08015EC4..08015EC6`; words above 1 select 18 bytes, word 1 selects the final remainder (18 for an exact multiple), and zero takes the closing branch (`08015E90..08015EAA`). Thus a 19-byte read uses request words **2, 1, 0**, replies containing **18, 1, 0 payload bytes**. The last zero/zero exchange closes the service; receiving the last data byte alone is not completion. Compatibility opening bytes, the carry bit and object business schemas retain their previous evidence limits.
+
+### Implementation and limits
+
+- **`bc94ff3`**: automatic read countdown and strict full-chunk/zero-closure checks in the bounded model. OFM additionally checks a nonzero peer reply word against its outstanding count. This matches the traced recipient's echo behavior; compatibility with other peer implementations remains unqualified.
+- **`451e82e`**: connects the read model to the actual RF command queue. `iohc object read NODE PROVIDER KEY OFFSET SPAN` starts an explicit paired-2W metadata read; NODE/PROVIDER/KEY are hex and OFFSET/SPAN decimal. The host budget is 30 seconds and capacity 1024 bytes. These are OFM host limits, not newly recovered RF/RCM timer values. An opening `47` is accepted only after a challenge and transmission of `3D`; continuations are raw `4A/4B` with sequence/key/peer/token binding. **Opening request authentication does not cryptographically authenticate every returned data byte**: completed bytes are labelled correlated, never authenticated product state.
+- During an active read, unrelated queue entries and conflicting pairing/discovery/scan/key-receive/passive/gateway starts are refused. Identity/key changes stop the read; cancellation cannot retract RF bytes already sent and does not claim to cancel recipient state. The result is volatile and available only after zero-word closure, with unchanged identity/key.
+- The allowlist is provider `00`, keys `0000..0003`, `030A`, `8100`, `8103`, `4300`, `4302`; or provider `0B`, key `C000`. No arbitrary provider, key/counter object, `48/49` RF write, subscription write or high-FP producer is enabled. Allowlisting a metadata selector does not prove a particular peer supports it or decode its contents.
+- **`df23363`**: persistent preamble detection can extend one RX window but no longer bypasses the existing complete-exchange budget. Tests cover preamble-held management waits and the independent object-read host deadline.
+- **`0b5f0fd`**: module 0.5.1 and readable transport diagnostics. ETS application stays **3.9**, encoded 57/module 5, with unchanged 68-byte/25-KO channel layout and unchanged ETS XML.
+
+Online object 160/property 10: **`2C`** gives a 22-byte summary: result/schema/stage/channel at 0..3, token BE32 at 4..7, peer BE24 at 8..10, disposition at 11, negotiated/transferred BE16 at 12..15, live-identity flag at 16, trust at 17 (`2` only for a complete live result), boot identity BE32 at 18..21. **`2D`** request is opcode, boot BE32, token BE32, offset BE16, count 1..16 (12 bytes). Only a matching boot/token, completed transfer and live key binding permit readback. Reply is result/schema, token BE32, offset BE16, count, correlated trust, then up to 16 raw bytes (at most 26 total). No local controller/channel key is serialized. `iohc object status` shows progress; `iohc object cancel TOKEN` cancels the matching boot-local token.
+
+Validation: **563 native tests**, **34 UI/source checks**, **16 actual ETS JavaScript tests**, **2 radio-trial summarizer tests**, recognition generation check. Queued-controller tests cover challenged opening, rejection of an unchallenged opening, 18+1-byte read and explicit zero closure, cancellation, key replacement and persistent preamble deadlines. No peer capture or physical acceptance was performed.
+
+Still open: physical FIFO/CRC/timing and original-peer/version-3 acceptance; power-cut qualification; exact commercial/generation binding; authenticated high-FP observation tuples and qualified writes; product-specific KNX objects/publication; subscription/monitoring writes; RF object-write integration and unresolved `4300`/`8100`/`8103` schemas; full common commissioning coverage and persistent field-evidence history; real ETS import/download. The read pipeline above is diagnostic raw-byte transport, not production product-state support.
+
+`8ab63c0` closes additional ownership gaps: an object read cannot start while gateway/1W receive is active, radio diagnostics/metadata refresh cannot overlap its console start, and runtime bandwidth/radio diagnostics cannot interrupt a read between queued frames.
+
+Final production validation: SX1276 TP development, TP release and IP development builds passed against OFM `8ab63c0`, module 0.5.1/application 3.9. ETS XML and generated parameter/KO header are unchanged from the validated application 3.9 product. Serial inventory shows only debug-console and Bluetooth callouts; no identifiable SX1276 serial fixture was available. No physical peer acceptance, power-cut test, signed product or device programming is claimed.

@@ -1,3 +1,11 @@
+## OFM 0.5.1 integration — 2026-10-05
+
+- Pin OFM `8ab63c0`; ETS application 3.9, parameter memory and KO layout remain unchanged.
+- Add explicit allowlisted metadata object reads with challenged opening, automatic countdown/chunks and zero closure; completed raw readback is boot/token/key bound.
+- Bound waits despite persistent preamble detection and prevent gateway/radio diagnostic ownership overlap.
+- Read bytes are correlated, not authenticated product state. No object/high-FP RF writer or product KNX publication is enabled.
+- Native suite: 563 passed; UI checks 34, ETS JavaScript 16, tuning-summary checks 2; recognition check passed.
+
 ## Application 3.9 / OFM 0.5.0 — 2026-10-05
 
 - Pin OFM `cdeaa4a`; application/module version constants become 57/5 with unchanged channel memory and KOs.
