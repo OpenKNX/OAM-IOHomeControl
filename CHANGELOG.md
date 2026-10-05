@@ -1,3 +1,11 @@
+## Application 3.9 / OFM 0.5.0 — 2026-10-05
+
+- Pin OFM `cdeaa4a`; application/module version constants become 57/5 with unchanged channel memory and KOs.
+- Add read-only global commissioning status and channel evidence views; manual settings are preserved.
+- OFM adds sensor-information query, request-key-bound management observations, strict heating/siren codecs and ambiguous-journal rejection.
+- Product KOs, subscription writes and physical high-FP/peer/power-cut qualification remain open.
+- Validated: 558 native tests, 34 UI/source checks, 16 ETS JavaScript tests, producer/XSD and all three SX1276 builds.
+
 ## Application 3.8 / OFM 0.4.0 — 2026-10-05
 
 - Require OFM `f801e10`; regenerate application/module versions without changing channel memory or KO layout.
