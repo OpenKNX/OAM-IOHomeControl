@@ -1,3 +1,13 @@
+## ETS channel setup and help — 2026-10-05
+
+- Fix the automatic import-target range, internal JavaScript helper warnings and unsupported ETS help link in the linked OFM-IOHomeControl module.
+- Nest product functions inside each enabled channel using prefix-scoped %TT% references and deferred channel substitution; module numbers are not hardcoded in the UI.
+- Separate Expertenoptionen (protocol overrides and recognition controls) from Diagnose, grouped into status/recognition, sensors/priorities, metadata reads and product values.
+- New channels allow supported 2W recognition by default. Status / Erkennung lesen adopts known functions while respecting manual opt-outs and profile overrides; an application download remains necessary.
+- Add 47 concise German help topics and contextual help for every visible io-homecontrol setting. Preserve parameter memory and communication-object numbers.
+- Verified: 39 channel UI tests, 34 ETS JavaScript tests, recognition/semantics generator checks, all 16 expanded channel trees and help archive coverage. A temporary ModuleType renumbering test verifies that product references follow the owning module while offsets and KO numbers stay unchanged. Producer 4.3.12 integrity checks pass without warnings. The staged standard and renumbered variants also pass XSD validation. ETS export and visual ETS acceptance remain to be checked on an ETS-equipped machine.
+- Pin OFM-IOHomeControl 8b16922 for the matching channel templates, help and ETS scripts.
+
 ## OFM 0.5.1 integration — 2026-10-05
 
 - Pin OFM `8ab63c0`; ETS application 3.9, parameter memory and KO layout remain unchanged.

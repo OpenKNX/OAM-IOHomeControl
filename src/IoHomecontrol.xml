@@ -69,8 +69,6 @@
             <op:include href="../lib/OFM-LogicModule/src/Logikmodul.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="LOG" />
             <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="FCB" />
             <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="IOHC" />
-            <op:include href="../lib/OFM-IOHomeControl/src/IoHomeProduct.templ.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="PIC" type="template" />
-            <op:include href="../lib/OFM-IOHomeControl/src/IoHomeProductValues.templ.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="PVX" type="template" />
           </Dynamic>
 </generate>
 </KNX>
