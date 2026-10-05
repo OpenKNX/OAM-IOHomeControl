@@ -60,6 +60,7 @@
   <op:define prefix="PIC" ModuleType="25"
     template="../lib/OFM-IOHomeControl/src/IoHomeProduct.templ.xml"
     NumChannels="16" KoOffset="1000" />
+<op:define prefix="PVX" ModuleType="27" template="../lib/OFM-IOHomeControl/src/IoHomeProductValues.templ.xml" NumChannels="16" KoOffset="1100" />
 <generate>
             <Dynamic>
             <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="BASE" />
@@ -69,6 +70,7 @@
             <op:include href="../lib/OFM-FunctionBlocks/src/FunctionBlocks.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="FCB" />
             <op:include href="../lib/OFM-IOHomeControl/src/IoHomecontrol.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="IOHC" />
             <op:include href="../lib/OFM-IOHomeControl/src/IoHomeProduct.templ.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="PIC" type="template" />
+            <op:include href="../lib/OFM-IOHomeControl/src/IoHomeProductValues.templ.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="PVX" type="template" />
           </Dynamic>
 </generate>
 </KNX>
