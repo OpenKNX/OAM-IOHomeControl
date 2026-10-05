@@ -1,3 +1,10 @@
+## Application 3.8 / OFM 0.4.0 — 2026-10-05
+
+- Require OFM `f801e10`; regenerate application/module versions without changing channel memory or KO layout.
+- Add boot/revision-bound ETS import and global commissioning cancellation.
+- Checked global 2W identity journal, observation provenance, priority/sensor reads and bounded object-transfer model are provided by OFM.
+- No product-specific KNX KOs or high-FP RF writes are enabled. Hardware, power-cut and real ETS acceptance remain open.
+
 # Changelog
 
 All notable changes to this project are documented in this file.
