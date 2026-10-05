@@ -17,14 +17,15 @@
 #define ETS_ModuleId_IOHC 6
 #define ETS_ModuleId_PIC 7
 #define ETS_ModuleId_PVX 8
+#define ETS_ModuleId_MVS 9
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
 #define MAIN_ApplicationVersion 60
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14557
-#define MAIN_MaxKoNumber 1195
+#define MAIN_ParameterSize 14573
+#define MAIN_MaxKoNumber 1215
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
 #define NET_ModuleVersion 8
@@ -116,6 +117,9 @@
 #define BASE_ModuleEnabled_PVX                   110      // 1 Bit, Bit 0
 #define     BASE_ModuleEnabled_PVXMask 0x01
 #define     BASE_ModuleEnabled_PVXShift 0
+#define BASE_ModuleEnabled_MVS                   111      // 1 Bit, Bit 7
+#define     BASE_ModuleEnabled_MVSMask 0x80
+#define     BASE_ModuleEnabled_MVSShift 7
 
 // Zeitbasis
 #define ParamBASE_StartupDelayBase                    ((knx.paramByte(BASE_StartupDelayBase) & BASE_StartupDelayBaseMask) >> BASE_StartupDelayBaseShift)
@@ -186,6 +190,8 @@
 #define ParamBASE_ModuleEnabled_PIC                   ((bool)(knx.paramByte(BASE_ModuleEnabled_PIC) & BASE_ModuleEnabled_PICMask))
 // PVX
 #define ParamBASE_ModuleEnabled_PVX                   ((bool)(knx.paramByte(BASE_ModuleEnabled_PVX) & BASE_ModuleEnabled_PVXMask))
+// MVS
+#define ParamBASE_ModuleEnabled_MVS                   ((bool)(knx.paramByte(BASE_ModuleEnabled_MVS) & BASE_ModuleEnabled_MVSMask))
 
 #define BASE_KoHeartbeat 1
 #define BASE_KoTime 2
@@ -4006,7 +4012,7 @@
 #define ParamIOHC_cOneWayAcei                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayAcei)))
 // 1W Anmeldung mit MAC-Anhang (0x30)
 #define ParamIOHC_cOneWayEnrollmentMac                ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentMac)) & IOHC_cOneWayEnrollmentMacMask))
-// Somfy RS100: leiser Betrieb
+// Leiser Betrieb (reservierter Altparameter)
 #define ParamIOHC_cSilentOperation                    ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSilentOperation)) & IOHC_cSilentOperationMask))
 // 1W Anmeldeabschluss
 #define ParamIOHC_cOneWayEnrollmentFinalizer          ((knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentFinalizer)) & IOHC_cOneWayEnrollmentFinalizerMask) >> IOHC_cOneWayEnrollmentFinalizerShift)
@@ -4334,6 +4340,41 @@
 #define KoPVX_cValid                              (knx.getGroupObject(PVX_KoCalcNumber(PVX_KocValid)))
 // Kanal %C% Produktwerte abfragen
 #define KoPVX_cRead                               (knx.getGroupObject(PVX_KoCalcNumber(PVX_KocRead)))
+
+#define MVS_ChannelCount 16
+
+// Parameter per channel
+#define MVS_ParamBlockOffset 14557
+#define MVS_ParamBlockSize 1
+#define MVS_ParamCalcIndex(index) (index + MVS_ParamBlockOffset + _channelIndex * MVS_ParamBlockSize)
+
+#define MVS_cMovementMode                        0      // 2 Bits, Bit 7-6
+#define     MVS_cMovementModeMask 0xC0
+#define     MVS_cMovementModeShift 6
+#define MVS_cMovementModeObject                  0      // 1 Bit, Bit 5
+#define     MVS_cMovementModeObjectMask 0x20
+#define     MVS_cMovementModeObjectShift 5
+
+// Standard-Fahrmodus
+#define ParamMVS_cMovementMode                       ((knx.paramByte(MVS_ParamCalcIndex(MVS_cMovementMode)) & MVS_cMovementModeMask) >> MVS_cMovementModeShift)
+// Fahrmodus über Kommunikationsobjekt ändern
+#define ParamMVS_cMovementModeObject                 ((bool)(knx.paramByte(MVS_ParamCalcIndex(MVS_cMovementModeObject)) & MVS_cMovementModeObjectMask))
+
+// deprecated
+#define MVS_KoOffset 1200
+
+// Communication objects per channel (multiple occurrence)
+#define MVS_KoBlockOffset 1200
+#define MVS_KoBlockSize 1
+
+#define MVS_KoCalcNumber(index) (index + MVS_KoBlockOffset + _channelIndex * MVS_KoBlockSize)
+#define MVS_KoCalcIndex(number) ((number >= MVS_KoCalcNumber(0) && number < MVS_KoCalcNumber(MVS_KoBlockSize)) ? (number - MVS_KoBlockOffset) % MVS_KoBlockSize : -1)
+#define MVS_KoCalcChannel(number) ((number >= MVS_KoBlockOffset && number < MVS_KoBlockOffset + MVS_ChannelCount * MVS_KoBlockSize) ? (number - MVS_KoBlockOffset) / MVS_KoBlockSize : -1)
+
+#define MVS_KocMovementMode 0
+
+// Kanal %C% Fahrmodus
+#define KoMVS_cMovementMode                       (knx.getGroupObject(MVS_KoCalcNumber(MVS_KocMovementMode)))
 
 
 // enumeration types

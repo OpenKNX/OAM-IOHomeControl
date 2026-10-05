@@ -27,7 +27,8 @@ for page in pages:
     assert enabled.get("test") == ">0"
     selection = parameters[refs[choice.get("ParamRefId")]]
     assert selection.get("Name") == f"IOHC_c{channel}ChannelSelection"
-    products = page.find("k:ParameterBlock[@Name='IOHC_ProductFunctions']", NS)
+    assert page.find("k:ParameterBlock[@Name='IOHC_ProductFunctions']", NS) is None
+    products = page.find("k:ParameterBlock[@Name='IOHC_Functions']/k:ParameterBlock[@Name='IOHC_ProductFunctions']", NS)
     expert = page.find("k:ParameterBlock[@Name='IOHC_ExpertOptions']", NS)
     diagnostics = page.find("k:ParameterBlock[@Name='IOHC_Diagnostics']", NS)
     assert products is not None and expert is not None and diagnostics is not None
@@ -50,6 +51,26 @@ for page in pages:
 assert len(dynamic.findall(".//k:ParameterBlock[@Name='IOHC_ProductFunctions']", NS)) == 16
 assert len(dynamic.findall(".//k:ParameterBlock[@Name='IOHC_ExpertOptions']", NS)) == 16
 assert len(dynamic.findall(".//k:ParameterBlock[@Name='IOHC_Diagnostics']", NS)) == 16
+# The speed object belongs to its own channel and appears only for 2W covers.
+movement_pages = dynamic.findall(".//k:ParameterBlock[@Name='IOHC_MovementMode']", NS)
+assert len(movement_pages) == 16
+movement_type = tree.find(".//k:ParameterType[@Name='MVSMovementMode']", NS)
+assert {n.get("Value") for n in movement_type.findall(".//k:Enumeration", NS)} == {"0", "1", "2"}
+assert not any(parameters[refs[ref.get("RefId")]].get("Name").endswith("SilentOperation")
+               for ref in dynamic.findall(".//k:ParameterRefRef", NS))
+for channel, movement in enumerate(movement_pages, 1):
+    for ref in movement.findall(".//k:ParameterRefRef", NS):
+        assert parameters[refs[ref.get("RefId")]].get("Name").startswith(f"MVS_c{channel}MovementMode")
+        assert ref.get("HelpContext") == "IOHC-Fahrmodus"
+    ko_ref = movement.find(".//k:ComObjectRefRef", NS)
+    obj = objects[object_refs[ko_ref.get("RefId")]]
+    assert int(obj.get("Number")) == 1200 + channel - 1
+    assert obj.get("DatapointType") == "DPST-5-10"
+    assert parents[ko_ref].get("test") == "1"
+    assert parents[movement].get("test") == "1 2"
+    protocol_when = parents[parents[parents[movement]]]
+    assert protocol_when.get("test") == "0"
+    assert parameters[refs[parents[protocol_when].get("ParamRefId")]].get("Name").endswith("ProtocolMode")
 help_topics = {n.get("HelpContext") for n in dynamic.iter() if n.get("HelpContext", "").startswith("IOHC-")}
 for channel in tree.findall(".//k:Channel[@Name='IOHC_Global']", NS):
     for ref in channel.findall(".//k:ParameterRefRef", NS):

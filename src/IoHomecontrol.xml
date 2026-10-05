@@ -61,6 +61,7 @@
     template="../lib/OFM-IOHomeControl/src/IoHomeProduct.templ.xml"
     NumChannels="16" KoOffset="1000" />
 <op:define prefix="PVX" ModuleType="27" template="../lib/OFM-IOHomeControl/src/IoHomeProductValues.templ.xml" NumChannels="16" KoOffset="1100" />
+<op:define prefix="MVS" ModuleType="28" template="../lib/OFM-IOHomeControl/src/IoHomeMovement.templ.xml" NumChannels="16" KoOffset="1200" />
 <generate>
             <Dynamic>
             <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="BASE" />
