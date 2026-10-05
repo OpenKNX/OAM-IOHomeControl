@@ -17,11 +17,11 @@
 #define MODULE_LogicModule_Version_Minor 4
 #define MODULE_LogicModule_Version_Revision 1
 #define MODULE_LogicModule_ETS 68
-#define MODULE_IOHomeControl_Version "0.6.0+edf41a8"
+#define MODULE_IOHomeControl_Version "0.7.0+91bc7be"
 #define MODULE_IOHomeControl_Version_Major 0
-#define MODULE_IOHomeControl_Version_Minor 6
+#define MODULE_IOHomeControl_Version_Minor 7
 #define MODULE_IOHomeControl_Version_Revision 0
-#define MODULE_IOHomeControl_ETS 6
+#define MODULE_IOHomeControl_ETS 7
 #define MODULE_HardwareConfig_Version "1.0.0+51dc43e"
 #define MODULE_HardwareConfig_Version_Major 1
 #define MODULE_HardwareConfig_Version_Minor 0

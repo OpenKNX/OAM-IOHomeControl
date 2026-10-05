@@ -211,3 +211,33 @@ separates completed software from missing qualification and unknown semantics.
 Unresolved capacity layouts, exact commercial/generation identities, physical
 temperature bounds, additional product object sets and authenticated high-FP
 peer behavior remain explicit limits. Existing user files are preserved.
+
+## Evidence-backed continuation — module0.7.0 / application3.11
+
+OFM `91bc7be` includes separate commits for combined identity-bound MP/FP GETs
+(`03 00 60` for RGB), explicit default sensor subscription, semantic-context
+invalidation of management samples, opt-in bounded host sensor polling, normal
+ETS effective-setting summaries, last-two per-field ETS adoption history and
+full recognition-snapshot reread checks. Sensor writes are explicit expert
+operations requiring an established backbone, not automatic configuration.
+
+API32/capability bit6 is additive. Application3.11 encodes59/module7. All existing
+parameter/KO definitions and generated header memory/object constants are
+unchanged; only application/module version constants differ. Eight new history
+parameters are ETS-only and excluded from configuration transfer. Group-object
+banks stay600..999 and1000..1095; channel parameter stride stays68 bytes.
+
+Final validation:586 native tests (355 protocol/169 controller/62 exchange),
+34 UI/source checks,24 executed ETS JavaScript tests,4 release-evidence tests,
+2 radio-summary tests and recognition generation check. Producer4.3.12 internal
+integrity/project20 XSD checks pass. SX1276 TP-development, TP-release and
+IP-development firmware builds pass. The first production compilation exposed
+incorrect ownership member names in new paths; commit502a950 corrects them,
+and all final builds above include that fix.
+
+No peer, waveform, power-cut, actual ETS import/save/reopen/download/migration,
+signed product, flash or push was performed. Sensor physical acceptance is an
+additional unrun optional gate. High-FP rfWrite/knxPublish remain false. Capacity
+schemas, exact commercial variants, physical temperature context, event/wake
+monitoring, object writes and full persistent commissioning audit history remain
+open. ETS retains two distinct adoptions per field, not an unlimited audit log.
