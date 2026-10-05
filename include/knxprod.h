@@ -16,21 +16,22 @@
 #define ETS_ModuleId_FCB 5
 #define ETS_ModuleId_IOHC 6
 #define ETS_ModuleId_PIC 7
+#define ETS_ModuleId_PVX 8
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 59
+#define MAIN_ApplicationVersion 60
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14525
-#define MAIN_MaxKoNumber 1095
+#define MAIN_ParameterSize 14557
+#define MAIN_MaxKoNumber 1195
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
 #define NET_ModuleVersion 8
 #define UCT_ModuleVersion 6
 #define LOG_ModuleVersion 68
 #define FCB_ModuleVersion 10
-#define IOHC_ModuleVersion 7
+#define IOHC_ModuleVersion 8
 // Parameter with single occurrence
 
 
@@ -112,6 +113,9 @@
 #define BASE_ModuleEnabled_PIC                   110      // 1 Bit, Bit 1
 #define     BASE_ModuleEnabled_PICMask 0x02
 #define     BASE_ModuleEnabled_PICShift 1
+#define BASE_ModuleEnabled_PVX                   110      // 1 Bit, Bit 0
+#define     BASE_ModuleEnabled_PVXMask 0x01
+#define     BASE_ModuleEnabled_PVXShift 0
 
 // Zeitbasis
 #define ParamBASE_StartupDelayBase                    ((knx.paramByte(BASE_StartupDelayBase) & BASE_StartupDelayBaseMask) >> BASE_StartupDelayBaseShift)
@@ -180,6 +184,8 @@
 #define ParamBASE_ModuleEnabled_IOHC                  ((bool)(knx.paramByte(BASE_ModuleEnabled_IOHC) & BASE_ModuleEnabled_IOHCMask))
 // PIC
 #define ParamBASE_ModuleEnabled_PIC                   ((bool)(knx.paramByte(BASE_ModuleEnabled_PIC) & BASE_ModuleEnabled_PICMask))
+// PVX
+#define ParamBASE_ModuleEnabled_PVX                   ((bool)(knx.paramByte(BASE_ModuleEnabled_PVX) & BASE_ModuleEnabled_PVXMask))
 
 #define BASE_KoHeartbeat 1
 #define BASE_KoTime 2
@@ -4282,6 +4288,52 @@
 #define KoPIC_cValid                              (knx.getGroupObject(PIC_KoCalcNumber(PIC_KocValid)))
 // Kanal %C% Produktwerte abfragen
 #define KoPIC_cRead                               (knx.getGroupObject(PIC_KoCalcNumber(PIC_KocRead)))
+
+#define PVX_ChannelCount 16
+
+// Parameter per channel
+#define PVX_ParamBlockOffset 14525
+#define PVX_ParamBlockSize 2
+#define PVX_ParamCalcIndex(index) (index + PVX_ParamBlockOffset + _channelIndex * PVX_ParamBlockSize)
+
+#define PVX_cProductDefinition                   0      // 8 Bits, Bit 7-0
+#define PVX_cValueIndex                          1      // uint8_t
+
+// Explizite Produktdefinition
+#define ParamPVX_cProductDefinition                  (knx.paramByte(PVX_ParamCalcIndex(PVX_cProductDefinition)))
+// MP=0 / FP=1..16
+#define ParamPVX_cValueIndex                         (knx.paramByte(PVX_ParamCalcIndex(PVX_cValueIndex)))
+
+// deprecated
+#define PVX_KoOffset 1100
+
+// Communication objects per channel (multiple occurrence)
+#define PVX_KoBlockOffset 1100
+#define PVX_KoBlockSize 6
+
+#define PVX_KoCalcNumber(index) (index + PVX_KoBlockOffset + _channelIndex * PVX_KoBlockSize)
+#define PVX_KoCalcIndex(number) ((number >= PVX_KoCalcNumber(0) && number < PVX_KoCalcNumber(PVX_KoBlockSize)) ? (number - PVX_KoBlockOffset) % PVX_KoBlockSize : -1)
+#define PVX_KoCalcChannel(number) ((number >= PVX_KoBlockOffset && number < PVX_KoBlockOffset + PVX_ChannelCount * PVX_KoBlockSize) ? (number - PVX_KoBlockOffset) / PVX_KoBlockSize : -1)
+
+#define PVX_KocTemperature 0
+#define PVX_KocTemperatureFeedback 1
+#define PVX_KocMode 2
+#define PVX_KocModeFeedback 3
+#define PVX_KocValid 4
+#define PVX_KocRead 5
+
+// Kanal %C% Temperatur setzen
+#define KoPVX_cTemperature                        (knx.getGroupObject(PVX_KoCalcNumber(PVX_KocTemperature)))
+// Kanal %C% Temperatur Rückmeldung
+#define KoPVX_cTemperatureFeedback                (knx.getGroupObject(PVX_KoCalcNumber(PVX_KocTemperatureFeedback)))
+// Kanal %C% Modus setzen
+#define KoPVX_cMode                               (knx.getGroupObject(PVX_KoCalcNumber(PVX_KocMode)))
+// Kanal %C% Modus Rückmeldung
+#define KoPVX_cModeFeedback                       (knx.getGroupObject(PVX_KoCalcNumber(PVX_KocModeFeedback)))
+// Kanal %C% Produktwerte gültig
+#define KoPVX_cValid                              (knx.getGroupObject(PVX_KoCalcNumber(PVX_KocValid)))
+// Kanal %C% Produktwerte abfragen
+#define KoPVX_cRead                               (knx.getGroupObject(PVX_KoCalcNumber(PVX_KocRead)))
 
 
 // enumeration types
