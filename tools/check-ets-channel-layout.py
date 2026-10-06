@@ -66,6 +66,11 @@ for page in pages:
     for ref in product_kos:
         obj = objects[object_refs[ref.get("RefId")]]
         assert re.match(rf"(?:PIC|PVX)_c{channel}(?!\d)", obj.get("Name"))
+    slat_branch = page.find(".//k:when[@test='16 18 35 36']", NS)
+    assert slat_branch is not None
+    assert parameters[refs[parents[slat_branch].get('ParamRefId')]].get('Name') == f'IOHC_c{channel}ChannelSelection'
+    assert {objects[object_refs[r.get('RefId')]].get('Name') for r in slat_branch.findall('k:ComObjectRefRef', NS)} == {f'IOHC_CH{channel}Slat', f'IOHC_CH{channel}SlatFeedback'}
+    assert not slat_branch.findall('k:choose', NS)
     commissioning = page.find("k:ParameterBlock[@Name='IOHC_Commissioning']", NS)
     for ref in commissioning.findall(".//k:ParameterRefRef", NS):
         name = parameters[refs[ref.get("RefId")]].get("Name")
