@@ -66,6 +66,30 @@ for page in pages:
     for ref in product_kos:
         obj = objects[object_refs[ref.get("RefId")]]
         assert re.match(rf"(?:PIC|PVX)_c{channel}(?!\d)", obj.get("Name"))
+    # Evaluate the expanded KO tree as ETS sees a manual selection before hidden
+    # category/feature calculations have provided values. This catches missing
+    # movement objects even when all IDs and enum declarations are valid.
+    def visible_objects(element, selection):
+        if element.tag.endswith('choose'):
+            name = parameters[refs[element.get('ParamRefId')]].get('Name')
+            value = selection if name == f'IOHC_c{channel}ChannelSelection' else 0
+            selected = [w for w in element if w.get('test') and
+                        (value > int(w.get('test')[1:]) if w.get('test').startswith('>') else
+                         str(value) in w.get('test').split())]
+            return set().union(*(visible_objects(w, selection) for w in selected)) if selected else set()
+        result = {objects[object_refs[element.get('RefId')]].get('Name')} if element.tag.endswith('ComObjectRefRef') else set()
+        for child in element:
+            result.update(visible_objects(child, selection))
+        return result
+    # Object names are checked below against their actual legacy declarations.
+    base_suffixes = {objects[object_refs[r.get('RefId')]].get('Name') for r in page.findall('.//k:ComObjectRefRef', NS)
+                     if r.get('RefId').endswith(('00001','00101','00201','00401','00501','01001','01801','01901')) and
+                     objects[object_refs[r.get('RefId')]].get('Name').startswith(f'IOHC_CH{channel}')}
+    for selection in (16,17,18,19,35,36):
+        actual = visible_objects(page, selection)
+        assert base_suffixes <= actual, (channel,selection,base_suffixes-actual)
+        slats = {f'IOHC_CH{channel}Slat', f'IOHC_CH{channel}SlatFeedback'}
+        assert (slats <= actual) == (selection in (16,18,35,36)), (channel,selection,actual)
     slat_branch = page.find(".//k:when[@test='16 18 35 36']", NS)
     assert slat_branch is not None
     assert parameters[refs[parents[slat_branch].get('ParamRefId')]].get('Name') == f'IOHC_c{channel}ChannelSelection'
