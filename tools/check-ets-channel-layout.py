@@ -2,6 +2,7 @@
 """Verify the expanded ETS channel tree after running producer with --Debug."""
 from pathlib import Path
 import argparse
+import json
 import re
 import xml.etree.ElementTree as ET
 import zipfile
@@ -34,6 +35,10 @@ for page in pages:
     diagnostics = page.find("k:ParameterBlock[@Name='IOHC_Diagnostics']", NS)
     assert products is not None and expert is not None and diagnostics is not None
     assert expert.find(".//k:ParameterBlock[@Name='IOHC_Diagnostics']", NS) is None
+    profile_tab = expert.find(".//k:ParameterBlock[@Name='IOHC_ExpertControllerProfile']", NS)
+    profile_condition = parents[profile_tab]
+    assert profile_condition.get("test") == "1"
+    assert parameters[refs[parents[profile_condition].get("ParamRefId")]].get("Name") == f"IOHC_c{channel}ProtocolMode"
     for category in ('Overview', 'Sensors', 'Objects', 'Products'):
         assert diagnostics.find(f".//k:ParameterBlock[@Name='IOHC_Diagnostic{category}']", NS) is not None
     product_refs = [ref for ref in products.findall(".//k:ParameterRefRef", NS)
@@ -66,7 +71,9 @@ assert not any(parameters[refs[ref.get("RefId")]].get("Name").endswith("SilentOp
 for channel, movement in enumerate(movement_pages, 1):
     assert parameters[refs[movement.get("RefId")]].get("Name") == f"MVS_c{channel}MovementMode"
     assert movement.get("HelpContext") == "IOHC-Fahrmodus"
-    assert parents[movement].get("test") == "1 2"
+    selection_rows = json.loads((ROOT / "lib/OFM-IOHomeControl/src/protocol/channel-selections.json").read_text())
+    expected_choices = {1, 2, *[r['value'] for r in selection_rows if r['control'] and r['type'] == 1]}
+    assert {int(v) for v in parents[movement].get("test").split()} == expected_choices
     protocol_when = parents[parents[parents[movement]]]
     assert protocol_when.get("test") == "0"
     assert parameters[refs[parents[protocol_when].get("ParamRefId")]].get("Name").endswith("ProtocolMode")
