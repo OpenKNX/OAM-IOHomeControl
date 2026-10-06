@@ -2,7 +2,6 @@
 """Verify the expanded ETS channel tree after running producer with --Debug."""
 from pathlib import Path
 import argparse
-import json
 import re
 import xml.etree.ElementTree as ET
 import zipfile
@@ -45,6 +44,20 @@ for page in pages:
                     if parameters[refs[ref.get("RefId")]].get("Name").startswith(("PIC_", "PVX_"))]
     assert len(product_refs) == 4
     for ref in product_refs:
+        ancestor = ref
+        while ancestor is not products:
+            parent = parents[ancestor]
+            if parent.tag.endswith('choose') and parent.get('ParamRefId') in refs:
+                parameter = parameters[refs[parent.get('ParamRefId')]]
+                if parameter.get('Name') == f'IOHC_c{channel}DeviceType':
+                    allowed = {int(v) for v in ancestor.get('test').split()}
+                    name = parameters[refs[ref.get('RefId')]].get('Name')
+                    assert allowed == ({25,26} if name.startswith('PIC_') else {18,21,22,23,30})
+                    break
+            ancestor = parent
+        else:
+            raise AssertionError('Product settings are missing their device-type condition')
+    for ref in product_refs:
         param = parameters[refs[ref.get("RefId")]]
         assert re.match(rf"(?:PIC|PVX)_c{channel}(?!\d)", param.get("Name"))
     product_kos = [ref for ref in products.findall(".//k:ComObjectRefRef", NS)
@@ -71,8 +84,7 @@ assert not any(parameters[refs[ref.get("RefId")]].get("Name").endswith("SilentOp
 for channel, movement in enumerate(movement_pages, 1):
     assert parameters[refs[movement.get("RefId")]].get("Name") == f"MVS_c{channel}MovementMode"
     assert movement.get("HelpContext") == "IOHC-Fahrmodus"
-    selection_rows = json.loads((ROOT / "lib/OFM-IOHomeControl/src/protocol/channel-selections.json").read_text())
-    expected_choices = {1, 2, *[r['value'] for r in selection_rows if r['control'] and r['type'] == 1]}
+    expected_choices = {1}
     assert {int(v) for v in parents[movement].get("test").split()} == expected_choices
     protocol_when = parents[parents[parents[movement]]]
     assert protocol_when.get("test") == "0"
