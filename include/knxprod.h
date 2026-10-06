@@ -19,21 +19,22 @@
 #define ETS_ModuleId_PVX 8
 #define ETS_ModuleId_MVS 9
 #define ETS_ModuleId_PRF 10
+#define ETS_ModuleId_LIM 11
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 61
+#define MAIN_ApplicationVersion 62
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14621
-#define MAIN_MaxKoNumber 1587
+#define MAIN_ParameterSize 14669
+#define MAIN_MaxKoNumber 1615
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
 #define NET_ModuleVersion 8
 #define UCT_ModuleVersion 6
 #define LOG_ModuleVersion 68
 #define FCB_ModuleVersion 10
-#define IOHC_ModuleVersion 8
+#define IOHC_ModuleVersion 9
 // Parameter with single occurrence
 
 
@@ -124,6 +125,9 @@
 #define BASE_ModuleEnabled_PRF                   111      // 1 Bit, Bit 6
 #define     BASE_ModuleEnabled_PRFMask 0x40
 #define     BASE_ModuleEnabled_PRFShift 6
+#define BASE_ModuleEnabled_LIM                   111      // 1 Bit, Bit 5
+#define     BASE_ModuleEnabled_LIMMask 0x20
+#define     BASE_ModuleEnabled_LIMShift 5
 
 // Zeitbasis
 #define ParamBASE_StartupDelayBase                    ((knx.paramByte(BASE_StartupDelayBase) & BASE_StartupDelayBaseMask) >> BASE_StartupDelayBaseShift)
@@ -198,6 +202,8 @@
 #define ParamBASE_ModuleEnabled_MVS                   ((bool)(knx.paramByte(BASE_ModuleEnabled_MVS) & BASE_ModuleEnabled_MVSMask))
 // PRF
 #define ParamBASE_ModuleEnabled_PRF                   ((bool)(knx.paramByte(BASE_ModuleEnabled_PRF) & BASE_ModuleEnabled_PRFMask))
+// LIM
+#define ParamBASE_ModuleEnabled_LIM                   ((bool)(knx.paramByte(BASE_ModuleEnabled_LIM) & BASE_ModuleEnabled_LIMMask))
 
 #define BASE_KoHeartbeat 1
 #define BASE_KoTime 2
@@ -4465,6 +4471,39 @@
 #define KoPRF_cBinarySet                          (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocBinarySet)))
 // Kanal %C% MP Schaltwert Rückmeldung
 #define KoPRF_cBinaryFeedback                     (knx.getGroupObject(PRF_KoCalcNumber(PRF_KocBinaryFeedback)))
+
+#define LIM_ChannelCount 16
+
+// Parameter per channel
+#define LIM_ParamBlockOffset 14621
+#define LIM_ParamBlockSize 3
+#define LIM_ParamCalcIndex(index) (index + LIM_ParamBlockOffset + _channelIndex * LIM_ParamBlockSize)
+
+#define LIM_cEnabled                             0      // 1 Bit, Bit 7
+#define     LIM_cEnabledMask 0x80
+#define     LIM_cEnabledShift 7
+#define LIM_cInterval                            1      // 16 Bits, Bit 15-0
+
+// Begrenzungsstatus lesen (vorläufig)
+#define ParamLIM_cEnabled                            ((bool)(knx.paramByte(LIM_ParamCalcIndex(LIM_cEnabled)) & LIM_cEnabledMask))
+// Begrenzung zyklisch abfragen
+#define ParamLIM_cInterval                           (knx.paramWord(LIM_ParamCalcIndex(LIM_cInterval)))
+
+// deprecated
+#define LIM_KoOffset 1600
+
+// Communication objects per channel (multiple occurrence)
+#define LIM_KoBlockOffset 1600
+#define LIM_KoBlockSize 1
+
+#define LIM_KoCalcNumber(index) (index + LIM_KoBlockOffset + _channelIndex * LIM_KoBlockSize)
+#define LIM_KoCalcIndex(number) ((number >= LIM_KoCalcNumber(0) && number < LIM_KoCalcNumber(LIM_KoBlockSize)) ? (number - LIM_KoBlockOffset) % LIM_KoBlockSize : -1)
+#define LIM_KoCalcChannel(number) ((number >= LIM_KoBlockOffset && number < LIM_KoBlockOffset + LIM_ChannelCount * LIM_KoBlockSize) ? (number - LIM_KoBlockOffset) / LIM_KoBlockSize : -1)
+
+#define LIM_KocActive 0
+
+// Kanal %C% Begrenzung aktiv
+#define KoLIM_cActive                             (knx.getGroupObject(LIM_KoCalcNumber(LIM_KocActive)))
 
 
 // enumeration types

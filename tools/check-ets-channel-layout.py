@@ -71,6 +71,27 @@ for page in pages:
     assert parameters[refs[parents[slat_branch].get('ParamRefId')]].get('Name') == f'IOHC_c{channel}ChannelSelection'
     assert {objects[object_refs[r.get('RefId')]].get('Name') for r in slat_branch.findall('k:ComObjectRefRef', NS)} == {f'IOHC_CH{channel}Slat', f'IOHC_CH{channel}SlatFeedback'}
     assert not slat_branch.findall('k:choose', NS)
+    limitation_refs = [r for r in products.findall('.//k:ComObjectRefRef', NS)
+                       if objects[object_refs[r.get('RefId')]].get('Name') == f'LIM_c{channel}Active']
+    assert len(limitation_refs) == 1
+    limitation_ko = objects[object_refs[limitation_refs[0].get('RefId')]]
+    assert int(limitation_ko.get('Number')) == 1600+channel-1
+    assert limitation_ko.get('DatapointType') == 'DPST-1-2'
+    assert limitation_ko.get('WriteFlag') == 'Disabled'
+    assert limitation_ko.get('UpdateFlag') == 'Disabled'
+    for flag in ('ReadFlag','TransmitFlag','CommunicationFlag'):
+        assert limitation_ko.get(flag) == 'Enabled'
+    assert parameters[refs[parents[parents[limitation_refs[0]]].get('ParamRefId')]].get('Name') == f'LIM_c{channel}Enabled'
+    ancestor = limitation_refs[0]
+    while ancestor is not products:
+        parent = parents[ancestor]
+        if parent.tag.endswith('choose') and parent.get('ParamRefId') in refs:
+            if parameters[refs[parent.get('ParamRefId')]].get('Name') == f'IOHC_c{channel}ProtocolMode':
+                assert ancestor.get('test') == '0'
+                break
+        ancestor = parent
+    else:
+        raise AssertionError('Limitation KO not restricted to 2W')
     commissioning = page.find("k:ParameterBlock[@Name='IOHC_Commissioning']", NS)
     for ref in commissioning.findall(".//k:ParameterRefRef", NS):
         name = parameters[refs[ref.get("RefId")]].get("Name")
