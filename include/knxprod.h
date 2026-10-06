@@ -20,14 +20,15 @@
 #define ETS_ModuleId_MVS 9
 #define ETS_ModuleId_PRF 10
 #define ETS_ModuleId_LIM 11
+#define ETS_ModuleId_BAT 12
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 64
+#define MAIN_ApplicationVersion 65
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14669
-#define MAIN_MaxKoNumber 1615
+#define MAIN_ParameterSize 14685
+#define MAIN_MaxKoNumber 1715
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
 #define NET_ModuleVersion 8
@@ -128,6 +129,9 @@
 #define BASE_ModuleEnabled_LIM                   111      // 1 Bit, Bit 5
 #define     BASE_ModuleEnabled_LIMMask 0x20
 #define     BASE_ModuleEnabled_LIMShift 5
+#define BASE_ModuleEnabled_BAT                   111      // 1 Bit, Bit 4
+#define     BASE_ModuleEnabled_BATMask 0x10
+#define     BASE_ModuleEnabled_BATShift 4
 
 // Zeitbasis
 #define ParamBASE_StartupDelayBase                    ((knx.paramByte(BASE_StartupDelayBase) & BASE_StartupDelayBaseMask) >> BASE_StartupDelayBaseShift)
@@ -204,6 +208,8 @@
 #define ParamBASE_ModuleEnabled_PRF                   ((bool)(knx.paramByte(BASE_ModuleEnabled_PRF) & BASE_ModuleEnabled_PRFMask))
 // LIM
 #define ParamBASE_ModuleEnabled_LIM                   ((bool)(knx.paramByte(BASE_ModuleEnabled_LIM) & BASE_ModuleEnabled_LIMMask))
+// BAT
+#define ParamBASE_ModuleEnabled_BAT                   ((bool)(knx.paramByte(BASE_ModuleEnabled_BAT) & BASE_ModuleEnabled_BATMask))
 
 #define BASE_KoHeartbeat 1
 #define BASE_KoTime 2
@@ -4504,6 +4510,34 @@
 
 // Kanal %C% Begrenzung aktiv
 #define KoLIM_cActive                             (knx.getGroupObject(LIM_KoCalcNumber(LIM_KocActive)))
+
+#define BAT_ChannelCount 16
+
+// Parameter per channel
+#define BAT_ParamBlockOffset 14669
+#define BAT_ParamBlockSize 1
+#define BAT_ParamCalcIndex(index) (index + BAT_ParamBlockOffset + _channelIndex * BAT_ParamBlockSize)
+
+#define BAT_cMode                                0      // 8 Bits, Bit 7-0
+
+// Batterieüberwachung
+#define ParamBAT_cMode                               (knx.paramByte(BAT_ParamCalcIndex(BAT_cMode)))
+
+// deprecated
+#define BAT_KoOffset 1700
+
+// Communication objects per channel (multiple occurrence)
+#define BAT_KoBlockOffset 1700
+#define BAT_KoBlockSize 1
+
+#define BAT_KoCalcNumber(index) (index + BAT_KoBlockOffset + _channelIndex * BAT_KoBlockSize)
+#define BAT_KoCalcIndex(number) ((number >= BAT_KoCalcNumber(0) && number < BAT_KoCalcNumber(BAT_KoBlockSize)) ? (number - BAT_KoBlockOffset) % BAT_KoBlockSize : -1)
+#define BAT_KoCalcChannel(number) ((number >= BAT_KoBlockOffset && number < BAT_KoBlockOffset + BAT_ChannelCount * BAT_KoBlockSize) ? (number - BAT_KoBlockOffset) / BAT_KoBlockSize : -1)
+
+#define BAT_KocLow 0
+
+// Kanal %C% Batterie schwach
+#define KoBAT_cLow                                (knx.getGroupObject(BAT_KoCalcNumber(BAT_KocLow)))
 
 
 // enumeration types

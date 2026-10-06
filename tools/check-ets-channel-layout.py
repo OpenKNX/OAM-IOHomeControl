@@ -95,6 +95,18 @@ for page in pages:
     assert parameters[refs[parents[slat_branch].get('ParamRefId')]].get('Name') == f'IOHC_c{channel}ChannelSelection'
     assert {objects[object_refs[r.get('RefId')]].get('Name') for r in slat_branch.findall('k:ComObjectRefRef', NS)} == {f'IOHC_CH{channel}Slat', f'IOHC_CH{channel}SlatFeedback'}
     assert not slat_branch.findall('k:choose', NS)
+    battery_refs = [r for r in products.findall('.//k:ComObjectRefRef', NS)
+                    if objects[object_refs[r.get('RefId')]].get('Name') == f'BAT_c{channel}Low']
+    assert len(battery_refs) == 1
+    battery_ko = objects[object_refs[battery_refs[0].get('RefId')]]
+    assert int(battery_ko.get('Number')) == 1700+channel-1
+    assert battery_ko.get('DatapointType') == 'DPST-1-5'
+    assert battery_ko.get('WriteFlag') == battery_ko.get('UpdateFlag') == 'Disabled'
+    for flag in ('ReadFlag','TransmitFlag','CommunicationFlag'):
+        assert battery_ko.get(flag) == 'Enabled'
+    branch = parents[battery_refs[0]]
+    assert branch.get('test') == '1 2'
+    assert parameters[refs[parents[branch].get('ParamRefId')]].get('Name') == f'BAT_c{channel}Mode'
     limitation_refs = [r for r in products.findall('.//k:ComObjectRefRef', NS)
                        if objects[object_refs[r.get('RefId')]].get('Name') == f'LIM_c{channel}Active']
     assert len(limitation_refs) == 1
