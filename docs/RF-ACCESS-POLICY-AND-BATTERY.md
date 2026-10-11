@@ -5,7 +5,9 @@ per-band duty limits. Production boot/reboot has a conservative **3636000 ms
 RF quiet period** to cover unknown prior airtime. RX is available during it.
 See `iohc duty status` for recovery and estimated eligibility delays.
 
-Normal environments retain their flags. Two explicit lab-only targets:
+All develop/debug environments expose the temporary bypass, including IP and
+standalone debug builds. Release environments reject it. The two existing bench
+targets remain convenient aliases:
 
 ```
 pio run -e bench_OpenKNX_XIAO_S3_SX1262_TP
@@ -13,7 +15,7 @@ pio run -e bench_OpenKNX_XIAO_S3_SX1276_TP
 ```
 
 These require a shielded/conducted approved RF test setup. They start in normal
-mode; only the local console can request a five-minute budget bypass:
+mode; a serial or debug web-console command can request a five-minute budget bypass:
 
 ```
 iohc duty debug on CONFIRM_SHIELDED_BENCH
@@ -22,8 +24,9 @@ iohc duty debug off
 iohc duty reset-debug
 ```
 
-No ETS/NVS setting enables bypass. No web console is allowed in a bench build.
-All accepted airtime is still counted; off/reset-debug never refund it. Normal
+No ETS/NVS setting enables bypass. Debug web-console builds support the same
+explicit confirmation command; KNX diagnostic KO commands cannot enable it.
+All accepted airtime is still counted; off/reset-debug never refund it. Release
 builds reject debug on. Fault, identity change, expiry or restart disables it.
 Never distribute bench images for normal field operation.
 
