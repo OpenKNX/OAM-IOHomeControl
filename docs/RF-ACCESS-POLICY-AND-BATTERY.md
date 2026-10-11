@@ -1,9 +1,10 @@
 # RF policy, lab builds and battery diagnostics
 
 Implemented software prototype, 2026-10-11. Ordinary firmware keeps its existing
-per-band duty limits. Production boot/reboot has a conservative **3636000 ms
-RF quiet period** to cover unknown prior airtime. RX is available during it.
-See `iohc duty status` for recovery and estimated eligibility delays.
+per-band duty limits. There is no RF quiet period after boot/reboot: commands
+can transmit as soon as radio initialization and protocol checks finish.
+The RAM-only accounting ledger starts fresh after reboot. See `iohc duty status`
+for estimated eligibility delays when actual charged airtime exhausts the budget.
 
 All develop/debug environments expose the temporary bypass, including IP and
 standalone debug builds. Release environments reject it. The two existing bench
@@ -44,7 +45,7 @@ Submitted/queued is not RF success. Watch RF-start/completion/reply and terminal
 results. No accepted TX => not_transmitted_duty_budget; partially sent exchange
 => exchange_duty_budget. Diagnostics show airtime/remaining quota/retry delay,
 per-object results and historical evidence ages. Percent remains unknown.
-Status polls defer before enqueue/logging when quota/recovery prevents them.
+Status polls defer before enqueue/logging when quota prevents them.
 
 Higher CH2 fairness and QualifiedPoliteAccess remain unavailable until complete
 hardware/regulatory qualification. Current helper LBT is not sufficient evidence.
