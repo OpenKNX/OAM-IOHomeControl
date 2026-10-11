@@ -1,12 +1,12 @@
 # RF policy, lab builds and battery diagnostics
 
-Implemented software prototype, 2026-10-11. Ordinary firmware keeps its existing
+Implemented software prototype, 2026-10-11. Release firmware keeps its existing
 per-band duty limits. There is no RF quiet period after boot/reboot: commands
 can transmit as soon as radio initialization and protocol checks finish.
 The RAM-only accounting ledger starts fresh after reboot. See `iohc duty status`
 for estimated eligibility delays when actual charged airtime exhausts the budget.
 
-All develop/debug environments expose the temporary bypass, including IP and
+All develop/debug environments activate bypass by default without expiry, including IP and
 standalone debug builds. Release environments reject it. The two existing bench
 targets remain convenient aliases:
 
@@ -15,8 +15,9 @@ pio run -e bench_OpenKNX_XIAO_S3_SX1262_TP
 pio run -e bench_OpenKNX_XIAO_S3_SX1276_TP
 ```
 
-These require a shielded/conducted approved RF test setup. They start in normal
-mode; a serial or debug web-console command can request a five-minute budget bypass:
+Debug builds require a shielded/conducted approved RF test setup. No activation
+command is needed after startup. Use the console to inspect or disable bypass;
+the confirmed on command re-enables it after manual off or a fault:
 
 ```
 iohc duty debug on CONFIRM_SHIELDED_BENCH
@@ -28,7 +29,8 @@ iohc duty reset-debug
 No ETS/NVS setting enables bypass. Debug web-console builds support the same
 explicit confirmation command; KNX diagnostic KO commands cannot enable it.
 All accepted airtime is still counted; off/reset-debug never refund it. Release
-builds reject debug on. Fault, identity change, expiry or restart disables it.
+builds reject debug on. Faults and later identity changes disable it. Debug
+reinitialization/reboot activates it again; there is no time-based expiry.
 Never distribute bench images for normal field operation.
 
 For explicit battery trials, enable Extended battery diagnostics for a paired
