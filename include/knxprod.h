@@ -24,7 +24,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 68
+#define MAIN_ApplicationVersion 69
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14685
@@ -3890,6 +3890,9 @@
 #define IOHC_cOneWayEnrollmentMac                53      // 1 Bit, Bit 7
 #define     IOHC_cOneWayEnrollmentMacMask 0x80
 #define     IOHC_cOneWayEnrollmentMacShift 7
+#define IOHC_cGarageEndpointsOnly                 0      // 1 Bit, Bit 1
+#define     IOHC_cGarageEndpointsOnlyMask 0x02
+#define     IOHC_cGarageEndpointsOnlyShift 1
 #define IOHC_cSilentOperation                    53      // 1 Bit, Bit 6
 #define     IOHC_cSilentOperationMask 0x40
 #define     IOHC_cSilentOperationShift 6
@@ -4030,6 +4033,8 @@
 #define ParamIOHC_cOneWayAcei                         (knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayAcei)))
 // 1W Anmeldung mit MAC-Anhang (0x30)
 #define ParamIOHC_cOneWayEnrollmentMac                ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cOneWayEnrollmentMac)) & IOHC_cOneWayEnrollmentMacMask))
+// MOTO 1000 io: nur AUF / ZU / STOP (keine Zwischenposition / Favorit)
+#define ParamIOHC_cGarageEndpointsOnly                ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cGarageEndpointsOnly)) & IOHC_cGarageEndpointsOnlyMask))
 // Leiser Betrieb (reservierter Altparameter)
 #define ParamIOHC_cSilentOperation                    ((bool)(knx.paramByte(IOHC_ParamCalcIndex(IOHC_cSilentOperation)) & IOHC_cSilentOperationMask))
 // 1W Anmeldeabschluss

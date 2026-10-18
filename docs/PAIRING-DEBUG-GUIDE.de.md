@@ -170,3 +170,34 @@ Bitte mitschicken:
    RX-Pfad arbeitet wahrscheinlich, Problem eher höher im Protokoll.
 3. `1W` reagiert gar nicht:
    zuerst Learn-Mode, Controller-Identität und Broadcast-/Geräteklasse prüfen.
+
+## Pull-Key-Diagnose und Garagentor-Kompatibilität
+
+Die expliziten Diagnosemodi `iohcNN pair2w-exp pull-key [ADDR]` und
+`iohcNN pair2w-exp launch-key [ADDR]` führen jetzt einen getrennten Ablauf
+`38 -> 32 -> 3C -> 3D` aus. `iohc pairdiag status` zeigt `pull_result`:
+`received`, `verified_same_key`, `verified_other_key`, `unproven`, `refused` oder
+`timeout`. Auch ein verifizierter Schlüssel beendet nur die Diagnose. Der Kanal
+wird dadurch nicht gepaart; Systemschlüssel und Flash/ETS bleiben unverändert.
+Es folgt kein automatisches Push-Pairing. Kandidatenschlüssel werden verworfen
+und nicht ausgegeben. Eine autorisierte Übernahme erfolgt ausschließlich über
+den getrennten, expliziten KeyImport-Ablauf.
+
+Ein korreliertes `FE 08` / `FE 80` nach Schlüsseltransfer ist eine eindeutige
+Push-Verweigerung; `FE 18` / Legacy-`FE 05` bedeutet Authentifizierungsfehler.
+Diese Antworten beenden den Versuch ohne blinde Wiederholung oder Pairing-Erfolg.
+Andere gefaltete Fehlerantworten beweisen keine Schlüsselübernahme. Reguläres
+Pairing benötigt weiterhin seine akzeptierte Bestätigung.
+
+Nur bei einem eindeutig identifizierten MOTO 1000 io die standardmäßig
+abgeschaltete Expertenoption **MOTO 1000 io: nur AUF / ZU / STOP** für den
+2W-Garagentorkanal einschalten. Sie sperrt Zwischenpositionen und Favorit.
+Andere positionierbare Garagentormodelle können Teilöffnung unterstützen;
+dort die Option ausgeschaltet lassen. Sechs-Byte-MAIN-only-Befehle setzen ein
+gültiges aufgelöstes Garagentorprofil voraus. Der Hersteller allein genügt nicht.
+Authentifizierung bestätigt keine Bewegung; die tatsächliche Statusantwort prüfen.
+
+Die importierten öffentlichen Aufzeichnungen sind Regressionseingaben und keine
+OFM-Hardwarequalifikation. Ninas authentifizierte Antwortsequenz, Atlantic-Key-Pull,
+KLI/KUX-Anmeldetiming und das MOTO1000-Verhalten nach STOP während der Fahrt
+müssen noch auf echter Hardware geprüft werden.

@@ -239,3 +239,31 @@ For a `2W` debug session on channel 1:
 10. if not paired: `iohc discover`, then `iohc radio txtest`, then `iohc radio sweep 3`
 
 That usually gives enough information to separate RF problems from pairing-flow problems.
+
+## Pull-key diagnostics and garage compatibility
+
+`iohcNN pair2w-exp pull-key [ADDR]` and `iohcNN pair2w-exp launch-key [ADDR]`
+now run an isolated `38 -> 32 -> 3C -> 3D`
+workflow. Consult the console help for the existing channel-first command syntax.
+`iohc pairdiag status` reports `pull_result`: `received`, `verified_same_key`,
+`verified_other_key`, `unproven`, `refused` or `timeout`. A verified result ends the
+diagnostic; it does not pair the channel, change the system key, persist a key or
+start push pairing. Candidate keys are discarded and never printed. Use the
+separate explicit KeyImport workflow for authorized key adoption.
+
+A correlated key-transfer `FE 08` / `FE 80` is a definitive push refusal;
+`FE 18` / legacy `FE 05` is an authentication failure. These stop the attempt
+without blind retries or marking the channel paired. Other folded errors do not
+prove key acceptance. Normal pairing still requires its accepted confirmation.
+
+For a positively identified MOTO 1000 io, enable the default-off expert option
+**MOTO 1000 io: nur AUF / ZU / STOP** under the 2W garage settings. This blocks
+intermediate and favorite targets. Other position-capable garage models can
+support partial opening and should keep this option off. Six-byte garage MAIN-only
+requests depend on a valid resolved garage profile, never manufacturer alone.
+Authentication completion does not establish movement; verify actual status.
+
+The imported public captures are regression input, not OFM physical bench
+qualification. Nina authenticated responder behavior, Atlantic key pull, KLI/KUX
+enrollment timing and MOTO1000 behavior after mid-travel STOP still require
+physical bench validation.

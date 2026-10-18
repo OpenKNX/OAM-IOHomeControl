@@ -1,3 +1,11 @@
+## Application 4.5: pairing and garage compatibility — 2026-10-18
+
+- Pin OFM `db31fce`: contextual FE errors and definitive key refusal handling; transcript-verified pull diagnosis with no automatic push or key persistence; garage MAIN-only EXECUTE and explicit MOTO1000 endpoint restriction; rejected optimistic-position rollback.
+- Integrate 26 public Atlantic, MOTO1000, Nina, Sunilus, RS100 and Oximo protocol frames in the executable OFM corpus. Partial transcripts, masked authentication, missing physical CRC and synthetic proof/PHY tests are identified in the provenance.
+- Increase ETS ApplicationVersion from 4.4 to 4.5 and regenerate the header for the default-off MOTO1000 option using unused byte 0 / BitOffset 6. Existing parameter offsets, 68-byte channel blocks and communication objects are unchanged.
+- Verified native protocol/controller/exchange (410/245/65), radio, storage, UI (52), ETS JavaScript (51), production callback checks, producer integrity and 16 expanded channel trees. Both XIAO S3 SX1262 and SX1276 TP develop firmware targets build successfully.
+- Physical device qualification, Nina authenticated responder, lost-33 proof design and the proposed full per-attempt telemetry counters require further implementation or hardware evidence. No physical RF test or signed ETS export is claimed.
+
 ## ETS channel setup and help — 2026-10-05
 
 - Fix the automatic import-target range, internal JavaScript helper warnings and unsupported ETS help link in the linked OFM-IOHomeControl module.
