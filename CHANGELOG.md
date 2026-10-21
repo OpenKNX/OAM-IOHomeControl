@@ -1,3 +1,12 @@
+## Application 4.6: guarded Atlantic heating — 2026-10-21
+
+- Pin OFM `e31b8e5`. Add typed private register reads/writes, strict challenged response correlation, independent write readback and measured feedback with validity/provenance. Sensor register 010E is read-only; detection enable uses 0106. Other heating profiles keep their existing semantics.
+- Add explicit staged Atlantic pull, bounded missing-proof retries, read-only +1 verification before keyed roll-call, and durable assignment to a chosen empty channel. Per-channel keys remain isolated from the global system key; restart recovery restores verified metadata.
+- Append 160 optional heating KOs at 1800 (ten per channel), default-off polling and profile-qualified ETS controls. Preserve all 174 checked legacy layout constants, including 68-byte parameter blocks and 25 legacy KOs per channel.
+- Migration: back up ETS first; remove legacy Kn+24 window writes, check Kn+22 DPT 5.010 mode links and Kn+21 setpoint feedback. Presence Kn+23 stays reserved. Online recognition and application download are required for qualified controls.
+- Integrate seven pinned public capture fixtures; keep masked cryptography absent and synthetic proof tests separate. Validate native protocol/controller/exchange (416/263/67), storage, production publication/recovery, UI (53), ETS JavaScript (52), producer integrity/XSD and expanded channel layout. SX1262 release and SX1276 develop TP firmware builds pass.
+- Physical Atlantic RF acceptance, further product-family qualification and signed ETS export remain unverified. No firmware was flashed.
+
 ## Application 4.5: pairing and garage compatibility — 2026-10-18
 
 - Pin OFM `db31fce`: contextual FE errors and definitive key refusal handling; transcript-verified pull diagnosis with no automatic push or key persistence; garage MAIN-only EXECUTE and explicit MOTO1000 endpoint restriction; rejected optimistic-position rollback.

@@ -21,14 +21,15 @@
 #define ETS_ModuleId_PRF 10
 #define ETS_ModuleId_LIM 11
 #define ETS_ModuleId_BAT 12
+#define ETS_ModuleId_HTG 13
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 69
+#define MAIN_ApplicationVersion 70
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
-#define MAIN_ParameterSize 14685
-#define MAIN_MaxKoNumber 1715
+#define MAIN_ParameterSize 14733
+#define MAIN_MaxKoNumber 1959
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
 #define NET_ModuleVersion 8
@@ -132,6 +133,9 @@
 #define BASE_ModuleEnabled_BAT                   111      // 1 Bit, Bit 4
 #define     BASE_ModuleEnabled_BATMask 0x10
 #define     BASE_ModuleEnabled_BATShift 4
+#define BASE_ModuleEnabled_HTG                   111      // 1 Bit, Bit 3
+#define     BASE_ModuleEnabled_HTGMask 0x08
+#define     BASE_ModuleEnabled_HTGShift 3
 
 // Zeitbasis
 #define ParamBASE_StartupDelayBase                    ((knx.paramByte(BASE_StartupDelayBase) & BASE_StartupDelayBaseMask) >> BASE_StartupDelayBaseShift)
@@ -210,6 +214,8 @@
 #define ParamBASE_ModuleEnabled_LIM                   ((bool)(knx.paramByte(BASE_ModuleEnabled_LIM) & BASE_ModuleEnabled_LIMMask))
 // BAT
 #define ParamBASE_ModuleEnabled_BAT                   ((bool)(knx.paramByte(BASE_ModuleEnabled_BAT) & BASE_ModuleEnabled_BATMask))
+// HTG
+#define ParamBASE_ModuleEnabled_HTG                   ((bool)(knx.paramByte(BASE_ModuleEnabled_HTG) & BASE_ModuleEnabled_HTGMask))
 
 #define BASE_KoHeartbeat 1
 #define BASE_KoTime 2
@@ -4269,7 +4275,7 @@
 #define KoIOHC_CHStepStop                          (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHStepStop)))
 // Kanal %C% Temperatur Sollwert
 #define KoIOHC_CHCozyTemp                          (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHCozyTemp)))
-// Kanal %C% Temperatur Rückmeldung
+// Kanal %C% Sollwert Rückmeldung
 #define KoIOHC_CHCozyTempFeedback                  (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHCozyTempFeedback)))
 // Kanal %C% Betriebsmodus
 #define KoIOHC_CHCozyMode                          (knx.getGroupObject(IOHC_KoCalcNumber(IOHC_KoCHCozyMode)))
@@ -4543,6 +4549,71 @@
 
 // Kanal %C% Batterie schwach
 #define KoBAT_cLow                                (knx.getGroupObject(BAT_KoCalcNumber(BAT_KocLow)))
+
+#define HTG_ChannelCount 16
+
+// Parameter per channel
+#define HTG_ParamBlockOffset 14685
+#define HTG_ParamBlockSize 3
+#define HTG_ParamCalcIndex(index) (index + HTG_ParamBlockOffset + _channelIndex * HTG_ParamBlockSize)
+
+#define HTG_cEnabled                             0      // 1 Bit, Bit 7
+#define     HTG_cEnabledMask 0x80
+#define     HTG_cEnabledShift 7
+#define HTG_cMaxObject                           0      // 1 Bit, Bit 6
+#define     HTG_cMaxObjectMask 0x40
+#define     HTG_cMaxObjectShift 6
+#define HTG_cPollSeconds                         1      // uint16_t
+
+// Private Atlantic-Heizregister verwenden
+#define ParamHTG_cEnabled                            ((bool)(knx.paramByte(HTG_ParamCalcIndex(HTG_cEnabled)) & HTG_cEnabledMask))
+// Maximalen Sollwert als Diagnoseobjekt anzeigen
+#define ParamHTG_cMaxObject                          ((bool)(knx.paramByte(HTG_ParamCalcIndex(HTG_cMaxObject)) & HTG_cMaxObjectMask))
+// Abfragezyklus in Sekunden (0=aus, sonst mindestens 60)
+#define ParamHTG_cPollSeconds                        (knx.paramWord(HTG_ParamCalcIndex(HTG_cPollSeconds)))
+
+// deprecated
+#define HTG_KoOffset 1800
+
+// Communication objects per channel (multiple occurrence)
+#define HTG_KoBlockOffset 1800
+#define HTG_KoBlockSize 10
+
+#define HTG_KoCalcNumber(index) (index + HTG_KoBlockOffset + _channelIndex * HTG_KoBlockSize)
+#define HTG_KoCalcIndex(number) ((number >= HTG_KoCalcNumber(0) && number < HTG_KoCalcNumber(HTG_KoBlockSize)) ? (number - HTG_KoBlockOffset) % HTG_KoBlockSize : -1)
+#define HTG_KoCalcChannel(number) ((number >= HTG_KoBlockOffset && number < HTG_KoBlockOffset + HTG_ChannelCount * HTG_KoBlockSize) ? (number - HTG_KoBlockOffset) / HTG_KoBlockSize : -1)
+
+#define HTG_KocRoomTemperature 0
+#define HTG_KocSetpointFeedback 1
+#define HTG_KocModeFeedback 2
+#define HTG_KocValid 3
+#define HTG_KocHeating 4
+#define HTG_KocWindow 5
+#define HTG_KocDetectionSet 6
+#define HTG_KocDetectionFeedback 7
+#define HTG_KocMaxSetpoint 8
+#define HTG_KocRead 9
+
+// Kanal %C% Raumtemperatur
+#define KoHTG_cRoomTemperature                    (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocRoomTemperature)))
+// Kanal %C% Sollwert Rückmeldung
+#define KoHTG_cSetpointFeedback                   (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocSetpointFeedback)))
+// Kanal %C% Istmodus 0=Auto 1=Manuell 2=Programm 3=Extern 4=Aus
+#define KoHTG_cModeFeedback                       (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocModeFeedback)))
+// Kanal %C% Gültigkeit Bit0=Modus 1=Max 2=Soll 3=Erkennung 4=Fenster 5=Raum 6=Regler
+#define KoHTG_cValid                              (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocValid)))
+// Kanal %C% Heizelement aktiv
+#define KoHTG_cHeating                            (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocHeating)))
+// Kanal %C% Fensterkontakt Rückmeldung
+#define KoHTG_cWindow                             (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocWindow)))
+// Kanal %C% Fenstererkennung freigeben
+#define KoHTG_cDetectionSet                       (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocDetectionSet)))
+// Kanal %C% Fenstererkennung Status
+#define KoHTG_cDetectionFeedback                  (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocDetectionFeedback)))
+// Kanal %C% Maximaler Sollwert
+#define KoHTG_cMaxSetpoint                        (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocMaxSetpoint)))
+// Kanal %C% Heizungswerte abfragen
+#define KoHTG_cRead                               (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocRead)))
 
 
 // enumeration types

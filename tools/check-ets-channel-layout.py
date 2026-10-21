@@ -2,6 +2,7 @@
 """Verify the expanded ETS channel tree after running producer with --Debug."""
 from pathlib import Path
 import argparse
+import json
 import re
 import xml.etree.ElementTree as ET
 import zipfile
@@ -212,3 +213,52 @@ archives = list((ROOT / "src/IoHomecontrol.baggages").rglob("Help_de.zip"))
 assert any(help_topics <= {Path(name).stem for name in zipfile.ZipFile(archive).namelist()}
            for archive in archives), "Generated help archive lacks channel help"
 print(f"16 channel trees and {len(help_topics)} contextual help topics verified")
+
+# Application 4.6 appends heating objects; historical channel ABI stays fixed.
+if any(o.get("Name", "").startswith("HTG_") for o in objects.values()):
+    header = (ROOT / "include/knxprod.h").read_text()
+    definitions = dict(re.findall(r"^#define\s+(\w+)\s+([^\s/]+)", header, re.MULTILINE))
+    baseline = json.loads((ROOT / "lib/OFM-IOHomeControl/test/compatibility-baseline.json").read_text())
+    for name, expected in baseline.items():
+        assert definitions.get(name) == expected, (name, expected, definitions.get(name))
+    assert definitions["HTG_KoBlockOffset"] == "1800"
+    assert definitions["HTG_KoBlockSize"] == "10"
+    assert definitions["HTG_ParamBlockSize"] == "3"
+    assert definitions["HTG_ChannelCount"] == "16"
+    dpts = ("9-1", "9-1", "5-10", "5-10", "1-11", "1-19", "1-3", "1-3", "9-1", "1-17")
+    for channel in range(1,17):
+        base = 1800 + 10*(channel-1)
+        bank = {int(o.get("Number"))-base:o for o in objects.values()
+                if base <= int(o.get("Number")) < base+10}
+        assert set(bank) == set(range(10)), channel
+        for index, obj in bank.items():
+            assert obj.get("DatapointType") == "DPST-"+dpts[index], (channel,index)
+            assert obj.get("WriteFlag") == ("Enabled" if index in (6,9) else "Disabled")
+        for ref in dynamic.findall(".//k:ComObjectRefRef",NS):
+            obj = objects[object_refs[ref.get("RefId")]]
+            if not (base <= int(obj.get("Number")) < base+10):
+                continue
+            guards=set()
+            ancestor=ref
+            while ancestor in parents:
+                parent=parents[ancestor]
+                if parent.tag.endswith("choose") and parent.get("ParamRefId") in refs:
+                    name=parameters[refs[parent.get("ParamRefId")]].get("Name")
+                    if ancestor.get("test")=="1":guards.add(name)
+                ancestor=parent
+            assert {f"HTG_c{channel}Qualified",f"HTG_c{channel}Enabled"} <= guards, (channel,guards)
+        legacy_base=600+25*(channel-1)
+        for ref in dynamic.findall(".//k:ComObjectRefRef",NS):
+            obj=objects[object_refs[ref.get("RefId")]]
+            offset=int(obj.get("Number"))-legacy_base
+            if offset not in (20,21,22,23,24):continue
+            assert offset!=23, "Unqualified presence writer must stay hidden"
+            qualified=False;ancestor=ref
+            while ancestor in parents:
+                parent=parents[ancestor]
+                if parent.tag.endswith("choose") and parent.get("ParamRefId") in refs:
+                    name=parameters[refs[parent.get("ParamRefId")]].get("Name")
+                    qualified|=name==f"IOHC_c{channel}HeatingQualified" and ancestor.get("test")=="1"
+                ancestor=parent
+            assert qualified,(channel,obj.get("Name"))
+    print(f"Heating bank: 160 KOs and legacy controls profile gated; {len(baseline)} legacy layout constants preserved")
