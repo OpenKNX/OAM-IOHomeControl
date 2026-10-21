@@ -1,3 +1,9 @@
+## REG1 IP release memory fix — 2026-10-21
+
+- Fix workflow run 39639124329: both pinned and branch builds exceeded the classic ESP32 DRAM linker segment by 104 bytes in `release_OpenKNX_REG1_ESP_V00_11_SX1276_IP`.
+- Pin OFM `0c15cac`. Compact heating cache field padding and share its immutable invalid-channel view in flash. Reduce module BSS by 1400 bytes while preserving all 16 channels, full raw replies, polling and pairing behavior. Add cache-size and maximum-raw-reply/unknown-state regression checks.
+- Verified all four release targets from `scripts/Build-Release.ps1`, including REG1 IP with 1296 bytes of DRAM-segment margin. Full native, storage, UI and ETS JavaScript checks pass; parameter/KO layout is unchanged.
+
 ## Pairing recovery and Atlantic advice — 2026-10-21
 
 - Pin OFM `466804f` (recovery commit `fa8dcec`, Atlantic advice commit `466804f`). Recover a missing 0x33 in normal 2W push pairing through a bounded challenged name read before repeating key-init. Reject unchallenged, foreign, late, malformed or failed exchanges; require successful durable assignment. Report read acceptance separately from locally verified peer MACs.
