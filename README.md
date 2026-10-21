@@ -24,6 +24,20 @@ For all io-homecontrol specific details, use the [OFM-IOHomeControl](https://git
 - VELUX KUX/KLI enrollment finalizer and troubleshooting guidance
 - Radio/protocol diagnostics
 
+The October 2026 interoperability updates preserve legacy result codes while decoding
+packed `0xFE` errors, stop definitive key-transfer refusals, and bind pairing
+responses to the peer, channel, key and deadline. Pull-key mode is an explicit
+verified diagnostic; it never automatically pushes or stores the received key.
+A name reply after a missing `0x33` does not establish key ownership. Nina Config
+State is observed without enabling an unqualified responder or automatic key pull.
+
+For confirmed MOTO 1000 io devices, enable the existing endpoint-only option;
+other garage models retain their own positioning capabilities. Battery evidence
+uses the existing low-battery KO. `iohc battery CH status` shows Full/Normal/Low
+or unknown/not reported, distinguishes historical evidence, and adds no polling
+or percentage estimate. Atlantic pull, Nina responder sequencing and KLI/KUX wake
+timing still require the documented hardware tests.
+
 ## Hardware targets
 
 | Board | Radio | KNX | Environment |
