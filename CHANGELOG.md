@@ -1,3 +1,9 @@
+## Pairing recovery and Atlantic advice — 2026-10-21
+
+- Pin OFM `466804f` (recovery commit `fa8dcec`, Atlantic advice commit `466804f`). Recover a missing 0x33 in normal 2W push pairing through a bounded challenged name read before repeating key-init. Reject unchallenged, foreign, late, malformed or failed exchanges; require successful durable assignment. Report read acceptance separately from locally verified peer MACs.
+- Recognize Atlantic manufacturer 12 / profile 1023/0 during normal pairing and discovery. Offer the explicit pull workflow in logs and ETS status; stop normal pairing before key push and preserve channel metadata, assignments and keys. Advice expires after three minutes and never starts acquisition or assignment automatically.
+- Keep application 4.6 parameter/KO layout unchanged. Update ETS state labels and add a backward-compatible advisory tail to the status response. Validate native, production adapter, ETS JavaScript, schema/layout and both radio builds. Physical lost-confirmation and Atlantic RF tests remain pending.
+
 ## Application 4.6: guarded Atlantic heating — 2026-10-21
 
 - Pin OFM `e31b8e5`. Add typed private register reads/writes, strict challenged response correlation, independent write readback and measured feedback with validity/provenance. Sensor register 010E is read-only; detection enable uses 0106. Other heating profiles keep their existing semantics.

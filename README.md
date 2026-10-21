@@ -28,7 +28,10 @@ The October 2026 interoperability updates preserve legacy result codes while dec
 packed `0xFE` errors, stop definitive key-transfer refusals, and bind pairing
 responses to the peer, channel, key and deadline. Pull-key mode is an explicit
 verified diagnostic; it never automatically pushes or stores the received key.
-A name reply after a missing `0x33` does not establish key ownership. Nina Config
+A name reply on its own after a missing `0x33` does not establish key ownership.
+Normal push pairing first tries up to two challenged name reads before another
+key-init; only a correlated reply after the matching authentication response
+permits recovery, and successful durable storage is still required. Nina Config
 State is observed without enabling an unqualified responder or automatic key pull.
 
 For confirmed MOTO 1000 io devices, enable the existing endpoint-only option;
@@ -41,6 +44,8 @@ timing still require the documented hardware tests.
 ## Atlantic heating (application 4.6)
 
 Private heating registers require a confirmed Atlantic 52/1 actuator and its own channel key. The separate 1023/0 pairing node is never assigned as a heater. Generic heat pumps and existing VELUX/Somfy commissioning retain their own protocol paths.
+
+Normal pairing and discovery now recognize the Atlantic 1023/0 pairing node and offer the matching pull command. Normal pairing stops before pushing a key. Read the ETS channel status to see “Atlantic Pull angeboten” and the exact command. This temporary advice changes no channel assignment, metadata or key; it expires after three minutes and is shown only for an empty 2W channel. Pull and subsequent assignment remain explicit.
 
 On a selected empty channel, `iohcNN pair2w-exp pull-atlantic [PAIRNODE]` stages a temporary key, verifies its proof and probes the candidate heater. Review `iohc heating status CHANNEL`, then explicitly run `iohc heating assign CHANNEL SESSION`. Only a verified heater and successful durable write complete assignment; the global system key and occupied channels remain unchanged. Generic diagnostic pull does not assign a device.
 
