@@ -262,3 +262,29 @@ if any(o.get("Name", "").startswith("HTG_") for o in objects.values()):
                 ancestor=parent
             assert qualified,(channel,obj.get("Name"))
     print(f"Heating bank: 160 KOs and legacy controls profile gated; {len(baseline)} legacy layout constants preserved")
+
+# 4.7 extends a separate bank; every numeric 4.6 ABI constant remains fixed.
+if any(o.get("Name", "").startswith("HAW_") for o in objects.values()):
+    baseline46=json.loads((ROOT/"lib/OFM-IOHomeControl/test/compatibility-46-baseline.json").read_text())
+    for name,expected in baseline46.items():
+        assert definitions.get(name)==expected,(name,expected,definitions.get(name))
+    assert definitions["HAW_KoBlockOffset"]=="1960" and definitions["HAW_KoBlockSize"]=="3"
+    assert definitions["HTG_cAgiliaHomeAwayMask"]=="0x20" and definitions["MAIN_ParameterSize"]=="14733"
+    for channel in range(1,17):
+        base=1960+3*(channel-1)
+        bank={int(o.get("Number"))-base:o for o in objects.values() if base<=int(o.get("Number"))<base+3}
+        assert set(bank)=={0,1,2}
+        for index,obj in bank.items():
+            assert obj.get("DatapointType")==("DPST-5-10" if index==2 else "DPST-1-1")
+            assert obj.get("WriteFlag")==("Enabled" if index==0 else "Disabled")
+        for ref in dynamic.findall(".//k:ComObjectRefRef",NS):
+            obj=objects[object_refs[ref.get("RefId")]]
+            if not base<=int(obj.get("Number"))<base+3:continue
+            guards=set();ancestor=ref
+            while ancestor in parents:
+                parent=parents[ancestor]
+                if parent.tag.endswith("choose") and parent.get("ParamRefId") in refs and ancestor.get("test")=="1":
+                    guards.add(parameters[refs[parent.get("ParamRefId")]].get("Name"))
+                ancestor=parent
+            assert {f"HTG_c{channel}Qualified",f"HTG_c{channel}Enabled",f"HTG_c{channel}AgiliaHomeAway"}<=guards,(channel,guards)
+    print(f"Home/Away: 48 append-only KOs; {len(baseline46)} application 4.6 constants preserved")

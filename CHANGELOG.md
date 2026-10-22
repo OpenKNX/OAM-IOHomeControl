@@ -1,3 +1,12 @@
+## Application 4.7: Atlantic recovery and Home/Away — 2026-10-22
+
+- Pin OFM `0ec3ace` (discovery `fdebd28`, Home/Away `52c210e`, qualification gates `22117eb`, standard test integration `0ec3ace`). Reference: Laberning `b4b749353cfaa586868926e84d953eff6db4ff13` (#176); keep public masked cryptography absent and synthetic security proofs separate.
+- Make the normal explicit Atlantic workflow search all three frequencies in two bounded passes after a silent direct probe. Verify discovered heater addresses independently, then require explicit durable assignment. Add ETS start/status/assignment buttons, multiple-responder tests, strict LBT/quota handling and RX restoration before RSSI reads.
+- Add qualified AGILIA IO Home/Away commands through the normal KNX path. Default-off model confirmation, exact challenged ACKs, unknown startup, no write replay and separate command/status objects prevent ACKs from appearing as measured occupancy or heating effect. Keep 0101 separate and 012A diagnostic/read-only.
+- Append 48 HAW KOs at 1960; preserve all 2187 checked application 4.6 constants, 14733 parameter bytes, HTG stride 10 and the 580-byte heating cache. See README for upgrade and group-association checks.
+- Verified native protocol/controller/exchange (420/275/73) with both radio configurations, production adapters, storage, UI (55), ETS JavaScript (57), evidence/fixture integrity (7), producer integrity/XSD and all 16 expanded channel trees. All four release firmware targets and the SX1276 bench target build; REG1 IP retains 1176 bytes of DRAM segment margin.
+- Physical RF/heater behavior, 30-minute AUTO effects, power-cut testing, real ETS migration/downloads and signed export remain unrun release gates. No firmware was flashed. Reproducible commands and results are recorded in `docs/atlantic176-validation-2026-10-22.json`.
+
 ## REG1 IP release memory fix — 2026-10-21
 
 - Fix workflow run 39639124329: both pinned and branch builds exceeded the classic ESP32 DRAM linker segment by 104 bytes in `release_OpenKNX_REG1_ESP_V00_11_SX1276_IP`.

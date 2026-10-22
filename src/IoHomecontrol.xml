@@ -7,7 +7,7 @@
   <op:ETS
     OpenKnxId="0xAF"
     ApplicationNumber="0x34"
-    ApplicationVersion="4.6"
+    ApplicationVersion="4.7"
     ReplacesVersionsDownTo="0.1"
     ApplicationRevision="0"
     FirmwareRevision="0"
@@ -66,6 +66,7 @@
 <op:define prefix="LIM" ModuleType="30" template="../lib/OFM-IOHomeControl/src/IoHomeLimitation.templ.xml" NumChannels="16" KoOffset="1600" />
 <op:define prefix="BAT" ModuleType="31" template="../lib/OFM-IOHomeControl/src/IoHomeBattery.templ.xml" NumChannels="16" KoOffset="1700" />
 <op:define prefix="HTG" ModuleType="32" template="../lib/OFM-IOHomeControl/src/IoHomeHeating.templ.xml" NumChannels="16" KoOffset="1800" />
+<op:define prefix="HAW" ModuleType="33" template="../lib/OFM-IOHomeControl/src/IoHomeHomeAway.templ.xml" NumChannels="16" KoOffset="1960" />
 <generate>
             <Dynamic>
             <op:include href="../lib/OGM-Common/src/Common.share.xml" xpath="//ApplicationProgram/Dynamic/*" prefix="BASE" />

@@ -1,0 +1,152 @@
+{
+  "schema": 1,
+  "date": "2026-10-22",
+  "oam_base_commit": "e761fcf33bb1dbe644f0090d671c745f14d13aef",
+  "ofm_commit": "0ec3ace640a6695e321e6501cff97874986b6cfc",
+  "laberning_reference": "b4b749353cfaa586868926e84d953eff6db4ff13",
+  "velocet_reference": "b7a526d07506f5192548aadfecf68d0f6e5497fa",
+  "application": "4.7",
+  "release_accepted": false,
+  "software_checks": [
+    {
+      "command": "make -C test run check-storage corpus check-ets PYTHON=/private/tmp/iohc-check-venv/bin/python",
+      "outcome": "passed",
+      "log_sha256": "c82d183577104f1109320cd81ccfd3228ccce250b0bb662a48ebc674a13a8237",
+      "output": [
+        "Ran 7 tests in 0.002s",
+        "OK",
+        "Ran 6 tests in 0.000s",
+        "OK",
+        "420 passed, 0 failed",
+        "275 passed, 0 failed",
+        "73 passed, 0 failed",
+        "Ran 55 tests in 0.019s",
+        "OK",
+        "6 passed, 0 failed",
+        "57 ETS recognition tests passed"
+      ],
+      "ofm_commit": "0ec3ace640a6695e321e6501cff97874986b6cfc"
+    },
+    {
+      "command": "make -C test check-protocol check-controller check-exchange BUILD_DIR=build-sx1262 CXXFLAGS='-std=c++17 -Wall -Wextra -DTEST_NATIVE -DRADIO_SX1262 -I../src -I.'",
+      "outcome": "passed",
+      "log_sha256": "d4175a98bb20da457d9202a9b9590035505f4f0999115021986c6c946f756f4d",
+      "output": [
+        "420 passed, 0 failed",
+        "275 passed, 0 failed",
+        "73 passed, 0 failed"
+      ]
+    },
+    {
+      "command": "producer 4.3.12 create --Debug -h include/knxprod.h src/IoHomecontrol",
+      "outcome": "passed",
+      "log_sha256": "1afb70b13f5674790f789677e76ff934caa7fcfa115344653a8814a77a4c797b",
+      "output": [
+        "Preprocess module list... OK",
+        "Generating ConfigTransfer extensions... OK",
+        "Generating module list... OK",
+        "- Minimal required OpenKNXproducer version... OK",
+        "- Id-Homogeneity... OK",
+        "- Id-Uniqueness... OK",
+        "- ParameterType-Id-Syntax... OK",
+        "- Id-R_Suffix-Uniqueness... OK",
+        "- RefId-Integrity... OK",
+        "- ParamRefId-Integrity... OK",
+        "- AllocatorRefId-Integrity... OK",
+        "- BaseValue-Integrity... OK",
+        "- BaseOffset-Integrity... OK",
+        "- TextParameterRefId-Integrity... OK",
+        "- SourceParamRefRef-Integrity... OK",
+        "- TargetParamRefRef-Integrity... OK",
+        "- ParameterType-Integrity... OK",
+        "- Union-Integrity... OK",
+        "- Parameter-Name-Uniqueness... OK",
+        "- Parameter-Value-Integrity... OK",
+        "- ParameterRef-Value-Integrity... OK",
+        "- ComObject-Name-Uniqueness... OK",
+        "- ComObject-Number-Uniqueness... OK",
+        "- ComObject-ObjectSize-Integrity... OK",
+        "- ComObjectRef-ObjectSize-Integrity... OK",
+        "- RefId-Id-Comparison... OK",
+        "- RefId-RefRef-Comparison... OK",
+        "- Id-Namespace... OK",
+        "- Id-Format... OK",
+        "- Serial number... OK",
+        "- HelpContext-Ids... OK",
+        "- Icon-Ids... OK",
+        "- Baggage-File-Existence... OK",
+        "- Application data... OK",
+        "- Memory size... OK",
+        "- Channel-Number-Prefix consistency... OK",
+        "- Channel-in-Channel prevention... OK",
+        "- Unused config entries... OK",
+        "- Not replaced config entries... OK",
+        "- Integrity of script methods... OK",
+        "- Minimal required module versions... OK",
+        "- Further messages during document processing... NONE",
+        "Converting KO-Ids to Ets naming convention... OK",
+        "Removing Read-On-Init-Flag for all KO... OK",
+        "Validation against ../Organization/knxprod-support/knx_project_20/knx.xsd... OK",
+        "No ETS found, skipped knxprod creation!"
+      ]
+    },
+    {
+      "command": "pio run -e release_OpenKNX_XIAO_S3_SX1262_TP -e release_OpenKNX_XIAO_S3_SX1262_IP -e release_OpenKNX_REG1_ESP_V00_11_SX1276_TP -e release_OpenKNX_REG1_ESP_V00_11_SX1276_IP -e bench_OpenKNX_XIAO_S3_SX1276_TP",
+      "outcome": "passed",
+      "log_sha256": "9fd770eaec2890f4ab4a23a162f68d1c1a4b364b7eb215bb84babcde9b316595",
+      "output": [
+        "release_OpenKNX_XIAO_S3_SX1262_TP          SUCCESS   00:00:14.864",
+        "release_OpenKNX_XIAO_S3_SX1262_IP          SUCCESS   00:00:12.459",
+        "release_OpenKNX_REG1_ESP_V00_11_SX1276_TP  SUCCESS   00:00:28.192",
+        "release_OpenKNX_REG1_ESP_V00_11_SX1276_IP  SUCCESS   00:00:26.560",
+        "bench_OpenKNX_XIAO_S3_SX1276_TP            SUCCESS   00:00:30.036",
+        "========================= 5 succeeded in 00:01:52.111 ========================="
+      ]
+    },
+    {
+      "command": "python test/test_release_evidence.py",
+      "outcome": "passed",
+      "output": [
+        "Ran 7 tests",
+        "OK"
+      ]
+    },
+    {
+      "command": "python tools/check-ets-channel-layout.py --project-root <producer-project>",
+      "outcome": "passed",
+      "output": [
+        "16 channel trees and 85 contextual help topics verified",
+        "Home/Away: 48 append-only KOs; 2187 application 4.6 constants preserved"
+      ]
+    }
+  ],
+  "layout": {
+    "parameter_bytes": 14733,
+    "legacy_numeric_constants_preserved": 2187,
+    "htg_offset": 1800,
+    "htg_stride": 10,
+    "haw_offset": 1960,
+    "haw_stride": 3,
+    "haw_count": 48,
+    "max_ko": 2007
+  },
+  "reg1_ip_memory": {
+    "dram_data_bytes": 25308,
+    "dram_bss_bytes": 98088,
+    "dram_segment_margin_bytes": 1176,
+    "heating_state_bytes_per_channel": 580
+  },
+  "physical_gates": {
+    "atlantic176_radio_campaign": "not_run",
+    "agilia_home_away_campaign": "not_run",
+    "ets47_upgrade_campaign": "not_run",
+    "signed_ets_export": "not_run",
+    "powercut_and_storage_campaigns": "not_run"
+  },
+  "limitations": [
+    "Native/model tests do not prove RF timing, measured occupancy or physical heating effects.",
+    "No hardware RF transmissions, flashing or ETS downloads were performed.",
+    "Firmware/native source tested at 52c210e; 22117eb and 0ec3ace add only evidence/fixture tests and standard test integration.",
+    "Full software logs retained in /private/tmp/iohc-atl176-*.log during this session; relevant output and SHA-256 recorded here."
+  ]
+}

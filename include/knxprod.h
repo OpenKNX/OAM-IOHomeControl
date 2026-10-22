@@ -22,14 +22,15 @@
 #define ETS_ModuleId_LIM 11
 #define ETS_ModuleId_BAT 12
 #define ETS_ModuleId_HTG 13
+#define ETS_ModuleId_HAW 14
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 70
+#define MAIN_ApplicationVersion 71
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14733
-#define MAIN_MaxKoNumber 1959
+#define MAIN_MaxKoNumber 2007
 #define MAIN_OrderNumber "IO-HomeControl"
 #define BASE_ModuleVersion 25
 #define NET_ModuleVersion 8
@@ -136,6 +137,9 @@
 #define BASE_ModuleEnabled_HTG                   111      // 1 Bit, Bit 3
 #define     BASE_ModuleEnabled_HTGMask 0x08
 #define     BASE_ModuleEnabled_HTGShift 3
+#define BASE_ModuleEnabled_HAW                   111      // 1 Bit, Bit 2
+#define     BASE_ModuleEnabled_HAWMask 0x04
+#define     BASE_ModuleEnabled_HAWShift 2
 
 // Zeitbasis
 #define ParamBASE_StartupDelayBase                    ((knx.paramByte(BASE_StartupDelayBase) & BASE_StartupDelayBaseMask) >> BASE_StartupDelayBaseShift)
@@ -216,6 +220,8 @@
 #define ParamBASE_ModuleEnabled_BAT                   ((bool)(knx.paramByte(BASE_ModuleEnabled_BAT) & BASE_ModuleEnabled_BATMask))
 // HTG
 #define ParamBASE_ModuleEnabled_HTG                   ((bool)(knx.paramByte(BASE_ModuleEnabled_HTG) & BASE_ModuleEnabled_HTGMask))
+// HAW
+#define ParamBASE_ModuleEnabled_HAW                   ((bool)(knx.paramByte(BASE_ModuleEnabled_HAW) & BASE_ModuleEnabled_HAWMask))
 
 #define BASE_KoHeartbeat 1
 #define BASE_KoTime 2
@@ -4563,12 +4569,17 @@
 #define HTG_cMaxObject                           0      // 1 Bit, Bit 6
 #define     HTG_cMaxObjectMask 0x40
 #define     HTG_cMaxObjectShift 6
+#define HTG_cAgiliaHomeAway                      0      // 1 Bit, Bit 5
+#define     HTG_cAgiliaHomeAwayMask 0x20
+#define     HTG_cAgiliaHomeAwayShift 5
 #define HTG_cPollSeconds                         1      // uint16_t
 
 // Private Atlantic-Heizregister verwenden
 #define ParamHTG_cEnabled                            ((bool)(knx.paramByte(HTG_ParamCalcIndex(HTG_cEnabled)) & HTG_cEnabledMask))
 // Maximalen Sollwert als Diagnoseobjekt anzeigen
 #define ParamHTG_cMaxObject                          ((bool)(knx.paramByte(HTG_ParamCalcIndex(HTG_cMaxObject)) & HTG_cMaxObjectMask))
+// AGILIA IO Displaymodell am Gerät bestätigt: Home/Away freigeben
+#define ParamHTG_cAgiliaHomeAway                     ((bool)(knx.paramByte(HTG_ParamCalcIndex(HTG_cAgiliaHomeAway)) & HTG_cAgiliaHomeAwayMask))
 // Abfragezyklus in Sekunden (0=aus, sonst mindestens 60)
 #define ParamHTG_cPollSeconds                        (knx.paramWord(HTG_ParamCalcIndex(HTG_cPollSeconds)))
 
@@ -4614,6 +4625,37 @@
 #define KoHTG_cMaxSetpoint                        (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocMaxSetpoint)))
 // Kanal %C% Heizungswerte abfragen
 #define KoHTG_cRead                               (knx.getGroupObject(HTG_KoCalcNumber(HTG_KocRead)))
+
+#define HAW_ChannelCount 16
+
+// Parameter per channel
+#define HAW_ParamBlockOffset 0
+#define HAW_ParamBlockSize -1
+#define HAW_ParamCalcIndex(index) (index + HAW_ParamBlockOffset + _channelIndex * HAW_ParamBlockSize)
+
+
+
+// deprecated
+#define HAW_KoOffset 1960
+
+// Communication objects per channel (multiple occurrence)
+#define HAW_KoBlockOffset 1960
+#define HAW_KoBlockSize 3
+
+#define HAW_KoCalcNumber(index) (index + HAW_KoBlockOffset + _channelIndex * HAW_KoBlockSize)
+#define HAW_KoCalcIndex(number) ((number >= HAW_KoCalcNumber(0) && number < HAW_KoCalcNumber(HAW_KoBlockSize)) ? (number - HAW_KoBlockOffset) % HAW_KoBlockSize : -1)
+#define HAW_KoCalcChannel(number) ((number >= HAW_KoBlockOffset && number < HAW_KoBlockOffset + HAW_ChannelCount * HAW_KoBlockSize) ? (number - HAW_KoBlockOffset) / HAW_KoBlockSize : -1)
+
+#define HAW_KocCommand 0
+#define HAW_KocConfirmedCommand 1
+#define HAW_KocStatus 2
+
+// Kanal %C% Home/Away Befehl 1=Home 0=Away
+#define KoHAW_cCommand                            (knx.getGroupObject(HAW_KoCalcNumber(HAW_KocCommand)))
+// Kanal %C% Letzter quittierter Home/Away Befehl (kein Sensor)
+#define KoHAW_cConfirmedCommand                   (knx.getGroupObject(HAW_KoCalcNumber(HAW_KocConfirmedCommand)))
+// Kanal %C% Home/Away Befehlsstatus (0=unbekannt, 3=quittiert, Wirkung unbeobachtet)
+#define KoHAW_cStatus                             (knx.getGroupObject(HAW_KoCalcNumber(HAW_KocStatus)))
 
 
 // enumeration types
