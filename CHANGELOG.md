@@ -1,3 +1,11 @@
+## Application 4.7: inbound status replies — 2026-10-26
+
+- Pin OFM `ee82fb974d4ecc5f4aae9905eeecca3827d04b11`. Paired, directed 2W status now has a distinct identity/key/session-bound inbound challenge context. Its saved payload stays untrusted until the matching 0x3D HMAC verifies.
+- Give the generated 0x3C and at most one authenticated same-frequency 0x72 a bounded immediate reply. Retain all three ACK copies and wire flags; remaining copies use ordinary admission. Receive-channel-first ordering is an implementation policy awaiting real peer captures and release qualification.
+- Bind reply grants to explicit producer roles, expected state/opcode, channel identity and the original 25 ms timestamp. Raw frames, rekeying, cancellation, expiry and radio faults cannot reuse them. Scope busy CCA counters to their candidate and retain per-band accepted-TX accounting.
+- Add inbound security/timing/CCA regressions and permanent mutation checks to the standard native suite. Preserve ETS application 4.7 and all object/parameter layouts; retain the classic ESP32 IP 16-entry diagnostic ring.
+- Validation, firmware hashes and before/after static DRAM are recorded in `docs/inbound-status-validation-2026-10-26.json`. Real SX1276/SX1262 timing, ACK copy/channel captures and spectrum-access qualification remain `not_run`; no firmware was flashed.
+
 ## Application 4.7: 2W admission and status recovery — 2026-10-26
 
 - Pin OFM `93ba0a69e49450db5dd87eaf636323eeba62a6d5`. 2W in-session authentication responses are no longer delayed by additional LBT; START transmission access policy centralized. Only peer/session/frequency-bound replies qualify; carrier sensing never falls through to an unchecked send on busy or invalid RSSI.
