@@ -1,3 +1,11 @@
+## Application 4.7: 2W admission and status recovery — 2026-10-26
+
+- Pin OFM `93ba0a69e49450db5dd87eaf636323eeba62a6d5`. 2W in-session authentication responses are no longer delayed by additional LBT; START transmission access policy centralized. Only peer/session/frequency-bound replies qualify; carrier sensing never falls through to an unchecked send on busy or invalid RSSI.
+- Retry failed tracked status reads after 5 seconds, then progressively back off to 300 seconds. Preserve the low-power minimum, fixed ten-minute window, STOP settling and per-band duty budget. Bind failures to the owning channel and key revision; queued/unsent reads and unrelated responses do not change peer streaks or fabricate status.
+- Laberning #178/#179/#180 inform the fixes; Velocet supplies protocol consistency, not the application retry ladder or spectrum-access qualification.
+- Keep ETS application 4.7, HTG/HAW banks and parameter/KO offsets unchanged. Use a 16-entry diagnostic trace ring only for classic ESP32 IP release to fit the current dependency set's static DRAM budget; the default remains 24.
+- Record native, build, firmware hash and RAM evidence in `docs/two-way-recovery-validation-2026-10-26.json`. Physical RF/peer, spectrum-access, storage and ETS qualification remain `not_run`; no firmware was flashed.
+
 ## Application 4.7: Atlantic recovery and Home/Away — 2026-10-22
 
 - Pin OFM `0ec3ace` (discovery `fdebd28`, Home/Away `52c210e`, qualification gates `22117eb`, standard test integration `0ec3ace`). Reference: Laberning `b4b749353cfaa586868926e84d953eff6db4ff13` (#176); keep public masked cryptography absent and synthetic security proofs separate.
