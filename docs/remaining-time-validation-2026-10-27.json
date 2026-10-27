@@ -1,0 +1,493 @@
+{
+  "schema": 1,
+  "date": "2026-10-27",
+  "application": "4.7",
+  "oam_build_base_commit": "b218a52084bbba40ff16a7fea245b46bd76d6bcf",
+  "ofm_commit": "e48a53cc007a927d0a6877b15e4d1213302729e3",
+  "ofm_uncommitted_source_modifications": false,
+  "release_accepted": false,
+  "separate_ofm_commits": [
+    {
+      "commit": "8ca4f00cf835f8da482a5c6bfe3c33e48abdd71e",
+      "title": "fix: decode full remaining seconds only from owned main-info polls"
+    },
+    {
+      "commit": "a5f72c3e563576448dfd00c035c90312b56aa36c",
+      "title": "fix: preserve measured positions and bound remaining-time follow-up"
+    },
+    {
+      "commit": "c4f20166febad85a0c794eb53fcc7201dd9ba5da",
+      "title": "fix: keep normal cadence for two trusted moving poll misses"
+    },
+    {
+      "commit": "d6eabec96145dcba3e97e216b715d7c1820b86b5",
+      "title": "fix: defer locally blocked tracked polls without consuming peer retries"
+    },
+    {
+      "commit": "e6108475eba07126d60be7fc406c613d64607399",
+      "title": "fix: preserve stopped-poll provenance without reviving tracking"
+    },
+    {
+      "commit": "e7f5d37e5f990220d414e6ef66eb752a949eb401",
+      "title": "test: reject truncated countdowns and unqualified ACK timing"
+    },
+    {
+      "commit": "c7200d8ab176fb7746a7908fcf96f4c0448c8aa8",
+      "title": "docs: qualify remaining-time evidence and hardware recovery tests"
+    },
+    {
+      "commit": "e48a53cc007a927d0a6877b15e4d1213302729e3",
+      "title": "fix: continue bounded tracking when remaining time is unavailable"
+    }
+  ],
+  "sources": {
+    "native_offset_and_behavior": "https://github.com/laberning/home_io_control/commit/821454537355a1d20f8f8622889611f4f491a11b",
+    "authors": "Lars Berning and contributors",
+    "empirical_motivation": "https://github.com/laberning/home_io_control/issues/178",
+    "velocet_semantic_reference": "https://github.com/Velocet/iown-homecontrol/blob/b7a526d07506f5192548aadfecf68d0f6e5497fa/docs/commands.md",
+    "klf_api_semantic_reference": "https://device.report/m/533a5d7f5adc938b0c19129716e3b64b3d52d913af7da08a4f8376e9a1a3da69.pdf",
+    "klf_document": "VELUX API 3.16, printed pp. 44 and 70-71; gateway format is not native RF offsets"
+  },
+  "implementation": {
+    "native_layout": "BE16 bytes6/7 only for qualified owned correlated native main-info 03/04. Request type/parameters, channel, peer, own destination, saved key, product revision and original epoch are required. Short/ACK/tilt/probe/foreign/mismatched responses are excluded.",
+    "remaining_semantics": {
+      "positive": "1..65533, precise only within remaining bounded interpolation window",
+      "zero": "ambiguous; short confirmation only after positive count in the same moving epoch",
+      "FFFE": "unbounded, not a precise duration",
+      "FFFF": "undefined",
+      "unavailable": "short or unsupported reply context"
+    },
+    "measurements": "Preserve measured current/target and reported motion; restart interpolation from measured current only. STOPPED ends tracking and never snaps endpoints.",
+    "cadence": "Only shorten an existing estimate follow-up; unknown countdowns retain normal tracked cadence. Untracked motion reports cannot create an epoch. Preserve normal 2 s default, configured shorter intervals, 10 s low-power floor and original bounded deadline.",
+    "moving_grace": "First two actual single-attempt tracked poll misses with qualified measured or authenticated owned moving evidence retain normal cadence. Third enters existing auth/silent ladder; no restart within a real streak. STOP-settle multi-try polls get no grace.",
+    "admission": "Local RF/driver/auth-build faults defer within the original epoch with channel fairness and no peer-miss/grace consumption. Existing central CCA and duty policy retained. No new RF exemption, recurring poll configuration, writes, key extraction or SetConfig1 operation."
+  },
+  "corpus_evidence": {
+    "commit": "c82d38f47901b71c1c63413e638241dbe1aa2d06",
+    "yaml_count": 177,
+    "original_frames": 1104,
+    "originals_changed": false,
+    "new_yaml_imports": 0,
+    "audit_path": "lib/OFM-IOHomeControl/docs/remaining-time-corpus-audit-2026-10-27.json",
+    "audit_sha256": "1d41b25f669090d588378716db7e08484c9b61eb86065ee9111709808107bf09",
+    "context_counts": {
+      "unknown_request_context": 53,
+      "execute_ack_excluded": 34,
+      "captured_main_info_request": 22,
+      "other_private_variant_excluded": 73,
+      "statuspoll_documented_request_omitted": 23
+    },
+    "candidate_poll_fields": 45,
+    "positive_high_byte_capture_established": false,
+    "synthetic_tests": "Explicit 8-byte 255/256-second and sentinel vectors; not real RF high-byte evidence."
+  },
+  "software_checks": [
+    {
+      "command": "make -C test run check-storage corpus check-ets PYTHON=/tmp/io-capture-env/bin/python",
+      "outcome": "passed",
+      "native_suite_totals": {
+        "protocol": 432,
+        "controller": 305,
+        "exchange": 73
+      },
+      "native_total": 810,
+      "ets_tests": 62,
+      "original_capture_python_tests": 10,
+      "remaining_time_mutations": {
+        "low_byte_only": "rejected_as_expected",
+        "unqualified_execute_ack_timing": "rejected_as_expected",
+        "stale_interpolation_overwrites_measured_current": "rejected_as_expected"
+      },
+      "original_motion_mutations": "both rejected as expected",
+      "inbound_reply_mutations": "both rejected as expected",
+      "includes": [
+        "production controller main-info ownership/epoch/key gates",
+        "production channel sentinel/zero/interpolation/KNX callback sequence",
+        "real peer/key/new-epoch reset and millis wrap",
+        "two moving misses then existing auth/silence ladders",
+        "post-STOP multi-try excluded",
+        "local RF/driver deferral versus lost authenticated final",
+        "normal tracked cadence for unavailable countdowns without untracked epoch creation",
+        "source-integrity corpus audit, radio PHY/adapters and storage gates"
+      ],
+      "log": {
+        "path": "docs/build-evidence/remaining-time-2026-10-27/io184-final-host.log.gz",
+        "sha256": "b4cf40fbd305edd461e1f7be1f32e97d1e5cabb7dc50abb9f3314f3eb27529d3",
+        "uncompressed_sha256": "be7d776685ee26814523d2ddf442b3d3d7893388700a0c8f4fa1b3b93dfbc512"
+      }
+    },
+    {
+      "command": "make -C test suite BUILD_DIR=/tmp/io184-native-sx1262 PYTHON=/tmp/io-capture-env/bin/python CXXFLAGS='-std=c++17 -Wall -Wextra -DTEST_NATIVE -DRADIO_SX1262 -I../src -I.' && /tmp/io184-native-sx1262/test_suite",
+      "outcome": "passed",
+      "tests_passed": 810,
+      "compile_log": {
+        "path": "docs/build-evidence/remaining-time-2026-10-27/io184-sx1262-compile.log.gz",
+        "sha256": "2e47bbdc49bed7e3f47b0d25691d4601a68bfaf85090ef61da0359ab39e7f8ea",
+        "uncompressed_sha256": "62b59a7501f939491b34fe76205fc1fe227a987a4f3080f97d98792634ab4226"
+      },
+      "log": {
+        "path": "docs/build-evidence/remaining-time-2026-10-27/io184-sx1262.log.gz",
+        "sha256": "c86c55ca31145e220cf199809f0f010c1d6822b37227588900413d2880ae8e06",
+        "uncompressed_sha256": "8eaced9bc9a962ed06e2288eaa902bfa449d9718ef36f6f0066c3328044bc562"
+      }
+    },
+    {
+      "command": "make -C test suite BUILD_DIR=/tmp/io184-native-small PYTHON=/tmp/io-capture-env/bin/python CXXFLAGS='-std=c++17 -Wall -Wextra -DTEST_NATIVE -DIOHC_TWO_WAY_TRACE_CAPACITY=16 -I../src -I.' && /tmp/io184-native-small/test_suite",
+      "outcome": "passed",
+      "tests_passed": 810,
+      "compile_log": {
+        "path": "docs/build-evidence/remaining-time-2026-10-27/io184-small-compile.log.gz",
+        "sha256": "0838f2942ee6c8db74eaf5c4751406e6397d151245f434d8baab76d5083f2e8f",
+        "uncompressed_sha256": "5b70a00ea3f60a49fe815a95b665e61b6eebc23aba007027650b8cdcc417ef36"
+      },
+      "log": {
+        "path": "docs/build-evidence/remaining-time-2026-10-27/io184-small.log.gz",
+        "sha256": "c86c55ca31145e220cf199809f0f010c1d6822b37227588900413d2880ae8e06",
+        "uncompressed_sha256": "8eaced9bc9a962ed06e2288eaa902bfa449d9718ef36f6f0066c3328044bc562"
+      }
+    },
+    {
+      "command": "python3 tools/check-ets-channel-layout.py",
+      "outcome": "passed",
+      "result": "16 channel trees and 85 contextual help topics verified",
+      "log": {
+        "path": "docs/build-evidence/remaining-time-2026-10-27/io184-ets-layout.log.gz",
+        "sha256": "93532edd172948f53564e7e66ba343b20dcd02e7171563128fb6ac003291f2a3",
+        "uncompressed_sha256": "a93291973a0c8426cb8c4ca62d1358e4df8988c6153347c19d05d94bdd2d1b57"
+      }
+    }
+  ],
+  "build_command": "PLATFORMIO_BUILD_DIR=/tmp/io184-pio-build PATH=/tmp/io-build-bin:$PATH pio run -e release_OpenKNX_XIAO_S3_SX1262_TP -e release_OpenKNX_XIAO_S3_SX1262_IP -e release_OpenKNX_REG1_ESP_V00_11_SX1276_TP -e release_OpenKNX_REG1_ESP_V00_11_SX1276_IP",
+  "build_log": {
+    "path": "docs/build-evidence/remaining-time-2026-10-27/io184-release-final.log.gz",
+    "sha256": "0ffd7a1c577864aa329d7cd181fbe2dbca0b4813897343689b44891ba7d86ba9",
+    "uncompressed_sha256": "e52753681d12fcad316c040aec9133109ad39c5bb2abfc86fa92254a76537f3f"
+  },
+  "build_environment_notes": [
+    "Final builds use the exact committed OFM and OAM pin revisions above; earlier exploratory builds are excluded.",
+    "Installed PlatformIO toolchain with temporary esptool PATH wrapper; repository build scripts unchanged. esp-idf-size emits a nonfatal unsupported --ng warning.",
+    "Host Python 3.11, PyYAML 6.0.3, cryptography 50.0.2 and quickjs 1.19.4. Other dependency pins preserved; actual local linked revisions are recorded.",
+    "The current baseline after prior diagnostic work is 680 bytes REG1-IP static DRAM margin, rather than the older 992-byte capture baseline. Linker margins are not runtime stack/heap qualification.",
+    "Original generated user headers restored byte-for-byte after builds. Artifact paths refer to local temporary files; compressed retained logs redact local user/project paths."
+  ],
+  "firmware": [
+    {
+      "environment": "release_OpenKNX_XIAO_S3_SX1262_TP",
+      "outcome": "passed",
+      "runtime_ofm_version": "0.9.3+e48a53c",
+      "runtime_oam_sha": "b218a52",
+      "trace_capacity": 24,
+      "static_memory": {
+        "before_ofm_commit": "f9834597b0690c5c9316292d6d1962d25ffd6311",
+        "before_sections_bytes": {
+          "dram0.data": 22992,
+          "dram0.bss": 92968
+        },
+        "after_sections_bytes": {
+          "dram0.data": 22992,
+          "dram0.bss": 92968
+        },
+        "section_delta_bytes": {
+          "dram0.data": 0,
+          "dram0.bss": 0
+        },
+        "dram_margin_before_bytes": 165128,
+        "dram_margin_after_bytes": 165128
+      },
+      "flash": {
+        "before_image_bytes": 1969216,
+        "after_image_bytes": 1970880,
+        "image_delta_bytes": 1664,
+        "before_sections_bytes": {
+          "flash.text": 1489632,
+          "flash.rodata": 379200
+        },
+        "after_sections_bytes": {
+          "flash.text": 1491028,
+          "flash.rodata": 379476
+        },
+        "section_delta_bytes": {
+          "flash.text": 1396,
+          "flash.rodata": 276
+        }
+      },
+      "artifacts": [
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_XIAO_S3_SX1262_TP/firmware.bin",
+          "sha256": "ee23e40d355b76f8af72114fcf590be88221ec3a2612ab65a7ffadc904ebc531",
+          "bytes": 1970880
+        },
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_XIAO_S3_SX1262_TP/firmware.factory.bin",
+          "sha256": "b1a9c83ef82904b768d142cbe6182b39a228212d2489da31ebfbfddbf57e46c8",
+          "bytes": 2036416
+        },
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_XIAO_S3_SX1262_TP/firmware.elf",
+          "sha256": "db514dec083c9730d84a69d9ddcc92b53c313fd1751c4fbafb6822922d7c6838",
+          "bytes": 32623384
+        }
+      ]
+    },
+    {
+      "environment": "release_OpenKNX_XIAO_S3_SX1262_IP",
+      "outcome": "passed",
+      "runtime_ofm_version": "0.9.3+e48a53c",
+      "runtime_oam_sha": "b218a52",
+      "trace_capacity": 24,
+      "static_memory": {
+        "before_ofm_commit": "f9834597b0690c5c9316292d6d1962d25ffd6311",
+        "before_sections_bytes": {
+          "dram0.data": 22992,
+          "dram0.bss": 102368
+        },
+        "after_sections_bytes": {
+          "dram0.data": 22992,
+          "dram0.bss": 102368
+        },
+        "section_delta_bytes": {
+          "dram0.data": 0,
+          "dram0.bss": 0
+        },
+        "dram_margin_before_bytes": 155216,
+        "dram_margin_after_bytes": 155216
+      },
+      "flash": {
+        "before_image_bytes": 1896304,
+        "after_image_bytes": 1897472,
+        "image_delta_bytes": 1168,
+        "before_sections_bytes": {
+          "flash.text": 1388960,
+          "flash.rodata": 406496
+        },
+        "after_sections_bytes": {
+          "flash.text": 1389844,
+          "flash.rodata": 406776
+        },
+        "section_delta_bytes": {
+          "flash.text": 884,
+          "flash.rodata": 280
+        }
+      },
+      "artifacts": [
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_XIAO_S3_SX1262_IP/firmware.bin",
+          "sha256": "e9dee86cf8d673d921deb618699d47ec6fd99a181a5ce93510d7c573324410d6",
+          "bytes": 1897472
+        },
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_XIAO_S3_SX1262_IP/firmware.factory.bin",
+          "sha256": "58093215720592618e8ac57d3bd186019ccab75c1894efb50c047e48f9cb7cf5",
+          "bytes": 1963008
+        },
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_XIAO_S3_SX1262_IP/firmware.elf",
+          "sha256": "67fda71c363c68aefe9a03bad9cd135ca8fea6ec316f4706972bc0ea60f11d62",
+          "bytes": 31644980
+        }
+      ]
+    },
+    {
+      "environment": "release_OpenKNX_REG1_ESP_V00_11_SX1276_TP",
+      "outcome": "passed",
+      "runtime_ofm_version": "0.9.3+e48a53c",
+      "runtime_oam_sha": "b218a52",
+      "trace_capacity": 24,
+      "static_memory": {
+        "before_ofm_commit": "f9834597b0690c5c9316292d6d1962d25ffd6311",
+        "before_sections_bytes": {
+          "dram0.data": 25308,
+          "dram0.bss": 91552
+        },
+        "after_sections_bytes": {
+          "dram0.data": 25308,
+          "dram0.bss": 91552
+        },
+        "section_delta_bytes": {
+          "dram0.data": 0,
+          "dram0.bss": 0
+        },
+        "dram_margin_before_bytes": 7712,
+        "dram_margin_after_bytes": 7712
+      },
+      "flash": {
+        "before_image_bytes": 2002240,
+        "after_image_bytes": 2003920,
+        "image_delta_bytes": 1680,
+        "before_sections_bytes": {
+          "flash.text": 1502104,
+          "flash.rodata": 381868
+        },
+        "after_sections_bytes": {
+          "flash.text": 1503508,
+          "flash.rodata": 382144
+        },
+        "section_delta_bytes": {
+          "flash.text": 1404,
+          "flash.rodata": 276
+        }
+      },
+      "artifacts": [
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_REG1_ESP_V00_11_SX1276_TP/firmware.bin",
+          "sha256": "9ff48cc9dc222ff1ce870b049d7431b6cbc9562956eebe799ea3d62eca926dd1",
+          "bytes": 2003920
+        },
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_REG1_ESP_V00_11_SX1276_TP/firmware.factory.bin",
+          "sha256": "6cc8601af60b4a693dd6c4aae1b0b4b23f6c62c6ff944c95fdc6a480bfbdf160",
+          "bytes": 2069456
+        },
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_REG1_ESP_V00_11_SX1276_TP/firmware.elf",
+          "sha256": "482880a90cc3b72897bd819e132319a629b594ecc597c77a9e0de021dab12732",
+          "bytes": 32271220
+        }
+      ]
+    },
+    {
+      "environment": "release_OpenKNX_REG1_ESP_V00_11_SX1276_IP",
+      "outcome": "passed",
+      "runtime_ofm_version": "0.9.3+e48a53c",
+      "runtime_oam_sha": "b218a52",
+      "trace_capacity": 16,
+      "static_memory": {
+        "before_ofm_commit": "f9834597b0690c5c9316292d6d1962d25ffd6311",
+        "before_sections_bytes": {
+          "dram0.data": 25308,
+          "dram0.bss": 98584
+        },
+        "after_sections_bytes": {
+          "dram0.data": 25308,
+          "dram0.bss": 98584
+        },
+        "section_delta_bytes": {
+          "dram0.data": 0,
+          "dram0.bss": 0
+        },
+        "dram_margin_before_bytes": 680,
+        "dram_margin_after_bytes": 680
+      },
+      "flash": {
+        "before_image_bytes": 1943856,
+        "after_image_bytes": 1945040,
+        "image_delta_bytes": 1184,
+        "before_sections_bytes": {
+          "flash.text": 1414556,
+          "flash.rodata": 409976
+        },
+        "after_sections_bytes": {
+          "flash.text": 1415460,
+          "flash.rodata": 410252
+        },
+        "section_delta_bytes": {
+          "flash.text": 904,
+          "flash.rodata": 276
+        }
+      },
+      "artifacts": [
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_REG1_ESP_V00_11_SX1276_IP/firmware.bin",
+          "sha256": "d1d61b50f33720f611ea102ac8d49d6df3504149c4c8bc9f340e178d979939dd",
+          "bytes": 1945040
+        },
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_REG1_ESP_V00_11_SX1276_IP/firmware.factory.bin",
+          "sha256": "e283fef0cc83f4b11b8552489b5fbe2b60cf82f5fad2d26589d2fefbf2609e29",
+          "bytes": 2010576
+        },
+        {
+          "path": "/tmp/io184-pio-build/release_OpenKNX_REG1_ESP_V00_11_SX1276_IP/firmware.elf",
+          "sha256": "5950c4029fe0e585d4d0a27e6c2135d59981747c32fd97b59b28068d49e1ac20",
+          "bytes": 31299108
+        }
+      ]
+    }
+  ],
+  "resolved_dependencies": [
+    {
+      "library": "OFM-ConfigTransfer",
+      "commit": "6ee3377a85c015e5b04394ed0560725c1a047d05",
+      "tracked_modifications": []
+    },
+    {
+      "library": "OFM-FileTransferModule",
+      "commit": "bdf6a2e78951000a8f67a15b0f5949d9dfb00d85",
+      "tracked_modifications": []
+    },
+    {
+      "library": "OFM-FunctionBlocks",
+      "commit": "99e76b7a02681bd7e6201687373084748390d814",
+      "tracked_modifications": []
+    },
+    {
+      "library": "OFM-IOHomeControl",
+      "commit": "e48a53cc007a927d0a6877b15e4d1213302729e3",
+      "tracked_modifications": [
+        "M README.md",
+        " M docs/LOW-POWER-WAKE-2026-10-10.md",
+        " M docs/battery-support.md"
+      ]
+    },
+    {
+      "library": "OFM-LogicModule",
+      "commit": "ad02129c2e5178b754551c07a1c7365320296373",
+      "tracked_modifications": []
+    },
+    {
+      "library": "OFM-Network",
+      "commit": "78496143202ca8e14e071a1637b76270f2e1fcf4",
+      "tracked_modifications": []
+    },
+    {
+      "library": "OFM-UsbExchange",
+      "commit": "3c4c5db1d47a14a824dad54c7d750e7ba3f99348",
+      "tracked_modifications": []
+    },
+    {
+      "library": "OGM-Common",
+      "commit": "b0b178f2e7843de94bb5ce842dfe1155f2ac8741",
+      "tracked_modifications": []
+    },
+    {
+      "library": "OGM-HardwareConfig",
+      "commit": "0c5a94d92328bfd4eb0ea26a9f9498e8578308e6",
+      "tracked_modifications": []
+    },
+    {
+      "library": "TPUart",
+      "commit": "3bf45df3dea11db4460d639bdcec5786230f6001",
+      "tracked_modifications": []
+    },
+    {
+      "library": "knx",
+      "commit": "8e38048cea7bb095bd802c1ed1e4b9cec0ae47da",
+      "tracked_modifications": []
+    }
+  ],
+  "abi": {
+    "application": "4.7",
+    "htg_ko_offset": 1800,
+    "haw_ko_offset": 1960,
+    "ets_sources_or_layout_changed": false,
+    "ets_source_sha256": "f9131a8915ab6babd11ad9ba57376074112d9cfb8b82ee94edf9ae698fc5249d",
+    "knxprod_header_sha256": "a3e86424dab497d3b857724380b3c3cc75de76938e87602e31f228c7a6071a46",
+    "platformio_custom_sha256": "cf8cf199b4e8744352d4ba0199703eaa02143a43c6219810b319f911bb0e9f43"
+  },
+  "flash_schema_current": 18,
+  "physical_and_external_gates": {
+    "somfy_always_on_20_to_80_motion_runs": "not_run",
+    "velux_low_power_20_to_80_motion_runs": "not_run",
+    "sx1276_single_loss_third_miss_and_auth_loss": "not_run",
+    "sx1262_single_loss_third_miss_and_auth_loss": "not_run",
+    "ten_runs_per_actuator_and_chip": "not_run",
+    "raw_native_high_byte_and_zero_semantics_on_device": "not_run",
+    "remote_unsolicited_status_separate_from_polled_status": "not_run",
+    "stopped_off_target_and_near_endpoint_knx_motion": "not_run",
+    "regional_duty_cca_all_frequencies_fairness_and_rf_stack_traces": "not_run",
+    "physical_timing_and_spectrum_access_signoff": "not_run",
+    "persistent_storage_power_cut_reboot_and_wear": "not_run",
+    "signed_ets_import_upgrade_download": "not_run",
+    "runtime_stack_and_heap_under_tracked_motion": "not_run"
+  }
+}
