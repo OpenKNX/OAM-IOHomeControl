@@ -1,3 +1,10 @@
+## Application 4.7: original laberning capture regressions — 2026-10-27
+
+- Pin OFM `72dedab8da41cb8c49c9b0491ef848c55dff4af9`. Import 160 missing original YAMLs from laberning `c82d38f47901b71c1c63413e638241dbe1aa2d06`, reusing 17 identical existing files. Preserve original bytes, MIT attribution, Git blob/SHA-256 provenance, radio labels, redactions and reconstructed/synthetic evidence limits.
+- Validate all 1,104 source frames on the host; parse 897 bounded native vectors and cross-check 43 public rekeyed HMAC cases. Add source/security checks, targeted controller/KNX callback regressions, and negative mutation tests to CI. Raw YAML and long observer data stay outside firmware.
+- Fix two capture-proven status issues: honor a reported moving state near target, and end stopped-status tracking without snapping measured current or overwriting a distinct reported target. Protect MOTO refusals, stale position/tilt ACKs, sensor priority, foreign status, pending discovery ownership, preamble and optional pairing behavior.
+- Preserve application 4.7, HTG/HAW and all parameter/KO offsets. Record builds, runtime module hashes and DRAM evidence in `docs/original-captures-validation-2026-10-27.json`; corpus results do not qualify hardware or set release acceptance.
+
 ## Application 4.7: inbound status replies — 2026-10-26
 
 - Pin OFM `ee82fb974d4ecc5f4aae9905eeecca3827d04b11`. Paired, directed 2W status now has a distinct identity/key/session-bound inbound challenge context. Its saved payload stays untrusted until the matching 0x3D HMAC verifies.
