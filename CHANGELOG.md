@@ -1,5 +1,7 @@
 ## Application 4.9: debug RF bench admission — 2026-10-27
 
+- Pin OFM `d9709cc34f66ca7012835ee5a55170a623b7b558` so the version 4.9 debug bypass is included in dependency-based builds.
+
 - Default OPENKNX_DEBUG builds to bypass software duty, CCA/LBT, TX quota and read-only diagnostic RF admission limits for shielded bench testing. Retain airtime accounting, diagnostic logging, protocol timeouts, authentication and identity-collision protection.
 - Preserve release RF admission behavior. Add debug/release regression coverage and correct debug tracking logger compilation.
 - Advance ETS application version to 4.9 (encoded 73); preserve parameter/KO layouts and flash schema 18.
