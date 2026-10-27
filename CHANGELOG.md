@@ -1,7 +1,7 @@
 ## Application 4.7: remaining time and moving-poll recovery — 2026-10-27
 
-- Pin OFM `c7200d8ab176fb7746a7908fcf96f4c0448c8aa8`. Decode full 16-bit remaining seconds only for owned, correlated native 03/04 main-info polls. Exclude ACK/tilt/probe layouts, short/foreign/mismatched replies and untracked timing updates.
-- Preserve measured current/target and reported STOPPED/moving state. Distinguish positive/zero/unbounded/undefined counts; shorten existing follow-up only, retain the low-power 10 s floor, bounded deadline and identity/epoch resets.
+- Pin OFM `e48a53cc007a927d0a6877b15e4d1213302729e3`. Decode full 16-bit remaining seconds only for owned, correlated native 03/04 main-info polls. Exclude ACK/tilt/probe layouts, short/foreign/mismatched replies and untracked timing updates.
+- Preserve measured current/target and reported STOPPED/moving state. Keep normal cadence for unavailable countdowns only inside an existing epoch. Distinguish positive/zero/unbounded/undefined counts; shorten existing follow-up only, retain the low-power 10 s floor, bounded deadline and identity/epoch resets.
 - Keep normal cadence for two trusted moving single-attempt poll misses, then use existing auth/silence backoff. Local admission/driver failures defer fairly without consuming peer misses or extending tracking. Preserve STOP-settle exchange budgets and RF duty/CCA admission.
 - Add negative mutations and a reproducible per-frame corpus audit. All 177 original YAML hashes stay pinned to c82d38f; synthetic 256-second vectors are not captured high-byte proof. Credit laberning #184 `821454537355a1d20f8f8622889611f4f491a11b`; native offsets remain distinct from KLF/Overkiz API semantics.
 - Preserve application/ETS 4.7 and flash schema 18. Validation: `docs/remaining-time-validation-2026-10-27.json`. Hardware/ETS/storage/spectrum qualification remains unrun; release acceptance is false.
