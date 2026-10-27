@@ -1,0 +1,94 @@
+{
+  "schema": 1,
+  "date": "2026-10-27",
+  "oam_build_commit": "53ada17800ea4b56dc28d338d8ed9da604015ad3",
+  "ofm_commit": "d9709cc34f66ca7012835ee5a55170a623b7b558",
+  "application_version": "4.9",
+  "application_encoded_version": 73,
+  "flash_schema": 18,
+  "checks": {
+    "command": "make -C test check-rf-access-policy check-rf-build-modes check-discovery-evidence PYTHON=/tmp/io-capture-env/bin/python",
+    "outcome": "passed",
+    "rf_build_mode_cases": 7,
+    "rf_build_modes": [
+      "release",
+      "OPENKNX_DEBUG"
+    ],
+    "additional_debug_authentication_and_deadline_cases": 3,
+    "policy_compile_variants": 5,
+    "release_explicit_bench_flag_compile_rejections": 2,
+    "console_entry_modes": [
+      "release",
+      "OPENKNX_DEBUG"
+    ],
+    "log": {
+      "path": "docs/build-evidence/debug-rf-pin-2026-10-27/tests.log.gz",
+      "sha256": "71d605e3eba8e983dd65393e52f032b2ef3166dbb4e976210970070491eb6ea7"
+    }
+  },
+  "firmware_build_log": {
+    "path": "docs/build-evidence/debug-rf-pin-2026-10-27/firmware.log.gz",
+    "sha256": "032b159383e2478864ccbe7b24441b99b14ed162e32ff65436be310b4de88ad3"
+  },
+  "firmware": [
+    {
+      "environment": "develop_OpenKNX_XIAO_S3_SX1276_TP",
+      "outcome": "passed",
+      "openknx_debug": true,
+      "runtime_ofm": "0.9.3+d9709cc",
+      "runtime_oam": "53ada17",
+      "debug_startup_warning_present": true,
+      "static_dram_margin_bytes": 164672,
+      "artifacts": [
+        {
+          "local_path": "/tmp/dual-pio-build/develop_OpenKNX_XIAO_S3_SX1276_TP/firmware.bin",
+          "bytes": 2009856,
+          "sha256": "5c17b9cf23d5e8c7c8d2932df1a114f9afcb7d3256a078049cef8b1e17bfad01"
+        },
+        {
+          "local_path": "/tmp/dual-pio-build/develop_OpenKNX_XIAO_S3_SX1276_TP/firmware.factory.bin",
+          "bytes": 2075392,
+          "sha256": "457f2b831d72090ca1e397476a89bdac8c03882d4f4ae25a97db6a44b1ee3db5"
+        },
+        {
+          "local_path": "/tmp/dual-pio-build/develop_OpenKNX_XIAO_S3_SX1276_TP/firmware.elf",
+          "bytes": 37208572,
+          "sha256": "e9684f1116671ae829d4ef8b4eef71df02ede001c2339ae3d78d90d207f73109"
+        }
+      ]
+    },
+    {
+      "environment": "release_OpenKNX_REG1_ESP_V00_11_SX1276_IP",
+      "outcome": "passed",
+      "openknx_debug": false,
+      "runtime_ofm": "0.9.3+d9709cc",
+      "runtime_oam": "53ada17",
+      "debug_startup_warning_present": false,
+      "static_dram_margin_bytes": 792,
+      "artifacts": [
+        {
+          "local_path": "/tmp/dual-pio-build/release_OpenKNX_REG1_ESP_V00_11_SX1276_IP/firmware.bin",
+          "bytes": 1956896,
+          "sha256": "22a31fc25ae62a5290cccdab16017518b0c30e43a18c20819ea70542142ebf5c"
+        },
+        {
+          "local_path": "/tmp/dual-pio-build/release_OpenKNX_REG1_ESP_V00_11_SX1276_IP/firmware.factory.bin",
+          "bytes": 2022432,
+          "sha256": "cd0e265e802b2412437414e0c4708a7d9181a4c3fa752cf88be0b27e19e5db4d"
+        },
+        {
+          "local_path": "/tmp/dual-pio-build/release_OpenKNX_REG1_ESP_V00_11_SX1276_IP/firmware.elf",
+          "bytes": 31364108,
+          "sha256": "754fda8e3336a1fb82fb0379e18a1a6dcf6d232e79638c7cecc2ae2026c6156a"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    "The pinned OFM commit includes all debug-bypass source and regression changes; no RF source/test edits remain uncommitted.",
+    "Builds used the already-selected isolated Logic dependency at 6fe479e; original link and generated headers are restored after recording evidence.",
+    "Unrelated user edits are preserved. Release REG1-IP static DRAM margin remains 792 bytes, matching the earlier release build. Static margin does not qualify runtime heap/stack.",
+    "Physical RF, flashing and live ETS checks were not run. No firmware was deployed."
+  ],
+  "release_accepted": false
+}
