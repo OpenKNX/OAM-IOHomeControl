@@ -1,6 +1,6 @@
 ## Application 4.8: dual-controller RF evidence — 2026-10-27
 
-- Pin OFM `b32727e2dc8b546cb52a6bc9731009ee05bff1f1`. Preserve qualified immutable first collision evidence, separate local duty/CCA denial from actual peer silence and authenticated verification, and expose read-only ETS outcomes.
+- Pin OFM `3b5ba09a41c76ab5db96ea70b87d7fd34775afae`. Preserve qualified immutable first collision evidence, separate local duty/CCA denial from actual peer silence and authenticated verification, and expose read-only ETS outcomes.
 - Add bounded volatile background-poll pause, explicit SPE/standard diagnostic scans, receive-window/filter provenance and independent status transport/last-commander attribution. Preserve foreign-status ownership guards and all RF admission safeguards.
 - Add source-attributed 64/61/52-second payload excerpts, synthetic transport regressions, full-trace speed comparison and sanitized local peer-configuration tools. Credit laberning/home_io_control; original seven field logs and real high-byte/target-change captures remain unavailable.
 - Preserve current application/ETS 4.8 and flash schema 18. Reduce the classic ESP32 IP volatile trace ring to 14 slots for static DRAM headroom; other release targets retain 24. Physical A/B/C, ETS-host and radio qualification remain unrun. See `lib/OFM-IOHomeControl/docs/DUAL-CONTROLLER-DIAGNOSTICS.md` and `docs/dual-controller-validation-2026-10-27.json`.
