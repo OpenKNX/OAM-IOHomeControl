@@ -35,7 +35,7 @@
 #define BASE_ModuleVersion 32
 #define NET_ModuleVersion 9
 #define UCT_ModuleVersion 6
-#define LOG_ModuleVersion 68
+#define LOG_ModuleVersion 69
 #define FCB_ModuleVersion 10
 #define IOHC_ModuleVersion 9
 // Parameter with single occurrence
@@ -1668,9 +1668,9 @@
 #define LOG_fOSendOnChange                      55      // 1 Bit, Bit 2
 #define     LOG_fOSendOnChangeMask 0x04
 #define     LOG_fOSendOnChangeShift 2
-#define LOG_fOLockEnabled                       55      // 1 Bit, Bit 1
-#define     LOG_fOLockEnabledMask 0x02
-#define     LOG_fOLockEnabledShift 1
+#define LOG_fOLockEnabled                       55      // 2 Bits, Bit 1-0
+#define     LOG_fOLockEnabledMask 0x03
+#define     LOG_fOLockEnabledShift 0
 #define LOG_fODpt                               56      // 8 Bits, Bit 7-0
 #define LOG_fOLockTriggerLock                   57      // 2 Bits, Bit 7-6
 #define     LOG_fOLockTriggerLockMask 0xC0
@@ -2600,7 +2600,7 @@
 // Sendeverhalten für Ausgang
 #define ParamLOG_fOSendOnChange                      (PT_SendOnChange)((knx.paramByte(LOG_ParamCalcIndex(LOG_fOSendOnChange)) & LOG_fOSendOnChangeMask) >> LOG_fOSendOnChangeShift)
 // Sperre aktivieren
-#define ParamLOG_fOLockEnabled                       ((bool)(knx.paramByte(LOG_ParamCalcIndex(LOG_fOLockEnabled)) & LOG_fOLockEnabledMask))
+#define ParamLOG_fOLockEnabled                       (PT_InputEnable)(knx.paramByte(LOG_ParamCalcIndex(LOG_fOLockEnabled)) & LOG_fOLockEnabledMask)
 // DPT für Ausgang
 #define ParamLOG_fODpt                               (PT_LogicDpt)(knx.paramByte(LOG_ParamCalcIndex(LOG_fODpt)))
 // Beim Sperren
