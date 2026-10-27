@@ -1,0 +1,16 @@
+--- a/src/IoHomecontrol.script.js
++++ b/src/IoHomecontrol.script.js
+@@ -1090,11 +1090,8 @@
+             var chosen=IOHC_getParameter(device,"IOHC_ImportCandidate"),target=IOHC_getParameter(device,"IOHC_ImportTargetChannel");
+             trace.step="Zuordnungsvorschau";
+             preview=IOHC_assignmentPreview(online,device,job,discoveries,channelCount,Number(chosen?chosen.value:0),Number(target?target.value:0));
+-            if(String(previewParameter.value)!==preview.token) {
+-                trace.step="ETS-Vorschauparameter";
+-                IOHC_setParameterValue(device,"IOHC_AssignmentPreviewToken",preview.token);
+-                progress.setText("Zuordnungsvorschau: "+preview.text+" Auswahl prüfen; nochmals „Ergebnis übernehmen“ drücken, um genau diese Zuordnung zu speichern.");return;
+-            }
++            trace.step="ETS-Zuordnungsplan";
++            IOHC_setParameterValue(device,"IOHC_AssignmentPreviewToken",preview.token);
+             if(!preview.plan.length){progress.setText("Keine Zuordnung: "+preview.text);return;}
+         }
+         var channelBefore=[];for(var cb=0;cb<channelCount;cb++)channelBefore[cb]=channelActive[cb];

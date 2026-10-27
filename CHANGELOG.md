@@ -1,3 +1,11 @@
+## Application 4.7: three-shutter diagnostics — 2026-10-27
+
+- Pin OFM `f9834597b0690c5c9316292d6d1962d25ffd6311`. Add bounded per-node passive/active/directed/flash evidence, session/build identity, candidate decisions and a read-only summary. Preserve evidence after import finalization.
+- Add explicit existing-key `iohc keyimport scan` and targeted `verify NODE` operations. Use the existing scheduler with strict duty/CCA admission and matching committed identity; do not extract keys, re-pair or write membership/configuration.
+- Add filtered incremental RF observations with overwrite counts, foreign-destination/authentication labels, optional config history and guarded last-controller diagnostics. Redact import challenge/HMAC material.
+- Require ETS parameter readback before assignment ACK, log result/channel decisions, report project activation to volatile diagnostics, and avoid repeated receipt writes. The existing preview confirmation remains; first-click completion awaits approval after automatic review rejected its removal.
+- Preserve flash schema 18 and application/ETS 4.7. Procedure: `lib/OFM-IOHomeControl/docs/THREE-SHUTTER-DIAGNOSTICS.md`. Validation: `docs/three-shutter-validation-2026-10-27.json`; hardware/ETS-host acceptance remains unrun.
+
 ## Application 4.7: original laberning capture regressions — 2026-10-27
 
 - Pin OFM `72dedab8da41cb8c49c9b0491ef848c55dff4af9`. Import 160 missing original YAMLs from laberning `c82d38f47901b71c1c63413e638241dbe1aa2d06`, reusing 17 identical existing files. Preserve original bytes, MIT attribution, Git blob/SHA-256 provenance, radio labels, redactions and reconstructed/synthetic evidence limits.
