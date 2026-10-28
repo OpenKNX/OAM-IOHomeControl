@@ -1,3 +1,9 @@
+## Application 4.9: polling recovery and radio timing instrumentation — 2026-10-28
+
+- Pin OFM `69509f76450dcf73135b6c82ba5be1a09a5a0d43`, including the separate foreign-polling/backoff fix (`b59317f`) and gated SX1276 timing recorder (`69509f7`).
+- Restrict remote follow-ups to supported Execute observations and preserve active tracking/backoff. Timing recording remains build-gated and disabled at runtime by default; no physical RF timing correction is asserted.
+- Preserve ETS application 4.9, parameter/KO layouts, flash schema and pairings. Native tests and isolated module-target builds passed; full OAM validation remains blocked by the existing LogicModule/knxprod mismatch, and hardware timing qualification remains pending.
+
 ## Application 4.9: debug RF bench admission — 2026-10-27
 
 - Pin OFM `d9709cc34f66ca7012835ee5a55170a623b7b558` so the version 4.9 debug bypass is included in dependency-based builds.
