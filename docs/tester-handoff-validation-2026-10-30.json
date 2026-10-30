@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-30",
+  "ofm_commit": "9306a75589b037a5687a3ea80db40a8b8eded123",
+  "oam_parent": "43979f87df75fb7031bdb7bf52b250439d166d0d",
+  "dependencies": [
+    {
+      "module": "lib/knx",
+      "commit": "8e38048cea7bb095bd802c1ed1e4b9cec0ae47da"
+    },
+    {
+      "module": "lib/OFM-ConfigTransfer",
+      "commit": "6ee3377a85c015e5b04394ed0560725c1a047d05"
+    },
+    {
+      "module": "lib/OFM-FileTransferModule",
+      "commit": "bdf6a2e78951000a8f67a15b0f5949d9dfb00d85"
+    },
+    {
+      "module": "lib/OFM-FunctionBlocks",
+      "commit": "99e76b7a02681bd7e6201687373084748390d814"
+    },
+    {
+      "module": "lib/OFM-IOHomeControl",
+      "commit": "9306a75589b037a5687a3ea80db40a8b8eded123"
+    },
+    {
+      "module": "lib/OFM-LogicModule",
+      "commit": "6fe479e444c0a183f31b062c4f42912f570d4c84"
+    },
+    {
+      "module": "lib/OFM-Network",
+      "commit": "78496143202ca8e14e071a1637b76270f2e1fcf4"
+    },
+    {
+      "module": "lib/OFM-UsbExchange",
+      "commit": "3c4c5db1d47a14a824dad54c7d750e7ba3f99348"
+    },
+    {
+      "module": "lib/OGM-Common",
+      "commit": "3e481ed6cb7039b0ce45422805ca3e309ab99471"
+    },
+    {
+      "module": "lib/OGM-HardwareConfig",
+      "commit": "0c5a94d92328bfd4eb0ea26a9f9498e8578308e6"
+    },
+    {
+      "module": "lib/TPUart",
+      "commit": "3bf45df3dea11db4460d639bdcec5786230f6001"
+    }
+  ],
+  "full_application_builds": [
+    {
+      "environment": "timing_OpenKNX_ESP32_S3_DEV_SX1276_IP",
+      "result": "passed",
+      "elf_bytes": 36535908,
+      "elf_sha256": "600bd9a7bca567c07ff0560e3755c92fbc137f9b5d93aa8a8f854df36105bf61"
+    },
+    {
+      "environment": "release_OpenKNX_XIAO_S3_SX1276_TP",
+      "result": "passed",
+      "elf_bytes": 32756748,
+      "elf_sha256": "e7bec67ece6e059bbe167c38c539f3af5b71ec3fd376c7a9c04e1c1c14ae7d36"
+    },
+    {
+      "environment": "develop_OpenKNX_XIAO_S3_SX1262_IP",
+      "result": "passed",
+      "elf_bytes": 36267956,
+      "elf_sha256": "d0c3cf7339c317f17b20e64510c5dbc66d9678e2e3e541366648d1910680e662"
+    }
+  ],
+  "full_application": "Logic and FunctionBlocks included; absolute worktree links match manifest pins. No module/hook exclusions.",
+  "tests": {
+    "native_release": 836,
+    "native_debug": "11 targeted real-controller tests passed (make check-rf-build-modes); 6 policy build variants passed",
+    "radio_gate_on_off": "passed",
+    "parser": 4,
+    "policy_build_modes": "passed",
+    "wake_production_and_pause": "passed",
+    "reference_corpus": "177 YAMLs,1104 frames;10 corpus tests passed",
+    "ui": 55,
+    "native_debug_full_suite": "809 passed, 27 failed: existing release-limit assumptions conflict with intentionally unlimited debug RF. Release suite retains all 836 tests."
+  },
+  "include/knxprod.h": {
+    "unchanged": true,
+    "sha256": "40e60e1e070b80a50222aa0867fbd3b28946d3d22db4831ada158e973dd71782"
+  },
+  "src/IoHomecontrol.xml": {
+    "unchanged": true,
+    "sha256": "714277e30b355bdfd0a0ea8036dd628675f289177d852d7b92bfc8edddd2c2c5"
+  },
+  "ets_application": "4.9(encoded73), unchanged",
+  "flash_schema": "18, unchanged",
+  "iram_functions": [
+    "403755e4 g     F .iram0.text\t00000068 _ZN11RadioSX12767dio0IsrEPv",
+    "4037877c g     F .iram0.text\t00000016 esp_timer_get_time",
+    "40375400 g     F .iram0.text\t00000159 _ZN11RadioSX12768timingAtE17IoHomeTimingEventmb"
+  ],
+  "embedded_ofm_version": "0.9.3+9306a75, present in all three ELFs; not observed on flashed hardware",
+  "physical_tests": "not performed; no flashing,RF,motor,ETS-host,analyzer or independent peer-reception qualification",
+  "timing_root_cause": "unknown; scan flood confirmed/fixed; no faster-RX or protocol constant change",
+  "rf_policy": "OPENKNX_DEBUG always bypasses RF duty, packet-airtime, CCA/LBT and application quotas after off/reset/reboot, identity changes and faults. Release remains DutyLimited; accounting and protocol guards remain.",
+  "supersedes_local_commits": [
+    "8ab4c8cff281d1eeb7ad6d11824fc1c10055a5d3",
+    "61a4e70d4842d46c3bfeded50a4ff61a36d20990",
+    "cbf7955097f9961aab9e4dfbfd3d36e9b0857b96"
+  ]
+}

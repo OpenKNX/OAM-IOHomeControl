@@ -1,3 +1,10 @@
+## Application 4.9: tester capture and unlimited debug RF — 2026-10-30
+
+- Pin OFM `9306a75589b037a5687a3ea80db40a8b8eded123`. Arm one owned RF-attempt timing capture including its authentication continuation; ignore background scans and freeze completed/failed attempts. Separate in-scope drops from intentional scan exclusions and reject unowned/mismatched timing evidence.
+- Debug builds always bypass RF duty, packet-airtime, CCA/LBT and application quotas, including after off/reset/reboot, identity changes and radio faults. Release builds retain DutyLimited admission. Preserve accounting, authentication, collision and protocol guards. Report no-challenge versus missing-final-response stages without claiming physical actuation, and avoid paused background-poll scheduler churn.
+- Add `timing_OpenKNX_ESP32_S3_DEV_SX1276_IP` with the timing build gate enabled and runtime recording disabled by default. Keep normal release recording compiled out.
+- Preserve ETS application 4.9, flash schema 18, parameter/KO layouts and pairings. Use the manifest-pinned Logic/Common revisions for full integration; newer shared checkouts require matching generated ETS headers. Native tests pass; physical timing and RF root cause remain unqualified. Tester procedure: `lib/OFM-IOHomeControl/docs/diagnostics/TESTER-HANDOFF-2026-10-30.md`.
+
 ## Application 4.9: polling recovery and radio timing instrumentation — 2026-10-28
 
 - Pin OFM `69509f76450dcf73135b6c82ba5be1a09a5a0d43`, including the separate foreign-polling/backoff fix (`b59317f`) and gated SX1276 timing recorder (`69509f7`).
