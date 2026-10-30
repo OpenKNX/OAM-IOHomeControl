@@ -8,5 +8,5 @@ f7dbd6bd6fd0b844e1ddce8dd34d793f07e5e940 v1dev-KLFDocumentation lib/OFM-IOHomeCo
 7849614 ec/v1dev-ec lib/OFM-Network https://github.com/OpenKNX/OFM-Network.git
 3c4c5db v1dev lib/OFM-UsbExchange https://github.com/OpenKNX/OFM-UsbExchange.git
 3e481ed ec/v1dev-ec lib/OGM-Common https://github.com/OpenKNX/OGM-Common.git
-0c5a94d v1dev lib/OGM-HardwareConfig https://github.com/OpenKNX/OGM-HardwareConfig.git
+0c5a94d v1 lib/OGM-HardwareConfig https://github.com/OpenKNX/OGM-HardwareConfig.git
 3bf45df ec/main lib/TPUart https://github.com/OpenKNX/tpuart.git
