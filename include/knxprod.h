@@ -26,7 +26,7 @@
 #define MAIN_FirmwareName "IO-HomeControl KNX Gateway"
 #define MAIN_OpenKnxId 0xAF
 #define MAIN_ApplicationNumber 52
-#define MAIN_ApplicationVersion 73
+#define MAIN_ApplicationVersion 74
 #define MAIN_FirmwareRevision 0
 #define MAIN_ApplicationEncoding iso-8859-15
 #define MAIN_ParameterSize 14733
@@ -37,7 +37,7 @@
 #define UCT_ModuleVersion 6
 #define LOG_ModuleVersion 69
 #define FCB_ModuleVersion 10
-#define IOHC_ModuleVersion 9
+#define IOHC_ModuleVersion 10
 // Parameter with single occurrence
 
 
@@ -4572,6 +4572,9 @@
 #define HTG_cAgiliaHomeAway                      0      // 1 Bit, Bit 5
 #define     HTG_cAgiliaHomeAwayMask 0x20
 #define     HTG_cAgiliaHomeAwayShift 5
+#define HTG_cModel                               0      // 2 Bits, Bit 4-3
+#define     HTG_cModelMask 0x18
+#define     HTG_cModelShift 3
 #define HTG_cPollSeconds                         1      // uint16_t
 
 // Private Atlantic-Heizregister verwenden
@@ -4580,6 +4583,8 @@
 #define ParamHTG_cMaxObject                          ((bool)(knx.paramByte(HTG_ParamCalcIndex(HTG_cMaxObject)) & HTG_cMaxObjectMask))
 // AGILIA IO Displaymodell am Gerät bestätigt: Home/Away freigeben
 #define ParamHTG_cAgiliaHomeAway                     ((bool)(knx.paramByte(HTG_ParamCalcIndex(HTG_cAgiliaHomeAway)) & HTG_cAgiliaHomeAwayMask))
+// Bestätigtes Heizmodell
+#define ParamHTG_cModel                              ((knx.paramByte(HTG_ParamCalcIndex(HTG_cModel)) & HTG_cModelMask) >> HTG_cModelShift)
 // Abfragezyklus in Sekunden (0=aus, sonst mindestens 60)
 #define ParamHTG_cPollSeconds                        (knx.paramWord(HTG_ParamCalcIndex(HTG_cPollSeconds)))
 
