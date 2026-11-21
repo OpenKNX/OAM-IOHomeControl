@@ -4,6 +4,27 @@
 on: [push, pull_request]
 
 jobs:
+  ofm-pin:
+    name: Verify the pinned OFM dependency
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Read the pinned OFM revision
+        id: ofm
+        run: |
+          revision="$(python3 tools/check-ofm-pin.py --print-ref)"
+          echo "revision=$revision" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@v4
+        with:
+          repository: OpenKNX/OFM-IOHomeControl
+          ref: ${{ steps.ofm.outputs.revision }}
+          path: lib/OFM-IOHomeControl
+          persist-credentials: false
+      - run: python3 tools/check-ofm-pin.py
+
   check:
     name: Check '${{ matrix.target }}' in '${{ matrix.oam }}'
     strategy:
