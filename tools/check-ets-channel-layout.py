@@ -250,6 +250,7 @@ help_source = ROOT / "lib/OFM-IOHomeControl/src/Baggages/Help_de"
 for topic in help_topics:
     assert (help_source / f"{topic}.md").is_file(), topic
 archives = list((ROOT / "src/IoHomecontrol.baggages").rglob("Help_de.zip"))
+archives.extend((ROOT / "release/data").glob("*.baggages/**/Help_de.zip"))
 assert any(help_topics <= {Path(name).stem for name in zipfile.ZipFile(archive).namelist()}
            for archive in archives), "Generated help archive lacks channel help"
 print(f"16 channel trees and {len(help_topics)} contextual help topics verified")
