@@ -9,7 +9,9 @@ import zipfile
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--project-root', type=Path, default=Path(__file__).resolve().parents[1])
-ROOT = parser.parse_args().project_root
+parser.add_argument('--baseline', type=Path, help='optional expanded ETS XML from application 4.11')
+args = parser.parse_args()
+ROOT = args.project_root
 NS = {"k": "http://knx.org/xml/project/20"}
 tree = ET.parse(ROOT / "src/IoHomecontrol.debug.xml")
 parents = {child: parent for parent in tree.iter() for child in parent}
@@ -17,6 +19,44 @@ parameters = {p.get("Id"): p for p in tree.findall(".//k:Static//k:Parameter", N
 refs = {p.get("Id"): p.get("RefId") for p in tree.findall(".//k:Static//k:ParameterRef", NS)}
 objects = {o.get("Id"): o for o in tree.findall(".//k:Static//k:ComObject", NS)}
 object_refs = {o.get("Id"): o.get("RefId") for o in tree.findall(".//k:Static//k:ComObjectRef", NS)}
+sensor_objects = {
+    'EnergyWh': ('13-10', '4 Bytes'), 'HotWaterWh': ('13-10', '4 Bytes'),
+    'Outdoor': ('9-1', '2 Bytes'), 'Power': ('14-56', '4 Bytes'),
+    'Occupancy': ('1-18', '1 Bit'), 'Detection': ('1-3', '1 Bit'),
+    'Boost': ('1-1', '1 Bit'), 'Absence': ('1-1', '1 Bit'),
+    'Target': ('9-1', '2 Bytes'), 'CentralHeating': ('1-1', '1 Bit'),
+}
+named_objects = {obj.get('Name'): obj for obj in objects.values()}
+names_at_number = {}
+for obj in objects.values():
+    names_at_number.setdefault(obj.get('Number'), set()).add(obj.get('Name'))
+assert sum(name.startswith('SNS_') for name in named_objects) == 160
+for channel in range(1, 17):
+    for offset, (signal, (dpt, size)) in enumerate(sensor_objects.items()):
+        name = f'SNS_c{channel}{signal}'
+        obj = named_objects[name]
+        number = str(2010 + (channel - 1) * len(sensor_objects) + offset)
+        assert obj.get('Number') == number and names_at_number[number] == {name}, name
+        assert obj.get('DatapointType') == 'DPST-' + dpt and obj.get('ObjectSize') == size, name
+        for flag in ('WriteFlag', 'ReadFlag', 'UpdateFlag', 'ReadOnInitFlag'):
+            assert obj.get(flag) == 'Disabled', (name, flag)
+        assert obj.get('CommunicationFlag') == obj.get('TransmitFlag') == 'Enabled', name
+    model, = (param for param in parameters.values() if param.get('Name') == f'SNS_c{channel}Model')
+    assert model.get('Value') == '0', channel
+types = tree.findall(".//k:Static//k:ParameterType[@Name='SNSModel']", NS)
+assert len(types) == 1
+assert [x.get('Value') for x in types[0].findall('.//k:Enumeration', NS)] == list(map(str, range(7)))
+
+if args.baseline:
+    baseline_tree = ET.parse(args.baseline)
+    baseline_numbers = {
+        obj.get('Name'): obj.get('Number')
+        for obj in baseline_tree.findall(".//k:Static//k:ComObject", NS)
+    }
+    assert baseline_numbers == {
+        name: obj.get('Number') for name, obj in named_objects.items() if not name.startswith('SNS_')
+    }, 'Existing object numbers differ from the baseline'
+
 dynamic = tree.find(".//k:Dynamic", NS)
 pages = [p for p in dynamic.findall(".//k:ParameterBlock", NS)
          if re.fullmatch(r"IOHC_IOHCChannel\d+Page", p.get("Name", ""))]
@@ -266,10 +306,16 @@ if any(o.get("Name", "").startswith("HTG_") for o in objects.values()):
 # 4.7 extends a separate bank; every numeric 4.6 ABI constant remains fixed.
 if any(o.get("Name", "").startswith("HAW_") for o in objects.values()):
     baseline46=json.loads((ROOT/"lib/OFM-IOHomeControl/test/compatibility-46-baseline.json").read_text())
-    for name,expected in baseline46.items():
-        assert definitions.get(name)==expected,(name,expected,definitions.get(name))
+    # Module versions evolve independently. The timer lock fields were already
+    # widened in OGM-Common before the 4.12 SNS addition.
+    changed_since_46 = {"MAIN_ParameterSize", "LOG_fOLockEnabledMask", "LOG_fOLockEnabledShift"}
+    legacy_layout = {name: expected for name, expected in baseline46.items()
+                     if name not in changed_since_46 and not name.endswith("_ModuleVersion")}
+    for name, expected in legacy_layout.items():
+        assert definitions.get(name) == expected, (name, expected, definitions.get(name))
     assert definitions["HAW_KoBlockOffset"]=="1960" and definitions["HAW_KoBlockSize"]=="3"
-    assert definitions["HTG_cAgiliaHomeAwayMask"]=="0x20" and definitions["MAIN_ParameterSize"]=="14733"
+    assert definitions["HTG_cAgiliaHomeAwayMask"]=="0x20"
+    assert definitions["MAIN_ParameterSize"]=="14749"
     for channel in range(1,17):
         base=1960+3*(channel-1)
         bank={int(o.get("Number"))-base:o for o in objects.values() if base<=int(o.get("Number"))<base+3}
@@ -287,4 +333,4 @@ if any(o.get("Name", "").startswith("HAW_") for o in objects.values()):
                     guards.add(parameters[refs[parent.get("ParamRefId")]].get("Name"))
                 ancestor=parent
             assert {f"HTG_c{channel}Qualified",f"HTG_c{channel}Enabled",f"HTG_c{channel}AgiliaHomeAway"}<=guards,(channel,guards)
-    print(f"Home/Away: 48 append-only KOs; {len(baseline46)} application 4.6 constants preserved")
+    print(f"Home/Away: 48 append-only KOs; {len(legacy_layout)} application 4.6 layout constants preserved")
