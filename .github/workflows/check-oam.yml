@@ -21,9 +21,9 @@ jobs:
         with:
           repository: OpenKNX/OFM-IOHomeControl
           ref: ${{ steps.ofm.outputs.revision }}
-          path: lib/OFM-IOHomeControl
+          path: _ci/ofm
           persist-credentials: false
-      - run: python3 tools/check-ofm-pin.py
+      - run: python3 tools/check-ofm-pin.py --checkout _ci/ofm
 
   check:
     name: Check '${{ matrix.target }}' in '${{ matrix.oam }}'

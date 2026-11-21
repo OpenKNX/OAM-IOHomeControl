@@ -26,6 +26,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--print-ref", action="store_true")
+    parser.add_argument("--checkout", type=Path, help="resolved checkout if it is outside lib/")
     parser.add_argument("--versions", type=Path)
     args = parser.parse_args()
     revision, branch = read_pin(args.root)
@@ -33,7 +34,7 @@ def main():
         print(revision)
         return
 
-    checkout = args.root / OFM
+    checkout = args.checkout or args.root / OFM
     head = subprocess.check_output(["git", "-C", checkout, "rev-parse", "HEAD"], text=True).strip()
     if head != revision:
         raise SystemExit(f"OFM checkout {head} differs from {branch} pin {revision}")
