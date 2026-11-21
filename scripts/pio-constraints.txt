@@ -1,0 +1,2 @@
+# pioarduino/platform-espressif32#563: 55.03.312-1 rejects the post-release Core.
+pioarduino==6.2.0
